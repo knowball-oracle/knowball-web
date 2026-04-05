@@ -1,0 +1,30 @@
+@if (visible) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4" (click)="cancelled.emit()">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+    <div
+      class="glass-liquid relative rounded-2xl p-6 w-full max-w-sm z-10 shadow-2xl"
+      (click)="$event.stopPropagation()"
+    >
+      <h3 class="text-base font-semibold text-white mb-2">{{ title }}</h3>
+      <p class="text-sm text-white/60 mb-6">{{ message }}</p>
+
+      <div class="flex gap-3 justify-end">
+        <button type="button" (click)="cancelled.emit()" class="btn-ghost text-sm">
+          {{ cancelLabel }}
+        </button>
+        <button
+          type="button"
+          (click)="confirmed.emit()"
+          class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
+          [class.btn-primary]="!danger"
+          [class.bg-red-600]="danger"
+          [class.hover:bg-red-700]="danger"
+          [class.text-white]="danger"
+        >
+          {{ confirmLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

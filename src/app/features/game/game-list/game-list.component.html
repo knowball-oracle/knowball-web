@@ -1,0 +1,106 @@
+<div class="p-6 md:p-8 max-w-6xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-xl font-bold text-white">Partidas</h1>
+      <p class="text-sm text-white/40 mt-0.5">Acompanhe os jogos e placares.</p>
+    </div>
+    <a routerLink="/games/new" class="btn-primary text-sm flex items-center gap-1.5">
+      <lucide-icon [img]="PlusIcon" size="15" /> Nova
+    </a>
+  </div>
+
+  @if (loading) {
+    <div class="space-y-2">
+      @for (_ of [1, 2, 3, 4, 5]; track $index) {
+        <div class="skeleton h-14 rounded-xl"></div>
+      }
+    </div>
+  }
+
+  @if (error) {
+    <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && !error) {
+    @if (items.length === 0) {
+      <div class="glass rounded-2xl py-16 text-center">
+        <p class="text-white/30 text-sm">Nenhuma partida cadastrada.</p>
+        <a
+          routerLink="/games/new"
+          class="inline-block mt-3 text-sm text-white/50 hover:text-white transition"
+        >
+          Criar a primeira →
+        </a>
+      </div>
+    } @else {
+      <div class="glass rounded-2xl overflow-hidden">
+        <table class="w-full text-sm text-left">
+          <thead class="border-b border-white/8">
+            <tr class="text-white/30 uppercase text-xs tracking-wider">
+              <th class="px-5 py-3">Campeonato</th>
+              <th class="px-5 py-3">Data</th>
+              <th class="px-5 py-3">Local</th>
+              <th class="px-5 py-3 text-center">Placar</th>
+              <th class="px-5 py-3 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            @for (item of items; track item.id) {
+              <tr class="hover:bg-white/4 transition-colors duration-150">
+                <td class="px-5 py-3.5 font-medium text-white/80">
+                  {{ item.championship.name }}
+                </td>
+                <td class="px-5 py-3.5 text-white/50 tabular-nums">
+                  {{ item.matchDate | date: 'dd/MM/yyyy HH:mm' }}
+                </td>
+                <td class="px-5 py-3.5 text-white/50">{{ item.place }}</td>
+                <td class="px-5 py-3.5 text-center">
+                  <span class="font-bold text-white/90 tabular-nums">
+                    {{ item.homeScore }} × {{ item.awayScore }}
+                  </span>
+                </td>
+                <td class="px-5 py-3.5">
+                  <div class="flex items-center justify-end gap-1">
+                    <a
+                      [routerLink]="['/games', item.id]"
+                      class="p-2 rounded-lg text-white/30 hover:text-white/80 hover:bg-white/8 transition-all duration-200"
+                      title="Ver detalhes"
+                    >
+                      <lucide-icon [img]="EyeIcon" size="14" />
+                    </a>
+                    <a
+                      [routerLink]="['/games', item.id, 'edit']"
+                      class="p-2 rounded-lg text-white/30 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-200"
+                      title="Editar"
+                    >
+                      <lucide-icon [img]="PencilIcon" size="14" />
+                    </a>
+                    <button
+                      (click)="confirmDelete(item.id!)"
+                      class="p-2 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
+                      title="Excluir"
+                    >
+                      <lucide-icon [img]="TrashIcon" size="14" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</div>
+
+<app-confirm-dialog
+  [visible]="pendingDeleteId !== null"
+  title="Excluir partida"
+  message="Esta ação não pode ser desfeita. Participações e arbitragens vinculadas também serão removidas."
+  confirmLabel="Excluir"
+  [danger]="true"
+  (confirmed)="delete()"
+  (cancelled)="pendingDeleteId = null"
+/>

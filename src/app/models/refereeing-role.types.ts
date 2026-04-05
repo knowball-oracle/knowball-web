@@ -1,0 +1,6 @@
+export enum RefereeingRoleType {
+  MAIN = 'MAIN',
+  ASSISTANT_1 = 'ASSISTANT_1',
+  ASSISTANT_2  = 'ASSISTANT_2',
+  FOURTH_REFEREE = 'FOURTH_REFEREE'
+}

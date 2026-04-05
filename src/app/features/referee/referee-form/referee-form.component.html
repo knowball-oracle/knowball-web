@@ -1,0 +1,88 @@
+<div class="p-6 md:p-8 max-w-xl mx-auto">
+  <div class="flex items-center gap-3 mb-6">
+    <a routerLink="/referees" class="text-white/30 hover:text-white/70 transition text-sm"
+      >← Árbitros</a
+    >
+    <span class="text-white/10">|</span>
+    <h1 class="text-xl font-bold text-white">
+      {{ isEdit ? 'Editar Árbitro' : 'Novo Árbitro' }}
+    </h1>
+  </div>
+
+  @if (loading) {
+    <div class="space-y-3">
+      @for (_ of [1, 2, 3]; track $index) {
+        <div class="skeleton h-12 rounded-xl"></div>
+      }
+    </div>
+  }
+
+  @if (error) {
+    <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading) {
+    <div class="glass rounded-2xl p-6">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Nome
+          </label>
+          <input
+            formControlName="name"
+            type="text"
+            placeholder="Nome completo do árbitro"
+            class="input-field"
+            [class.border-red-500/40]="name.invalid && name.touched"
+          />
+          @if (name.invalid && name.touched) {
+            <p class="text-xs text-red-400 mt-1">Nome obrigatório.</p>
+          }
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Data de Nascimento
+          </label>
+          <input
+            formControlName="birthDate"
+            type="date"
+            class="input-field"
+            [class.border-red-500/40]="birthDate.invalid && birthDate.touched"
+          />
+          @if (birthDate.invalid && birthDate.touched) {
+            <p class="text-xs text-red-400 mt-1">Data obrigatória.</p>
+          }
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Status
+          </label>
+          <select
+            formControlName="status"
+            class="input-field"
+            [class.border-red-500/40]="status.invalid && status.touched"
+          >
+            <option value="">Selecione...</option>
+            @for (s of statuses; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+          @if (status.invalid && status.touched) {
+            <p class="text-xs text-red-400 mt-1">Status obrigatório.</p>
+          }
+        </div>
+
+        <div class="flex gap-3 pt-1">
+          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40">
+            {{ saving ? 'Salvando...' : 'Salvar' }}
+          </button>
+          <a routerLink="/referees" class="btn-ghost">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  }
+</div>

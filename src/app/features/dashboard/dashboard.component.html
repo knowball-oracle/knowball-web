@@ -1,0 +1,211 @@
+<div class="p-6 md:p-8 max-w-6xl mx-auto space-y-8">
+  <div class="flex items-start justify-between">
+    <div>
+      <h1 class="text-3xl font-semibold text-white">
+        Olá, <span class="text-orange-400">{{ user?.name?.split(' ')[0] }}</span> 👋
+      </h1>
+      <p class="text-md text-white/40 mt-1">Aqui está um resumo do sistema KnowBall.</p>
+    </div>
+    <div class="glass rounded-xl px-4 py-2 text-xs text-white/30 tabular-nums hidden sm:block">
+      {{ today | date: 'dd/MM/yyyy' }}
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      @for (_ of [1, 2, 3, 4, 5]; track $index) {
+        <div class="skeleton h-20 rounded-2xl"></div>
+      }
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      @for (stat of stats; track stat.label) {
+        <a
+          [routerLink]="stat.path"
+          class="glass rounded-2xl p-4 flex flex-col gap-2 border border-white/5 transition-all duration-300 hover:bg-white/5 hover:-translate-y-0.5 group"
+          [ngClass]="accentClasses(stat.accent).border"
+        >
+          <div class="flex items-center justify-between">
+            <div class="p-1.5 rounded-lg" [ngClass]="accentClasses(stat.accent).glow">
+              <lucide-icon
+                [img]="stat.icon"
+                size="14"
+                [ngClass]="accentClasses(stat.accent).icon"
+              />
+            </div>
+            <lucide-icon
+              [img]="TrendingUpIcon"
+              size="11"
+              class="text-white/10 group-hover:text-white/30 transition-colors"
+            />
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-white tabular-nums leading-none">
+              {{ stat.count }}
+            </p>
+            <p class="text-xs text-white/35 mt-0.5 leading-tight">{{ stat.label }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  }
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <div class="lg:col-span-2 glass rounded-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-white/8">
+        <div class="flex items-center gap-2">
+          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-400" />
+          <p class="text-sm font-semibold text-white/80">Últimas Partidas</p>
+        </div>
+        <a
+          routerLink="/games"
+          class="text-xs text-white/30 hover:text-white/70 flex items-center gap-1 transition"
+        >
+          Ver todas <lucide-icon [img]="ArrowRightIcon" size="12" />
+        </a>
+      </div>
+
+      @if (loading) {
+        <div class="p-4 space-y-2">
+          @for (_ of [1, 2, 3, 4]; track $index) {
+            <div class="skeleton h-12 rounded-xl"></div>
+          }
+        </div>
+      } @else if (recentGames.length === 0) {
+        <div class="py-12 text-center">
+          <p class="text-white/20 text-sm">Nenhuma partida cadastrada.</p>
+          <a
+            routerLink="/games/new"
+            class="inline-block mt-2 text-xs text-white/40 hover:text-white transition"
+          >
+            Cadastrar primeira →
+          </a>
+        </div>
+      } @else {
+        <div class="divide-y divide-white/5">
+          @for (game of recentGames; track game.id) {
+            <a
+              [routerLink]="['/games', game.id]"
+              class="flex items-center justify-between px-5 py-3.5 hover:bg-white/4 transition-colors duration-150 group"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="p-1.5 rounded-lg bg-emerald-400/8 shrink-0">
+                  <lucide-icon [img]="MapPinIcon" size="13" class="text-emerald-400" />
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-medium text-white/80 truncate">
+                    {{ game.championship?.name }}
+                  </p>
+                  <p class="text-xs text-white/35 truncate">{{ game.place }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 shrink-0 ml-4">
+                <div class="text-right">
+                  <p class="text-base font-bold text-white tabular-nums">
+                    {{ game.homeScore }} <span class="text-white/25">×</span> {{ game.awayScore }}
+                  </p>
+                  <p class="text-xs text-white/30 tabular-nums">
+                    {{ game.matchDate | date: 'dd/MM/yy' }}
+                  </p>
+                </div>
+                <lucide-icon
+                  [img]="ArrowRightIcon"
+                  size="13"
+                  class="text-white/15 group-hover:text-white/50 transition-colors"
+                />
+              </div>
+            </a>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="glass rounded-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-white/8">
+        <div class="flex items-center gap-2">
+          <lucide-icon [img]="cards[4]?.icon" size="15" class="text-rose-400" />
+          <p class="text-sm font-semibold text-white/80">Denúncias</p>
+        </div>
+        <a
+          routerLink="/reports"
+          class="text-xs text-white/30 hover:text-white/70 flex items-center gap-1 transition"
+        >
+          Ver todas <lucide-icon [img]="ArrowRightIcon" size="12" />
+        </a>
+      </div>
+
+      @if (loading) {
+        <div class="p-4 space-y-2">
+          @for (_ of [1, 2, 3]; track $index) {
+            <div class="skeleton h-14 rounded-xl"></div>
+          }
+        </div>
+      } @else if (pendingReports.length === 0) {
+        <div class="py-12 text-center px-4">
+          <div
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-400/10 mb-3"
+          >
+            <lucide-icon [img]="TrendingUpIcon" size="16" class="text-emerald-400" />
+          </div>
+          <p class="text-white/40 text-sm">Nenhuma denúncia pendente.</p>
+        </div>
+      } @else {
+        <div class="divide-y divide-white/5">
+          @for (report of pendingReports; track report.id) {
+            <a
+              [routerLink]="['/reports', report.id]"
+              class="flex items-start justify-between gap-3 px-5 py-3.5 hover:bg-white/4 transition-colors duration-150 group"
+            >
+              <div class="min-w-0">
+                <p class="text-sm font-mono text-white/60 truncate">{{ report.protocol }}</p>
+                <p class="text-xs text-white/30 tabular-nums mt-0.5">
+                  {{ report.date | date: 'dd/MM/yy' }}
+                </p>
+              </div>
+              <span class="badge shrink-0 mt-0.5" [class]="reportStatusStyle(report.status)">
+                {{ report.status === 'NEW' ? 'Nova' : 'Em análise' }}
+              </span>
+            </a>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div>
+    <p class="text-xs text-white/25 uppercase tracking-widest mb-3">Módulos</p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      @for (card of cards; track card.path) {
+        <a
+          [routerLink]="card.path"
+          class="group glass rounded-2xl p-4 border border-white/5 transition-all duration-300 hover:bg-white/5 hover:-translate-y-0.5 flex flex-col gap-3"
+          [ngClass]="accentClasses(card.accent).border"
+        >
+          <div class="flex items-center justify-between">
+            <div class="p-2 rounded-xl" [ngClass]="accentClasses(card.accent).glow">
+              <lucide-icon
+                [img]="card.icon"
+                size="16"
+                [ngClass]="accentClasses(card.accent).icon"
+              />
+            </div>
+            @if (card.count !== null) {
+              <span
+                class="text-xs font-bold tabular-nums"
+                [ngClass]="accentClasses(card.accent).icon"
+              >
+                {{ card.count }}
+              </span>
+            }
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-white/80 leading-tight">{{ card.label }}</p>
+            <p class="text-xs text-white/30 mt-0.5 leading-tight hidden sm:block">
+              {{ card.description }}
+            </p>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</div>

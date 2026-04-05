@@ -1,0 +1,102 @@
+<div class="p-6 md:p-8 max-w-xl mx-auto">
+  <div class="flex items-center gap-3 mb-6">
+    <a routerLink="/users" class="text-white/30 hover:text-white/70 transition text-sm"
+      >← Usuários</a
+    >
+    <span class="text-white/10">|</span>
+    <h1 class="text-xl font-bold text-white">
+      {{ isEdit ? 'Editar Usuário' : 'Novo Usuário' }}
+    </h1>
+  </div>
+
+  @if (loading) {
+    <div class="space-y-3">
+      @for (_ of [1, 2, 3, 4]; track $index) {
+        <div class="skeleton h-12 rounded-xl"></div>
+      }
+    </div>
+  }
+
+  @if (error) {
+    <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading) {
+    <div class="glass rounded-2xl p-6">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Nome
+          </label>
+          <input
+            formControlName="name"
+            type="text"
+            placeholder="Nome completo"
+            class="input-field"
+            [class.border-red-500/40]="name.invalid && name.touched"
+          />
+          @if (name.invalid && name.touched) {
+            <p class="text-xs text-red-400 mt-1">Nome obrigatório.</p>
+          }
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            E-mail
+          </label>
+          <input
+            formControlName="email"
+            type="email"
+            placeholder="email@exemplo.com"
+            class="input-field"
+            [class.border-red-500/40]="email.invalid && email.touched"
+          />
+          @if (email.invalid && email.touched) {
+            <p class="text-xs text-red-400 mt-1">
+              {{ email.hasError('required') ? 'E-mail obrigatório.' : 'E-mail inválido.' }}
+            </p>
+          }
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Senha
+            @if (isEdit) {
+              <span class="normal-case text-white/20 ml-1">(deixe em branco para manter)</span>
+            }
+          </label>
+          <input
+            formControlName="password"
+            type="password"
+            placeholder="••••••••"
+            class="input-field"
+            [class.border-red-500/40]="password.invalid && password.touched"
+          />
+          @if (password.invalid && password.touched) {
+            <p class="text-xs text-red-400 mt-1">Senha deve ter no mínimo 6 caracteres.</p>
+          }
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Role
+          </label>
+          <select formControlName="role" class="input-field">
+            @for (r of roles; track r) {
+              <option [value]="r">{{ r }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="flex gap-3 pt-1">
+          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40">
+            {{ saving ? 'Salvando...' : 'Salvar' }}
+          </button>
+          <a routerLink="/users" class="btn-ghost">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  }
+</div>

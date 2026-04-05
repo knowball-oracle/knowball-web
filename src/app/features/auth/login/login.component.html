@@ -1,0 +1,65 @@
+<div
+  class="min-h-dvh flex items-center justify-center p-4"
+  style="
+    background:
+      radial-gradient(ellipse at 60% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 60%), #06060f;
+  "
+>
+  <div class="glass-liquid rounded-3xl p-8 w-full max-w-md">
+    <div class="flex justify-center mb-8">
+      <img src="/knowball.svg" alt="KnowBall" class="h-10 w-auto" />
+    </div>
+
+    <h2 class="text-lg font-semibold text-white mb-1">Bem-vindo de volta</h2>
+    <p class="text-sm text-white/40 mb-6">Entre com suas credenciais para continuar.</p>
+
+    @if (error) {
+      <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+        {{ error }}
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
+          E-mail
+        </label>
+        <input
+          formControlName="email"
+          type="email"
+          placeholder="seu@email.com"
+          class="input-field"
+          [class.border-red-500/40]="form.get('email')!.invalid && form.get('email')!.touched"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
+          Senha
+        </label>
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="••••••••"
+          class="input-field"
+          [class.border-red-500/40]="form.get('password')!.invalid && form.get('password')!.touched"
+        />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loading"
+        class="w-full btn-primary mt-2 py-2.5 text-sm font-semibold disabled:opacity-40"
+      >
+        {{ loading ? 'Entrando...' : 'Entrar' }}
+      </button>
+    </form>
+
+    <p class="text-center text-sm text-white/30 mt-6">
+      Não tem conta?
+      <a routerLink="/auth/register" class="text-white/70 hover:text-white transition">
+        Cadastre-se
+      </a>
+    </p>
+  </div>
+</div>

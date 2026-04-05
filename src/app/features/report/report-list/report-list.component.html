@@ -1,0 +1,90 @@
+<div class="p-6 md:p-8 max-w-5xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-xl font-bold text-white">Denúncias</h1>
+      <p class="text-sm text-white/40 mt-0.5">Denúncias abertas e analisadas.</p>
+    </div>
+    <a routerLink="/reports/new" class="btn-primary text-sm flex items-center gap-1.5">
+      <lucide-icon [img]="PlusIcon" size="15" /> Nova
+    </a>
+  </div>
+
+  @if (loading) {
+    <div class="space-y-2">
+      @for (_ of [1, 2, 3, 4]; track $index) {
+        <div class="skeleton h-14 rounded-xl"></div>
+      }
+    </div>
+  }
+
+  @if (error) {
+    <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && !error) {
+    @if (items.length === 0) {
+      <div class="glass rounded-2xl py-16 text-center">
+        <p class="text-white/30 text-sm">Nenhuma denúncia cadastrada.</p>
+        <a
+          routerLink="/reports/new"
+          class="inline-block mt-3 text-sm text-white/50 hover:text-white transition"
+        >
+          Registrar a primeira →
+        </a>
+      </div>
+    } @else {
+      <div class="glass rounded-2xl overflow-hidden">
+        <table class="w-full text-sm text-left">
+          <thead class="border-b border-white/8">
+            <tr class="text-white/30 uppercase text-xs tracking-wider">
+              <th class="px-5 py-3">Protocolo</th>
+              <th class="px-5 py-3">Data</th>
+              <th class="px-5 py-3">Status</th>
+              <th class="px-5 py-3">Resultado</th>
+              <th class="px-5 py-3 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            @for (item of items; track item.id) {
+              <tr class="hover:bg-white/4 transition-colors duration-150">
+                <td class="px-5 py-3.5 font-mono text-white/70 text-xs">
+                  {{ item.protocol }}
+                </td>
+                <td class="px-5 py-3.5 text-white/50 tabular-nums">
+                  {{ item.date | date: 'dd/MM/yyyy' }}
+                </td>
+                <td class="px-5 py-3.5">
+                  <span class="badge" [class]="statusStyle(item.status)">
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td class="px-5 py-3.5">
+                  @if (item.analysisResult) {
+                    <span class="badge" [class]="resultStyle(item.analysisResult)">
+                      {{ item.analysisResult }}
+                    </span>
+                  } @else {
+                    <span class="text-white/20 text-xs">—</span>
+                  }
+                </td>
+                <td class="px-5 py-3.5">
+                  <div class="flex items-center justify-end">
+                    <a
+                      [routerLink]="['/reports', item.id]"
+                      class="p-2 rounded-lg text-white/30 hover:text-white/80 hover:bg-white/8 transition-all duration-200"
+                      title="Ver detalhes"
+                    >
+                      <lucide-icon [img]="EyeIcon" size="14" />
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</div>

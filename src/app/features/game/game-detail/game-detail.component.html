@@ -1,0 +1,128 @@
+<div class="p-6 md:p-8 max-w-4xl mx-auto space-y-5">
+  <div class="flex items-center gap-3 mb-2">
+    <a routerLink="/games" class="text-white/30 hover:text-white/70 transition text-sm"
+      >← Partidas</a
+    >
+    <span class="text-white/10">|</span>
+    <h1 class="text-xl font-bold text-white">Detalhes da Partida</h1>
+  </div>
+
+  @if (loading) {
+    <div class="space-y-3">
+      @for (_ of [1, 2, 3]; track $index) {
+        <div class="skeleton h-24 rounded-2xl"></div>
+      }
+    </div>
+  }
+
+  @if (error) {
+    <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading && game) {
+
+    <div class="glass rounded-2xl p-6 text-center">
+      <p class="text-xs text-white/30 uppercase tracking-wider mb-3">
+        {{ game.championship.name }} · {{ game.matchDate | date: 'dd/MM/yyyy HH:mm' }}
+      </p>
+      <div class="text-5xl font-bold tabular-nums text-white tracking-tight">
+        {{ game.homeScore }} <span class="text-white/20 mx-2">×</span> {{ game.awayScore }}
+      </div>
+      <p class="text-sm text-white/40 mt-3">📍 {{ game.place }}</p>
+    </div>
+
+    <div class="glass rounded-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-white/8">
+        <p class="text-sm font-semibold text-white/80">Times</p>
+        <button
+          (click)="showParticipationForm = !showParticipationForm"
+          class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all duration-200"
+        >
+          <lucide-icon [img]="showParticipationForm ? XIcon : PlusIcon" size="13" />
+          {{ showParticipationForm ? 'Cancelar' : 'Adicionar' }}
+        </button>
+      </div>
+
+      @if (showParticipationForm) {
+        <div class="px-5 py-4 border-b border-white/8">
+          <app-participation-form
+            [gameId]="id"
+            (saved)="onParticipationSaved()"
+            (cancelled)="showParticipationForm = false"
+          />
+        </div>
+      }
+
+      @if (participations.length === 0 && !showParticipationForm) {
+        <p class="text-center text-white/25 text-sm py-8">Nenhum time vinculado.</p>
+      } @else {
+        <table class="w-full text-sm text-left">
+          <thead class="border-b border-white/5">
+            <tr class="text-white/25 uppercase text-xs tracking-wider">
+              <th class="px-5 py-3">Time</th>
+              <th class="px-5 py-3">Tipo</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            @for (p of participations; track p.id) {
+              <tr class="hover:bg-white/4 transition-colors duration-150">
+                <td class="px-5 py-3.5 font-medium text-white/80">{{ p.team.name }}</td>
+                <td class="px-5 py-3.5">
+                  <span class="badge" [class]="participationTypeStyle(p.type)">{{ p.type }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    <div class="glass rounded-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-white/8">
+        <p class="text-sm font-semibold text-white/80">Árbitros</p>
+        <button
+          (click)="showRefereeingForm = !showRefereeingForm"
+          class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all duration-200"
+        >
+          <lucide-icon [img]="showRefereeingForm ? XIcon : PlusIcon" size="13" />
+          {{ showRefereeingForm ? 'Cancelar' : 'Adicionar' }}
+        </button>
+      </div>
+
+      @if (showRefereeingForm) {
+        <div class="px-5 py-4 border-b border-white/8">
+          <app-refereeing-form
+            [gameId]="id"
+            (saved)="onRefereeingSaved()"
+            (cancelled)="showRefereeingForm = false"
+          />
+        </div>
+      }
+
+      @if (refereeings.length === 0 && !showRefereeingForm) {
+        <p class="text-center text-white/25 text-sm py-8">Nenhum árbitro vinculado.</p>
+      } @else {
+        <table class="w-full text-sm text-left">
+          <thead class="border-b border-white/5">
+            <tr class="text-white/25 uppercase text-xs tracking-wider">
+              <th class="px-5 py-3">Árbitro</th>
+              <th class="px-5 py-3">Função</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            @for (r of refereeings; track r.id) {
+              <tr class="hover:bg-white/4 transition-colors duration-150">
+                <td class="px-5 py-3.5 font-medium text-white/80">{{ r.referee.name }}</td>
+                <td class="px-5 py-3.5">
+                  <span class="badge" [class]="roleStyle(r.role)">{{ r.role }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  }
+</div>

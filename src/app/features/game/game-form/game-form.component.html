@@ -1,0 +1,113 @@
+<div class="p-6 md:p-8 max-w-xl mx-auto">
+  <div class="flex items-center gap-3 mb-6">
+    <a routerLink="/games" class="text-white/30 hover:text-white/70 transition text-sm"
+      >← Partidas</a
+    >
+    <span class="text-white/10">|</span>
+    <h1 class="text-xl font-bold text-white">
+      {{ isEdit ? 'Editar Partida' : 'Nova Partida' }}
+    </h1>
+  </div>
+
+  @if (loading) {
+    <div class="space-y-3">
+      @for (_ of [1, 2, 3, 4]; track $index) {
+        <div class="skeleton h-12 rounded-xl"></div>
+      }
+    </div>
+  }
+
+  @if (error) {
+    <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading) {
+    <div class="glass rounded-2xl p-6">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+
+        <div formGroupName="championship">
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Campeonato
+          </label>
+          <select
+            formControlName="id"
+            class="input-field"
+            [class.border-red-500/40]="championship.invalid && championship.touched"
+          >
+            <option [value]="null">Selecione...</option>
+            @for (c of championships; track c.id) {
+              <option [value]="c.id">{{ c.name }} ({{ c.year }})</option>
+            }
+          </select>
+          @if (championship.invalid && championship.touched) {
+            <p class="text-xs text-red-400 mt-1">Campeonato obrigatório.</p>
+          }
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+              Data e Hora
+            </label>
+            <input
+              formControlName="matchDate"
+              type="datetime-local"
+              class="input-field"
+              [class.border-red-500/40]="matchDate.invalid && matchDate.touched"
+            />
+            @if (matchDate.invalid && matchDate.touched) {
+              <p class="text-xs text-red-400 mt-1">Data obrigatória.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+              Local
+            </label>
+            <input
+              formControlName="place"
+              type="text"
+              placeholder="Ex: Maracanã"
+              class="input-field"
+              [class.border-red-500/40]="place.invalid && place.touched"
+            />
+            @if (place.invalid && place.touched) {
+              <p class="text-xs text-red-400 mt-1">Local obrigatório.</p>
+            }
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Placar
+          </label>
+          <div class="flex items-center gap-3">
+            <input
+              formControlName="homeScore"
+              type="number"
+              min="0"
+              placeholder="0"
+              class="input-field text-center tabular-nums"
+            />
+            <span class="text-white/30 font-bold text-lg shrink-0">×</span>
+            <input
+              formControlName="awayScore"
+              type="number"
+              min="0"
+              placeholder="0"
+              class="input-field text-center tabular-nums"
+            />
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-1">
+          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40">
+            {{ saving ? 'Salvando...' : 'Salvar' }}
+          </button>
+          <a routerLink="/games" class="btn-ghost">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  }
+</div>

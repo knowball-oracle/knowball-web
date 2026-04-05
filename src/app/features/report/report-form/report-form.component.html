@@ -1,0 +1,136 @@
+<div class="p-6 md:p-8 max-w-2xl mx-auto">
+  <div class="flex items-center gap-3 mb-6">
+    <a routerLink="/reports" class="text-white/30 hover:text-white/70 transition text-sm"
+      >← Denúncias</a
+    >
+    <span class="text-white/10">|</span>
+    <h1 class="text-xl font-bold text-white">Nova Denúncia</h1>
+  </div>
+
+  @if (loading) {
+    <div class="space-y-3">
+      @for (_ of [1, 2, 3, 4]; track $index) {
+        <div class="skeleton h-12 rounded-xl"></div>
+      }
+    </div>
+  }
+
+  @if (error) {
+    <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+      {{ error }}
+    </div>
+  }
+
+  @if (!loading) {
+    <div class="glass rounded-2xl p-6">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div class="grid grid-cols-2 gap-4">
+          <div formGroupName="game">
+            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+              Partida
+            </label>
+            <select
+              formControlName="id"
+              class="input-field"
+              [class.border-red-500/40]="game.invalid && game.touched"
+            >
+              <option [value]="null">Selecione...</option>
+              @for (g of games; track g.id) {
+                <option [value]="g.id">{{ g.place }} — {{ g.matchDate | date: 'dd/MM/yy' }}</option>
+              }
+            </select>
+            @if (game.invalid && game.touched) {
+              <p class="text-xs text-red-400 mt-1">Partida obrigatória.</p>
+            }
+          </div>
+
+          <div formGroupName="referee">
+            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+              Árbitro
+            </label>
+            <select
+              formControlName="id"
+              class="input-field"
+              [class.border-red-500/40]="referee.invalid && referee.touched"
+            >
+              <option [value]="null">Selecione...</option>
+              @for (r of referees; track r.id) {
+                <option [value]="r.id">{{ r.name }}</option>
+              }
+            </select>
+            @if (referee.invalid && referee.touched) {
+              <p class="text-xs text-red-400 mt-1">Árbitro obrigatório.</p>
+            }
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+              Protocolo
+            </label>
+            <input
+              formControlName="protocol"
+              type="text"
+              placeholder="Ex: DEN-2025-001"
+              class="input-field"
+              [class.border-red-500/40]="protocol.invalid && protocol.touched"
+            />
+            @if (protocol.invalid && protocol.touched) {
+              <p class="text-xs text-red-400 mt-1">Protocolo obrigatório.</p>
+            }
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+              Data
+            </label>
+            <input
+              formControlName="date"
+              type="date"
+              class="input-field"
+              [class.border-red-500/40]="date.invalid && date.touched"
+            />
+            @if (date.invalid && date.touched) {
+              <p class="text-xs text-red-400 mt-1">Data obrigatória.</p>
+            }
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Conteúdo
+          </label>
+          <textarea
+            formControlName="content"
+            rows="6"
+            placeholder="Descreva o ocorrido detalhadamente (mín. 20 caracteres)..."
+            class="input-field resize-none"
+            [class.border-red-500/40]="content.invalid && content.touched"
+          >
+          </textarea>
+          @if (content.invalid && content.touched) {
+            <p class="text-xs text-red-400 mt-1">Conteúdo obrigatório (mínimo 20 caracteres).</p>
+          }
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
+            Status
+          </label>
+          <select formControlName="status" class="input-field">
+            @for (s of statuses; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="flex gap-3 pt-1">
+          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40">
+            {{ saving ? 'Enviando...' : 'Enviar Denúncia' }}
+          </button>
+          <a routerLink="/reports" class="btn-ghost">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  }
+</div>
