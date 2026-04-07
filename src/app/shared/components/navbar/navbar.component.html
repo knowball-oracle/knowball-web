@@ -15,8 +15,8 @@
   [class.-translate-x-full]="!mobileOpen"
   [class.translate-x-0]="mobileOpen"
 >
-  <div class="px-5 py-6 border-b border-white/10">
-    <img src="/knowball.svg" alt="KnowBall" class="h-8 w-auto" />
+  <div class="px-3 py-3 border-b border-white/10">
+    <img src="/logo.svg" alt="KnowBall" class="w-auto mt-2" />
   </div>
 
   <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
@@ -25,7 +25,7 @@
         [routerLink]="link.path"
         routerLinkActive="bg-white/10 text-white"
         [routerLinkActiveOptions]="{ exact: link.path === '/dashboard' }"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/40 hover:text-white hover:bg-white/5 transition-all duration-200"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white hover:text-white hover:bg-white/5 transition-all duration-200"
         (click)="mobileOpen = false"
       >
         <lucide-icon [img]="link.icon" size="17" class="shrink-0" />
@@ -34,7 +34,7 @@
     }
   </nav>
 
-  <div class="px-3 py-8 border-t border-white/10 space-y-1">
+  <div class="px-3 py-8 border-t border-white/10 space-y-2">
     <div class="flex items-center gap-3 px-3 py-4">
       <div
         class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-xs font-bold text-orange-400 shrink-0"
