@@ -72,7 +72,7 @@
             <input
               formControlName="protocol"
               type="text"
-              placeholder="Ex: DEN-2025-001"
+              placeholder="Ex: RPT-2026-001"
               class="input-field"
               [class.border-red-500/40]="protocol.invalid && protocol.touched"
             />
@@ -125,7 +125,7 @@
         </div>
 
         <div class="flex gap-3 pt-1">
-          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40">
+          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40 cursor-pointer">
             {{ saving ? 'Enviando...' : 'Enviar Denúncia' }}
           </button>
           <a routerLink="/reports" class="btn-ghost">Cancelar</a>

@@ -71,19 +71,19 @@ export const routes: Routes = [
               ),
           },
           {
-            path: ':id',
-            loadComponent: () =>
-              import('./features/game/game-detail/game-detail.component').then(
-                (c) => c.GameDetailComponent,
-              ),
-          },
-          {
             path: 'new',
             loadComponent: () =>
               import('./features/game/game-form/game-form.component').then(
                 (c) => c.GameFormComponent,
               ),
             canActivate: [AdminGuard],
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/game/game-detail/game-detail.component').then(
+                (c) => c.GameDetailComponent,
+              ),
           },
           {
             path: ':id/edit',
@@ -162,19 +162,18 @@ export const routes: Routes = [
               ),
           },
           {
-            path: ':id',
-            loadComponent: () =>
-              import('./features/report/report-detail/report-detail.component').then(
-                (c) => c.ReportDetailComponent,
-              ),
-          },
-          {
             path: 'new',
             loadComponent: () =>
               import('./features/report/report-form/report-form.component').then(
                 (c) => c.ReportFormComponent,
               ),
-            canActivate: [AdminGuard],
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/report/report-detail/report-detail.component').then(
+                (c) => c.ReportDetailComponent,
+              ),
           },
         ],
       },
