@@ -1,10 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { Eye, Plus } from '../../../shared/icons/icons';
 import { ReportService } from '../services/report.service';
 import { Report } from '../../../models/report.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-report-list',
@@ -14,7 +15,7 @@ import { Report } from '../../../models/report.model';
 })
 export class ReportListComponent implements OnInit {
   private service = inject(ReportService);
-  private router = inject(Router);
+  auth = inject(AuthService);
 
   items: Report[] = [];
   loading = true;

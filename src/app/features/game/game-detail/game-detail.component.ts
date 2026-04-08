@@ -11,6 +11,7 @@ import { Participation } from '../../../models/participation.model';
 import { Refereeing } from '../../../models/refereeing.model';
 import { ParticipationFormComponent } from '../participation-form/participation-form.component';
 import { RefereeingFormComponent } from '../refereeing-form/refereeing-form.component';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-game-detail',
@@ -30,6 +31,7 @@ export class GameDetailComponent implements OnInit {
   private gameSvc = inject(GameService);
   private participationSvc = inject(ParticipationService);
   private refereeingSvc = inject(RefereeingService);
+  auth = inject(AuthService);
 
   game: Game | null = null;
   participations: Participation[] = [];

@@ -6,6 +6,7 @@ import { Pencil, Trash2, Plus } from '../../../shared/icons/icons';
 import { ChampionshipService } from '../services/championship.service';
 import { Championship } from '../../../models/championship.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-championship-list',
@@ -16,6 +17,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 export class ChampionshipListComponent implements OnInit {
   private service = inject(ChampionshipService);
   private router = inject(Router);
+  auth = inject(AuthService);
 
   items: Championship[] = [];
   loading = true;

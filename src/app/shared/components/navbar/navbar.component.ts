@@ -1,19 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
 import {
-  FileWarning,
   LayoutDashboard,
-  LogOut,
-  LucideAngularModule,
-  Menu,
-  ShieldCheck,
-  Swords,
   Trophy,
-  Users,
+  Swords,
+  ShieldCheck,
   Users2,
+  FileWarning,
+  Users,
+  LogOut,
+  Menu,
   X,
-} from 'lucide-angular';
+} from '../../../shared/icons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -23,8 +23,8 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
-  private auth = inject(AuthService);
   private router = inject(Router);
+  auth = inject(AuthService);
 
   user = this.auth.getUser();
   mobileOpen = false;
@@ -40,9 +40,7 @@ export class NavbarComponent {
     { path: '/referees', label: 'Árbitros', icon: ShieldCheck },
     { path: '/teams', label: 'Times', icon: Users2 },
     { path: '/reports', label: 'Denúncias', icon: FileWarning },
-    ...(this.user?.role === 'ROLE_ADMIN'
-      ? [{ path: '/users', label: 'Usuários', icon: Users }]
-      : []),
+    { path: '/users', label: 'Usuários', icon: Users },
   ];
 
   logout(): void {

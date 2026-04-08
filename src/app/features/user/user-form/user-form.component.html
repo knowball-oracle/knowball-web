@@ -91,7 +91,7 @@
         </div>
 
         <div class="flex gap-3 pt-1">
-          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40">
+          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40 cursor-pointer">
             {{ saving ? 'Salvando...' : 'Salvar' }}
           </button>
           <a routerLink="/users" class="btn-ghost">Cancelar</a>

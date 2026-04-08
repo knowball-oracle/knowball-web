@@ -6,6 +6,7 @@ import { Pencil, Trash2, Plus } from '../../../shared/icons/icons';
 import { TeamService } from '../services/team.service';
 import { Team } from '../../../models/team.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-team-list',
@@ -15,6 +16,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 })
 export class TeamListComponent implements OnInit {
   private service = inject(TeamService);
+  auth = inject(AuthService);
 
   items: Team[] = [];
   loading = true;

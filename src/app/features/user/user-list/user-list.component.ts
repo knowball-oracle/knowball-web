@@ -6,6 +6,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Pencil, Trash2, Plus, Search } from '../../../shared/icons/icons';
 import { UserService } from '../services/user.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../core/services/auth.service';
 import { UserResponse } from '../../../models/user-response.model';
 
 @Component({
@@ -23,6 +24,7 @@ import { UserResponse } from '../../../models/user-response.model';
 export class UserListComponent implements OnInit {
   private service = inject(UserService);
   private fb = inject(FormBuilder);
+  auth = inject(AuthService);
 
   items: UserResponse[] = [];
   loading = true;

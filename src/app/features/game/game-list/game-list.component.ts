@@ -6,6 +6,7 @@ import { Eye, Pencil, Trash2, Plus } from '../../../shared/icons/icons';
 import { GameService } from '../services/game.service';
 import { Game } from '../../../models/game.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-game-list',
@@ -16,6 +17,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 export class GameListComponent implements OnInit {
   private service = inject(GameService);
   private router = inject(Router);
+  auth = inject(AuthService);
 
   items: Game[] = [];
   loading = true;

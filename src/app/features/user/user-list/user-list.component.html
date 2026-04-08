@@ -20,7 +20,7 @@
         formControlName="name"
         type="text"
         placeholder="Filtrar por nome..."
-        class="input-field pl-9"
+        class="input-field pl-12"
       />
     </div>
     <div class="relative flex-1 max-w-xs">
@@ -33,10 +33,10 @@
         formControlName="email"
         type="text"
         placeholder="Filtrar por e-mail..."
-        class="input-field pl-9"
+        class="input-field pl-12"
       />
     </div>
-    <button type="submit" class="btn-primary text-sm">Buscar</button>
+    <button type="submit" class="btn-primary text-sm cursor-pointer">Buscar</button>
   </form>
 
   @if (loading) {
@@ -82,14 +82,12 @@
                     <a
                       [routerLink]="['/users', item.id, 'edit']"
                       class="p-2 rounded-lg text-white/30 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-200"
-                      title="Editar"
                     >
                       <lucide-icon [img]="PencilIcon" size="14" />
                     </a>
                     <button
                       (click)="confirmDelete(item.id)"
-                      class="p-2 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
-                      title="Excluir"
+                      class="p-2 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
                     >
                       <lucide-icon [img]="TrashIcon" size="14" />
                     </button>
@@ -111,7 +109,6 @@
               [class.text-black]="p === currentPage"
               [class.bg-white/8]="p !== currentPage"
               [class.text-white/40]="p !== currentPage"
-              [class.hover:bg-white/15]="p !== currentPage"
             >
               {{ p + 1 }}
             </button>

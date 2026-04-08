@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { Pencil, Trash2, Plus } from '../../../shared/icons/icons';
 import { RefereeService } from '../services/referee.service';
 import { Referee } from '../../../models/referee.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-referee-list',
@@ -15,6 +16,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 })
 export class RefereeListComponent implements OnInit {
   private service = inject(RefereeService);
+  auth = inject(AuthService);
 
   items: Referee[] = [];
   loading = true;

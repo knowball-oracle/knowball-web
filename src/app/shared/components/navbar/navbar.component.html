@@ -16,42 +16,52 @@
   [class.translate-x-0]="mobileOpen"
 >
   <div class="px-3 py-3 border-b border-white/10">
-    <img src="/logo.svg" alt="KnowBall" class="w-auto mt-2" />
+    <a routerLink="/dashboard">
+      <img src="/assets/logo.svg" alt="KnowBall" class="h-8 w-auto mt-2" />
+    </a>
   </div>
 
   <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
     @for (link of links; track link.path) {
-      <a
-        [routerLink]="link.path"
-        routerLinkActive="bg-white/10 text-white"
-        [routerLinkActiveOptions]="{ exact: link.path === '/dashboard' }"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white hover:text-white hover:bg-white/5 transition-all duration-200"
-        (click)="mobileOpen = false"
-      >
-        <lucide-icon [img]="link.icon" size="17" class="shrink-0" />
-        <span>{{ link.label }}</span>
-      </a>
+      @if (link.path !== '/users' || auth.isAdmin()) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="bg-white/10 text-white"
+          [routerLinkActiveOptions]="{ exact: link.path === '/dashboard' }"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white hover:text-white hover:bg-white/5 transition-all duration-200"
+          (click)="mobileOpen = false"
+        >
+          <lucide-icon [img]="link.icon" size="17" />
+          <span>{{ link.label }}</span>
+        </a>
+      }
     }
   </nav>
 
-  <div class="px-3 py-8 border-t border-white/10 space-y-2">
-    <div class="flex items-center gap-3 px-3 py-4">
+  <div class="px-3 py-3 border-t border-white/8">
+    <div class="flex items-center gap-2.5 px-2 py-2 rounded-xl">
       <div
         class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-xs font-bold text-orange-400 shrink-0"
       >
         {{ initials() }}
       </div>
-      <div class="overflow-hidden">
+
+      <div class="min-w-0 flex-1">
         <p class="text-sm font-medium text-white/80 truncate">{{ user?.name }}</p>
-        <p class="text-xs text-white/30 truncate">{{ user?.role }}</p>
+        @if (auth.isAdmin()) {
+          <span class="text-xs text-purple-400">ADMIN</span>
+        } @else {
+          <span class="text-xs text-white/30">USER</span>
+        }
       </div>
+
+      <button
+        (click)="logout()"
+        title="Sair"
+        class="p-1.5 rounded-lg text-white/25 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 shrink-0 cursor-pointer"
+      >
+        <lucide-icon [img]="LogOutIcon" size="16" />
+      </button>
     </div>
-    <button
-      (click)="logout()"
-      class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-500 bg-red-500/10 hover:text-red-400 hover:bg-red-500/8 transition-all duration-200 cursor-pointer"
-    >
-      <lucide-icon [img]="LogOutIcon" size="17" class="shrink-0" />
-      <span>Sair</span>
-    </button>
   </div>
 </aside>

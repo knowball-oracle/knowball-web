@@ -22,7 +22,6 @@
   }
 
   @if (!loading && game) {
-
     <div class="glass rounded-2xl p-6 text-center">
       <p class="text-xs text-white/30 uppercase tracking-wider mb-3">
         {{ game.championship.name }} · {{ game.matchDate | date: 'dd/MM/yyyy HH:mm' }}
@@ -36,13 +35,15 @@
     <div class="glass rounded-2xl overflow-hidden">
       <div class="flex items-center justify-between px-5 py-4 border-b border-white/8">
         <p class="text-sm font-semibold text-white/80">Times</p>
-        <button
-          (click)="showParticipationForm = !showParticipationForm"
-          class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all duration-200"
-        >
-          <lucide-icon [img]="showParticipationForm ? XIcon : PlusIcon" size="13" />
-          {{ showParticipationForm ? 'Cancelar' : 'Adicionar' }}
-        </button>
+        @if (auth.isAdmin()) {
+          <button
+            (click)="showParticipationForm = !showParticipationForm"
+            class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all duration-200 cursor-pointer"
+          >
+            <lucide-icon [img]="showParticipationForm ? XIcon : PlusIcon" size="13" />
+            {{ showParticipationForm ? 'Cancelar' : 'Adicionar' }}
+          </button>
+        }
       </div>
 
       @if (showParticipationForm) {
@@ -82,13 +83,15 @@
     <div class="glass rounded-2xl overflow-hidden">
       <div class="flex items-center justify-between px-5 py-4 border-b border-white/8">
         <p class="text-sm font-semibold text-white/80">Árbitros</p>
-        <button
-          (click)="showRefereeingForm = !showRefereeingForm"
-          class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all duration-200"
-        >
-          <lucide-icon [img]="showRefereeingForm ? XIcon : PlusIcon" size="13" />
-          {{ showRefereeingForm ? 'Cancelar' : 'Adicionar' }}
-        </button>
+        @if (auth.isAdmin()) {
+          <button
+            (click)="showRefereeingForm = !showRefereeingForm"
+            class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all duration-200 cursor-pointer"
+          >
+            <lucide-icon [img]="showRefereeingForm ? XIcon : PlusIcon" size="13" />
+            {{ showRefereeingForm ? 'Cancelar' : 'Adicionar' }}
+          </button>
+        }
       </div>
 
       @if (showRefereeingForm) {

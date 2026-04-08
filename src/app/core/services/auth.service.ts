@@ -42,16 +42,23 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
+
   getUser(): any | null {
     const u = localStorage.getItem(this.USER_KEY);
     return u ? JSON.parse(u) : null;
   }
+
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
+
   isAdmin(): boolean {
-    return this.getUser()?.role === 'ROLE_ADMIN';
+    const role = this.getUser()?.role;
+    if (!role) return false;
+    if (Array.isArray(role)) return role.includes('ROLE_ADMIN');
+    return role === 'ROLE_ADMIN';
   }
+
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
