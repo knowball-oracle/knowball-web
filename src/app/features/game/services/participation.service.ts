@@ -12,7 +12,9 @@ interface ParticipationRequest {
   type: ParticipationType;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ParticipationService {
   private url = `${environment.apiUrl}/participations`;
 

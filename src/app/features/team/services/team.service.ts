@@ -5,7 +5,9 @@ import { map, Observable } from "rxjs";
 import { HateoasCollection } from "../../../shared/types/hateoas.types"
 import { Team } from "../../../models/team.model";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class TeamService {
   private url = `${environment.apiUrl}/teams`;
 

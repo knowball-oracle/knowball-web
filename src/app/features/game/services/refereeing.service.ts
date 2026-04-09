@@ -12,7 +12,9 @@ interface RefereeingRequest {
   role: RefereeingRoleType;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class RefereeingService {
   private url = `${environment.apiUrl}/refereeing`;
 

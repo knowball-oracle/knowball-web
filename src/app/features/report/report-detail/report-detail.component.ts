@@ -1,28 +1,44 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ReportService } from '../services/report.service';
 import { Report } from '../../../models/report.model';
-import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { AnalysisResultType, ReportStatusType } from '../../../models';
 
 @Component({
   selector: 'app-report-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './report-detail.component.html',
 })
 export class ReportDetailComponent implements OnInit {
   @Input() id!: string;
 
   private service = inject(ReportService);
+  auth = inject(AuthService);
 
   report: Report | null = null;
   loading = true;
   error = '';
+  updateError = '';
+  updateSuccess = false;
+
+  selectedStatus = '';
+  selectedResult = '';
 
   ngOnInit(): void {
+    this.load();
+  }
+
+  load(): void {
+    this.loading = true;
     this.service.getById(Number(this.id)).subscribe({
       next: (data) => {
         this.report = data;
+        this.selectedStatus = data.status;
+        this.selectedResult = data.analysisResult ?? '';
         this.loading = false;
       },
       error: () => {
@@ -30,6 +46,27 @@ export class ReportDetailComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  updateStatus(): void {
+    this.updateError = '';
+    this.updateSuccess = false;
+
+    this.service
+      .updateStatus(Number(this.id), {
+        status: this.selectedStatus as ReportStatusType,
+        analysisResult: (this.selectedResult as AnalysisResultType) || null,
+      })
+      .subscribe({
+        next: () => {
+          this.updateSuccess = true;
+          this.load();
+          setTimeout(() => (this.updateSuccess = false), 3000);
+        },
+        error: () => {
+          this.updateError = 'Erro ao atualizar status.';
+        },
+      });
   }
 
   statusColor(status: string): string {

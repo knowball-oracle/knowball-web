@@ -9,6 +9,7 @@ import { RefereeService } from '../../referee/services/referee.service';
 import { Game } from '../../../models/game.model';
 import { Referee } from '../../../models/referee.model';
 import { ReportStatusType } from '../../../models/report-status.types';
+import { UserOnlyGuard } from '../../../core/guards/user-only.guard';
 
 @Component({
   selector: 'app-report-form',

@@ -30,6 +30,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       return throwError(() => error);
-    }),
+    })
   );
 };

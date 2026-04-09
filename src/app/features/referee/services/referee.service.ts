@@ -5,7 +5,9 @@ import { map, Observable } from "rxjs";
 import { HateoasCollection } from "../../../shared/types/hateoas.types";
 import { Referee } from "../../../models/referee.model";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class RefereeService {
   private url = `${environment.apiUrl}/referees`;
 

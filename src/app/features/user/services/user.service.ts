@@ -5,7 +5,9 @@ import { Observable } from "rxjs";
 import { UserResponse } from "../../../models/user-response.model";
 import { User } from "../../../models/user.model";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
   private url = `${environment.apiUrl}/users`;
 

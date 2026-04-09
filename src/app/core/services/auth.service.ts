@@ -6,7 +6,9 @@ import { LoginRequest } from '../../models/login-request.model';
 import { LoginResponse } from '../../models/login-response.model';
 import { RegisterRequest } from '../../models/register-request.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   private readonly TOKEN_KEY = 'token';
   private readonly USER_KEY = 'user';

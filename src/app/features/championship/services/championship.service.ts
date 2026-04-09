@@ -6,7 +6,9 @@ import { environment } from '../../../../environments/environment';
 import { HateoasCollection, HateoasEntity } from '../../../shared/types/hateoas.types';
 import { Championship } from '../../../models/championship.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ChampionshipService {
   private url = `${environment.apiUrl}/championships`;
 

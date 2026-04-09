@@ -13,7 +13,9 @@ interface GameRequest {
   awayScore: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class GameService {
   private url = `${environment.apiUrl}/games`;
 

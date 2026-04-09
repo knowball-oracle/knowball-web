@@ -17,7 +17,14 @@ interface ReportRequest {
   analysisResult?: AnalysisResultType;
 }
 
-@Injectable({ providedIn: 'root' })
+interface ReportStatusRequest {
+  status: ReportStatusType;
+  analysisResult: AnalysisResultType | null;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class ReportService {
   private url = `${environment.apiUrl}/reports`;
 
@@ -41,5 +48,9 @@ export class ReportService {
 
   create(report: ReportRequest): Observable<Report> {
     return this.http.post<Report>(this.url, report);
+  }
+
+  updateStatus(id: number, body: ReportStatusRequest): Observable<Report> {
+    return this.http.put<Report>(`${this.url}/${id}/status`, body);
   }
 }
