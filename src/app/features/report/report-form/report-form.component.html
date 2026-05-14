@@ -50,16 +50,26 @@
             </label>
             <select
               formControlName="id"
-              class="input-field"
-              [class.border-red-500/40]="referee.invalid && referee.touched"
+              class="input-field bg-[#1c1b19] text-white/80"
+              [attr.disabled]="!game.value || loadingReferees ? true : null"
             >
-              <option [value]="null">Selecione...</option>
-              @for (r of referees; track r.id) {
-                <option [value]="r.id">{{ r.name }}</option>
+              <option [value]="null" disabled selected>
+                {{
+                  !game.value
+                    ? 'Selecione uma partida primeiro'
+                    : loadingReferees
+                      ? 'Carregando...'
+                      : 'Selecione um árbitro'
+                }}
+              </option>
+              @for (ref of referees; track ref.id) {
+                <option [value]="ref.id">{{ ref.name }}</option>
               }
             </select>
-            @if (referee.invalid && referee.touched) {
-              <p class="text-xs text-red-400 mt-1">Árbitro obrigatório.</p>
+            @if (game.value && !loadingReferees && referees.length === 0) {
+              <p class="text-xs text-yellow-400 mt-1">
+                Nenhum árbitro vinculado a esta partida. Adicione via detalhe da partida primeiro.
+              </p>
             }
           </div>
         </div>
@@ -106,26 +116,18 @@
             placeholder="Descreva o ocorrido detalhadamente (mín. 20 caracteres)..."
             class="input-field resize-none"
             [class.border-red-500/40]="content.invalid && content.touched"
-          >
-          </textarea>
+          ></textarea>
           @if (content.invalid && content.touched) {
             <p class="text-xs text-red-400 mt-1">Conteúdo obrigatório (mínimo 20 caracteres).</p>
           }
         </div>
 
-        <div>
-          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-            Status
-          </label>
-          <select formControlName="status" class="input-field">
-            @for (s of statuses; track s) {
-              <option [value]="s">{{ s }}</option>
-            }
-          </select>
-        </div>
-
         <div class="flex gap-3 pt-1">
-          <button type="submit" [disabled]="saving" class="btn-primary disabled:opacity-40 cursor-pointer">
+          <button
+            type="submit"
+            [disabled]="saving"
+            class="btn-primary disabled:opacity-40 cursor-pointer"
+          >
             {{ saving ? 'Enviando...' : 'Enviar Denúncia' }}
           </button>
           <a routerLink="/reports" class="btn-ghost">Cancelar</a>

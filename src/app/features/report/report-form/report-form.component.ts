@@ -5,11 +5,10 @@ import { Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { ReportService } from '../services/report.service';
 import { GameService } from '../../game/services/game.service';
-import { RefereeService } from '../../referee/services/referee.service';
 import { Game } from '../../../models/game.model';
 import { Referee } from '../../../models/referee.model';
 import { ReportStatusType } from '../../../models/report-status.types';
-import { UserOnlyGuard } from '../../../core/guards/user-only.guard';
+import { RefereeingService } from '../../game/services/refereeing.service';
 
 @Component({
   selector: 'app-report-form',
@@ -21,11 +20,12 @@ export class ReportFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private reportService = inject(ReportService);
   private gameService = inject(GameService);
-  private refereeService = inject(RefereeService);
+  private refereeingService = inject(RefereeingService);
   private router = inject(Router);
 
   loading = false;
   saving = false;
+  loadingReferees = false;
   error = '';
   games: Game[] = [];
   referees: Referee[] = [];
@@ -59,19 +59,34 @@ export class ReportFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    forkJoin({
-      games: this.gameService.getAll(),
-      referees: this.refereeService.getAll(),
-    }).subscribe({
-      next: (data) => {
-        this.games = data.games;
-        this.referees = data.referees;
+    this.gameService.getAll().subscribe({
+      next: (games) => {
+        this.games = games;
         this.loading = false;
       },
       error: () => {
-        this.error = 'Erro ao carregar dados.';
+        this.error = 'Erro ao carregar partidas.';
         this.loading = false;
       },
+    });
+
+    this.game.valueChanges.subscribe((gameId) => {
+      this.referees = [];
+      this.form.get('referee.id')!.setValue(null);
+
+      if (!gameId) return;
+
+      this.loadingReferees = true;
+      this.refereeingService.getByGame(Number(gameId)).subscribe({
+        next: (refereeing) => {
+          this.referees = refereeing.map((r) => r.referee);
+          this.loadingReferees = false;
+        },
+        error: () => {
+          this.error = 'Erro ao carregar árbitros da partida.';
+          this.loadingReferees = false;
+        },
+      });
     });
   }
 
