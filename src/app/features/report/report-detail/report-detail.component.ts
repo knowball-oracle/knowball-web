@@ -2,6 +2,8 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
+import { Trash2 } from '../../../shared/icons/icons';
 import { ReportService } from '../services/report.service';
 import { Report } from '../../../models/report.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -10,7 +12,7 @@ import { AnalysisResultType, ReportStatusType } from '../../../models';
 @Component({
   selector: 'app-report-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, LucideAngularModule],
   templateUrl: './report-detail.component.html',
 })
 export class ReportDetailComponent implements OnInit {
@@ -19,6 +21,8 @@ export class ReportDetailComponent implements OnInit {
   private service = inject(ReportService);
   private router = inject(Router);
   auth = inject(AuthService);
+
+  readonly TrashIcon = Trash2;
 
   report: Report | null = null;
   loading = true;
