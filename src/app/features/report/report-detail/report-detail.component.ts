@@ -2,17 +2,17 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { LucideAngularModule } from 'lucide-angular';
-import { Trash2 } from '../../../shared/icons/icons';
+import { LucideAngularModule, Trash2 } from 'lucide-angular';
 import { ReportService } from '../services/report.service';
 import { Report } from '../../../models/report.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { AnalysisResultType, ReportStatusType } from '../../../models';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-report-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, FormsModule, RouterLink, LucideAngularModule, ConfirmDialogComponent],
   templateUrl: './report-detail.component.html',
 })
 export class ReportDetailComponent implements OnInit {
@@ -31,6 +31,7 @@ export class ReportDetailComponent implements OnInit {
   updateSuccess = false;
   deleteError = '';
   deleting = false;
+  showDeleteConfirm = false;
 
   selectedStatus = '';
   selectedResult = '';
@@ -80,14 +81,16 @@ export class ReportDetailComponent implements OnInit {
     return this.auth.isAuthenticated();
   }
 
+  confirmDelete(): void {
+    this.showDeleteConfirm = true;
+  }
+
   deleteReport(): void {
     if (!this.report?.id || this.deleting) return;
 
-    const confirmed = window.confirm('Tem certeza que deseja excluir esta denúncia?');
-    if (!confirmed) return;
-
     this.deleting = true;
     this.deleteError = '';
+    this.showDeleteConfirm = false;
 
     this.service.delete(this.report.id).subscribe({
       next: () => {
@@ -100,7 +103,6 @@ export class ReportDetailComponent implements OnInit {
           this.deleteError = 'Você não tem permissão para excluir esta denúncia.';
           return;
         }
-
         if (err.status === 404) {
           this.deleteError = 'Denúncia não encontrada.';
           return;

@@ -1,6 +1,8 @@
 <div class="p-6 md:p-8 max-w-2xl mx-auto">
   <div class="flex items-center gap-3 mb-6">
-    <a routerLink="/reports" class="text-white/30 hover:text-white/70 transition text-sm">← Denúncias</a>
+    <a routerLink="/reports" class="text-white/30 hover:text-white/70 transition text-sm"
+      >← Denúncias</a
+    >
     <span class="text-white/10">|</span>
     <h1 class="text-xl font-bold text-white">Detalhes da Denúncia</h1>
   </div>
@@ -60,28 +62,6 @@
         </p>
       </div>
 
-      @if (canDelete()) {
-        <div class="glass rounded-2xl p-5 space-y-3 border border-red-500/20">
-          <p class="text-sm font-semibold text-white/80">Excluir denúncia</p>
-          <p class="text-xs text-white/40">Esta ação remove a denúncia permanentemente.</p>
-
-          <div class="flex items-center gap-3">
-            <button
-              (click)="deleteReport()"
-              [disabled]="deleting"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/15 text-red-400 hover:bg-red-500/20 transition disabled:opacity-40 cursor-pointer"
-            >
-              <lucide-icon [img]="TrashIcon" size="16"></lucide-icon>
-              {{ deleting ? 'Excluindo...' : 'Excluir denúncia' }}
-            </button>
-          </div>
-
-          @if (deleteError) {
-            <p class="text-xs text-red-400">{{ deleteError }}</p>
-          }
-        </div>
-      }
-
       @if (auth.isAdmin()) {
         <div class="glass rounded-2xl p-5 space-y-3 border border-white/8">
           <p class="text-sm font-semibold text-white/80">Atualizar Status</p>
@@ -122,6 +102,38 @@
           }
         </div>
       }
+
+      @if (canDelete()) {
+        <div class="glass rounded-2xl p-5 space-y-3 border border-red-500/20">
+          <p class="text-sm font-semibold text-white/80">Excluir denúncia</p>
+          <p class="text-xs text-white/40">Esta ação remove a denúncia permanentemente.</p>
+
+          <div class="flex items-center gap-3">
+            <button
+              (click)="confirmDelete()"
+              [disabled]="deleting"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/15 text-red-400 hover:bg-red-500/20 transition disabled:opacity-40 cursor-pointer"
+            >
+              <lucide-icon [img]="TrashIcon" size="16"></lucide-icon>
+              {{ deleting ? 'Excluindo...' : 'Excluir denúncia' }}
+            </button>
+          </div>
+
+          @if (deleteError) {
+            <p class="text-xs text-red-400">{{ deleteError }}</p>
+          }
+        </div>
+      }
     </div>
   }
 </div>
+
+<app-confirm-dialog
+  [visible]="showDeleteConfirm"
+  title="Excluir denúncia"
+  message="Esta ação não pode ser desfeita."
+  confirmLabel="Excluir"
+  [danger]="true"
+  (confirmed)="deleteReport()"
+  (cancelled)="showDeleteConfirm = false"
+/>
