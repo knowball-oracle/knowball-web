@@ -12,4 +12,5 @@ export interface Report {
   date: string;
   status: ReportStatusType;
   analysisResult?: AnalysisResultType;
+  canDelete?: boolean;
 }

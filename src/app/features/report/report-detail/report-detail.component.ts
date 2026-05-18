@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReportService } from '../services/report.service';
 import { Report } from '../../../models/report.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -17,6 +17,7 @@ export class ReportDetailComponent implements OnInit {
   @Input() id!: string;
 
   private service = inject(ReportService);
+  private router = inject(Router);
   auth = inject(AuthService);
 
   report: Report | null = null;
@@ -24,6 +25,8 @@ export class ReportDetailComponent implements OnInit {
   error = '';
   updateError = '';
   updateSuccess = false;
+  deleteError = '';
+  deleting = false;
 
   selectedStatus = '';
   selectedResult = '';
@@ -67,6 +70,41 @@ export class ReportDetailComponent implements OnInit {
           this.updateError = 'Erro ao atualizar status.';
         },
       });
+  }
+
+  canDelete(): boolean {
+    return this.auth.isAuthenticated();
+  }
+
+  deleteReport(): void {
+    if (!this.report?.id || this.deleting) return;
+
+    const confirmed = window.confirm('Tem certeza que deseja excluir esta denúncia?');
+    if (!confirmed) return;
+
+    this.deleting = true;
+    this.deleteError = '';
+
+    this.service.delete(this.report.id).subscribe({
+      next: () => {
+        this.router.navigate(['/reports']);
+      },
+      error: (err) => {
+        this.deleting = false;
+
+        if (err.status === 403) {
+          this.deleteError = 'Você não tem permissão para excluir esta denúncia.';
+          return;
+        }
+
+        if (err.status === 404) {
+          this.deleteError = 'Denúncia não encontrada.';
+          return;
+        }
+
+        this.deleteError = 'Erro ao excluir denúncia.';
+      },
+    });
   }
 
   statusColor(status: string): string {

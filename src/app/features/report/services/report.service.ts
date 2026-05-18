@@ -53,4 +53,8 @@ export class ReportService {
   updateStatus(id: number, body: ReportStatusRequest): Observable<Report> {
     return this.http.put<Report>(`${this.url}/${id}/status`, body);
   }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
 }

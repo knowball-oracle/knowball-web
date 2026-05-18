@@ -8,84 +8,118 @@
   </div>
 
   @if (loading) {
-  <div class="space-y-3">
-    @for (_ of [1, 2, 3]; track $index) {
-    <div class="skeleton h-16 rounded-xl"></div>
-    }
-  </div>
-  } @if (error) {
-  <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-    {{ error }}
-  </div>
-  } @if (!loading && report) {
-  <div class="space-y-4">
-    <div class="glass rounded-2xl p-5 flex items-center justify-between">
-      <div>
-        <p class="text-xs text-white/30 uppercase tracking-wider mb-1">Protocolo</p>
-        <p class="font-mono font-semibold text-white/90">{{ report.protocol }}</p>
-      </div>
-      <div class="flex gap-2">
-        <span class="badge" [class]="statusColor(report.status)">{{ report.status }}</span>
-        @if (report.analysisResult) {
-        <span class="badge" [class]="resultColor(report.analysisResult)">
-          {{ report.analysisResult }}
-        </span>
-        }
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4">
-      <div class="glass rounded-2xl p-5">
-        <p class="text-xs text-white/30 uppercase tracking-wider mb-2">Partida</p>
-        <p class="text-sm font-medium text-white/80">{{ report.game.place }}</p>
-        <p class="text-xs text-white/40 mt-1 tabular-nums">
-          {{ report.game.matchDate | date : 'dd/MM/yyyy HH:mm' }}
-        </p>
-      </div>
-      <div class="glass rounded-2xl p-5">
-        <p class="text-xs text-white/30 uppercase tracking-wider mb-2">Árbitro</p>
-        <p class="text-sm font-medium text-white/80">{{ report.referee.name }}</p>
-        <p class="text-xs text-white/40 mt-1 tabular-nums">
-          {{ report.date | date : 'dd/MM/yyyy' }}
-        </p>
-      </div>
-    </div>
-
-    <div class="glass rounded-2xl p-5">
-      <p class="text-xs text-white/30 uppercase tracking-wider mb-3">Conteúdo</p>
-      <p class="text-sm text-white/70 leading-relaxed whitespace-pre-wrap">
-        {{ report.content }}
-      </p>
-    </div>
-
-    @if (auth.isAdmin()) {
-    <div class="glass rounded-2xl p-5 space-y-3 border border-white/8">
-      <p class="text-sm font-semibold text-white/80">Atualizar Status</p>
-
-      <div class="flex gap-3">
-        <select [(ngModel)]="selectedStatus" class="input-field flex-1 bg-[#1c1b19] text-white/80">
-          <option value="NEW">Novo</option>
-          <option value="UNDER_REVIEW">Em análise</option>
-          <option value="RESOLVED">Resolvido</option>
-        </select>
-
-        <select [(ngModel)]="selectedResult" class="input-field flex-1 bg-[#1c1b19] text-white/80">
-          <option value="">Sem resultado</option>
-          <option value="POSITIVE">Positivo</option>
-          <option value="NEUTRAL">Neutro</option>
-          <option value="NEGATIVE">Negativo</option>
-        </select>
-
-        <button (click)="updateStatus()" class="btn-primary text-sm px-5 shrink-0 cursor-pointer">Salvar</button>
-      </div>
-
-      @if (updateSuccess) {
-      <p class="text-xs text-emerald-400">✓ Status atualizado com sucesso.</p>
-      } @if (updateError) {
-      <p class="text-xs text-red-400">{{ updateError }}</p>
+    <div class="space-y-3">
+      @for (_ of [1, 2, 3]; track $index) {
+        <div class="skeleton h-16 rounded-xl"></div>
       }
     </div>
+  }
+  @if (error) {
+    <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+      {{ error }}
+    </div>
+    @if (canDelete()) {
+      <div class="glass rounded-2xl p-5 space-y-3 border border-red-500/20">
+        <p class="text-sm font-semibold text-white/80">Excluir denúncia</p>
+        <p class="text-xs text-white/40">Esta ação remove a denúncia permanentemente.</p>
+
+        <div class="flex items-center gap-3">
+          <button
+            (click)="deleteReport()"
+            [disabled]="deleting"
+            class="px-4 py-2 rounded-xl bg-red-500/15 text-red-400 hover:bg-red-500/20 transition disabled:opacity-40 cursor-pointer"
+          >
+            {{ deleting ? 'Excluindo...' : 'Excluir denúncia' }}
+          </button>
+        </div>
+
+        @if (deleteError) {
+          <p class="text-xs text-red-400">{{ deleteError }}</p>
+        }
+      </div>
     }
-  </div>
+  }
+  @if (!loading && report) {
+    <div class="space-y-4">
+      <div class="glass rounded-2xl p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs text-white/30 uppercase tracking-wider mb-1">Protocolo</p>
+          <p class="font-mono font-semibold text-white/90">{{ report.protocol }}</p>
+        </div>
+        <div class="flex gap-2">
+          <span class="badge" [class]="statusColor(report.status)">{{ report.status }}</span>
+          @if (report.analysisResult) {
+            <span class="badge" [class]="resultColor(report.analysisResult)">
+              {{ report.analysisResult }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="glass rounded-2xl p-5">
+          <p class="text-xs text-white/30 uppercase tracking-wider mb-2">Partida</p>
+          <p class="text-sm font-medium text-white/80">{{ report.game.place }}</p>
+          <p class="text-xs text-white/40 mt-1 tabular-nums">
+            {{ report.game.matchDate | date: 'dd/MM/yyyy HH:mm' }}
+          </p>
+        </div>
+        <div class="glass rounded-2xl p-5">
+          <p class="text-xs text-white/30 uppercase tracking-wider mb-2">Árbitro</p>
+          <p class="text-sm font-medium text-white/80">{{ report.referee.name }}</p>
+          <p class="text-xs text-white/40 mt-1 tabular-nums">
+            {{ report.date | date: 'dd/MM/yyyy' }}
+          </p>
+        </div>
+      </div>
+
+      <div class="glass rounded-2xl p-5">
+        <p class="text-xs text-white/30 uppercase tracking-wider mb-3">Conteúdo</p>
+        <p class="text-sm text-white/70 leading-relaxed whitespace-pre-wrap">
+          {{ report.content }}
+        </p>
+      </div>
+
+      @if (auth.isAdmin()) {
+        <div class="glass rounded-2xl p-5 space-y-3 border border-white/8">
+          <p class="text-sm font-semibold text-white/80">Atualizar Status</p>
+
+          <div class="flex gap-3">
+            <select
+              [(ngModel)]="selectedStatus"
+              class="input-field flex-1 bg-[#1c1b19] text-white/80"
+            >
+              <option value="NEW">Novo</option>
+              <option value="UNDER_REVIEW">Em análise</option>
+              <option value="RESOLVED">Resolvido</option>
+            </select>
+
+            <select
+              [(ngModel)]="selectedResult"
+              class="input-field flex-1 bg-[#1c1b19] text-white/80"
+            >
+              <option value="">Sem resultado</option>
+              <option value="POSITIVE">Positivo</option>
+              <option value="NEUTRAL">Neutro</option>
+              <option value="NEGATIVE">Negativo</option>
+            </select>
+
+            <button
+              (click)="updateStatus()"
+              class="btn-primary text-sm px-5 shrink-0 cursor-pointer"
+            >
+              Salvar
+            </button>
+          </div>
+
+          @if (updateSuccess) {
+            <p class="text-xs text-emerald-400">✓ Status atualizado com sucesso.</p>
+          }
+          @if (updateError) {
+            <p class="text-xs text-red-400">{{ updateError }}</p>
+          }
+        </div>
+      }
+    </div>
   }
 </div>
