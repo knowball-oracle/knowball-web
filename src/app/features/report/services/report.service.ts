@@ -13,7 +13,6 @@ interface ReportRequest {
   protocol: string;
   content: string;
   date: string;
-  status: ReportStatusType;
   analysisResult?: AnalysisResultType;
 }
 

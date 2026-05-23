@@ -37,7 +37,6 @@ export class ReportFormComponent implements OnInit {
     protocol: ['', Validators.required],
     content: ['', [Validators.required, Validators.minLength(20)]],
     date: ['', Validators.required],
-    status: ['NEW', Validators.required],
     analysisResult: [null],
   });
 
