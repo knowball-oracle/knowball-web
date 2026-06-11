@@ -74,22 +74,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-              Protocolo
-            </label>
-            <input
-              formControlName="protocol"
-              type="text"
-              placeholder="Ex: RPT-2026-001"
-              class="input-field"
-              [class.border-red-500/40]="protocol.invalid && protocol.touched"
-            />
-            @if (protocol.invalid && protocol.touched) {
-              <p class="text-xs text-red-400 mt-1">Protocolo obrigatório.</p>
-            }
-          </div>
+        <div class="grid grid-cols-1 gap-4">
           <div>
             <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
               Data
@@ -136,3 +121,9 @@
     </div>
   }
 </div>
+
+<app-ticket-modal
+  [visible]="ticketVisible"
+  [protocolo]="ticketProtocolo"
+  (closed)="onTicketClosed()"
+/>
