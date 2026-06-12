@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
@@ -23,11 +23,9 @@ export class AuthService {
   private url = `${environment.apiUrl}/auth`;
 
   private _user = signal<SessionUser | null>(this._loadUser());
+  private _photo = signal<string | null>(this._loadPhoto());
 
   readonly user = this._user.asReadonly();
-  private _photo = signal<string | null>(
-    typeof window !== 'undefined' ? localStorage.getItem(this.PHOTO_KEY) : null,
-  );
   readonly photo = this._photo.asReadonly();
 
   constructor(private http: HttpClient) {}
@@ -36,6 +34,17 @@ export class AuthService {
     if (typeof window === 'undefined') return null;
     const u = localStorage.getItem(this.USER_KEY);
     return u ? JSON.parse(u) : null;
+  }
+
+  private _loadPhoto(): string | null {
+    if (typeof window === 'undefined') return null;
+    const email = JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')?.email ?? 'anonymous';
+    return localStorage.getItem(`${this.PHOTO_KEY}_${email}`);
+  }
+
+  private photoKey(): string {
+    const email = this._user()?.email ?? 'anonymous';
+    return `${this.PHOTO_KEY}_${email}`;
   }
 
   login(request: LoginRequest): Observable<LoginResponse> {
@@ -62,12 +71,15 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     this._user.set(user);
+    const savedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
+    this._photo.set(savedPhoto);
   }
 
   savePhoto(base64: string): void {
-    localStorage.setItem(this.PHOTO_KEY, base64);
+    localStorage.setItem(this.photoKey(), base64);
     this._photo.set(base64);
   }
+
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -90,7 +102,6 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
-    localStorage.removeItem(this.PHOTO_KEY);
     this._user.set(null);
     this._photo.set(null);
   }
