@@ -24,5 +24,8 @@ export {
   MapPin,
   CircleCheck,
   Copy,
+  ArrowLeft,
+  Camera,
+  Save,
   type LucideIconData,
 } from 'lucide-angular';

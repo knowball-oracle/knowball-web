@@ -40,14 +40,14 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import('./features/championship/championship-list/championship-list.component').then(
-                (c) => c.ChampionshipListComponent
+                (c) => c.ChampionshipListComponent,
               ),
           },
           {
             path: 'new',
             loadComponent: () =>
               import('./features/championship/championship-form/championship-form.component').then(
-                (c) => c.ChampionshipFormComponent
+                (c) => c.ChampionshipFormComponent,
               ),
             canActivate: [AdminGuard],
           },
@@ -55,7 +55,7 @@ export const routes: Routes = [
             path: ':id/edit',
             loadComponent: () =>
               import('./features/championship/championship-form/championship-form.component').then(
-                (c) => c.ChampionshipFormComponent
+                (c) => c.ChampionshipFormComponent,
               ),
             canActivate: [AdminGuard],
           },
@@ -69,14 +69,14 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import('./features/game/game-list/game-list.component').then(
-                (c) => c.GameListComponent
+                (c) => c.GameListComponent,
               ),
           },
           {
             path: 'new',
             loadComponent: () =>
               import('./features/game/game-form/game-form.component').then(
-                (c) => c.GameFormComponent
+                (c) => c.GameFormComponent,
               ),
             canActivate: [AdminGuard],
           },
@@ -84,14 +84,14 @@ export const routes: Routes = [
             path: ':id',
             loadComponent: () =>
               import('./features/game/game-detail/game-detail.component').then(
-                (c) => c.GameDetailComponent
+                (c) => c.GameDetailComponent,
               ),
           },
           {
             path: ':id/edit',
             loadComponent: () =>
               import('./features/game/game-form/game-form.component').then(
-                (c) => c.GameFormComponent
+                (c) => c.GameFormComponent,
               ),
             canActivate: [AdminGuard],
           },
@@ -105,14 +105,14 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import('./features/referee/referee-list/referee-list.component').then(
-                (c) => c.RefereeListComponent
+                (c) => c.RefereeListComponent,
               ),
           },
           {
             path: 'new',
             loadComponent: () =>
               import('./features/referee/referee-form/referee-form.component').then(
-                (c) => c.RefereeFormComponent
+                (c) => c.RefereeFormComponent,
               ),
             canActivate: [AdminGuard],
           },
@@ -120,7 +120,7 @@ export const routes: Routes = [
             path: ':id/edit',
             loadComponent: () =>
               import('./features/referee/referee-form/referee-form.component').then(
-                (c) => c.RefereeFormComponent
+                (c) => c.RefereeFormComponent,
               ),
             canActivate: [AdminGuard],
           },
@@ -134,14 +134,14 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import('./features/team/team-list/team-list.component').then(
-                (c) => c.TeamListComponent
+                (c) => c.TeamListComponent,
               ),
           },
           {
             path: 'new',
             loadComponent: () =>
               import('./features/team/team-form/team-form.component').then(
-                (c) => c.TeamFormComponent
+                (c) => c.TeamFormComponent,
               ),
             canActivate: [AdminGuard],
           },
@@ -149,7 +149,7 @@ export const routes: Routes = [
             path: ':id/edit',
             loadComponent: () =>
               import('./features/team/team-form/team-form.component').then(
-                (c) => c.TeamFormComponent
+                (c) => c.TeamFormComponent,
               ),
             canActivate: [AdminGuard],
           },
@@ -163,14 +163,14 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import('./features/report/report-list/report-list.component').then(
-                (c) => c.ReportListComponent
+                (c) => c.ReportListComponent,
               ),
           },
           {
             path: 'new',
             loadComponent: () =>
               import('./features/report/report-form/report-form.component').then(
-                (c) => c.ReportFormComponent
+                (c) => c.ReportFormComponent,
               ),
             canActivate: [UserOnlyGuard], // ← única mudança em reports
           },
@@ -178,7 +178,7 @@ export const routes: Routes = [
             path: ':id',
             loadComponent: () =>
               import('./features/report/report-detail/report-detail.component').then(
-                (c) => c.ReportDetailComponent
+                (c) => c.ReportDetailComponent,
               ),
           },
         ],
@@ -192,24 +192,31 @@ export const routes: Routes = [
             path: '',
             loadComponent: () =>
               import('./features/user/user-list/user-list.component').then(
-                (c) => c.UserListComponent
+                (c) => c.UserListComponent,
               ),
           },
           {
             path: 'new',
             loadComponent: () =>
               import('./features/user/user-form/user-form.component').then(
-                (c) => c.UserFormComponent
+                (c) => c.UserFormComponent,
               ),
           },
           {
             path: ':id/edit',
             loadComponent: () =>
               import('./features/user/user-form/user-form.component').then(
-                (c) => c.UserFormComponent
+                (c) => c.UserFormComponent,
               ),
           },
         ],
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./shared/components/update-profile/update-profile.component').then(
+            (c) => c.UpdateProfileComponent,
+          ),
       },
     ],
   },

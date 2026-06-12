@@ -39,21 +39,27 @@
   </nav>
 
   <div class="px-3 py-3 border-t border-white/8">
-    <div class="flex items-center gap-2.5 px-2 py-2 rounded-xl">
-      <div
-        class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-xs font-bold text-orange-400 shrink-0"
+    <div class="flex items-center gap-2.5">
+      <a
+        routerLink="/profile"
+        (click)="mobileOpen = false"
+        class="flex items-center gap-2.5 px-2 py-2 rounded-xl flex-1 min-w-0 hover:bg-white/5 transition-all duration-200"
       >
-        {{ initials() }}
-      </div>
+        <div
+          class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-xs font-bold text-orange-400 shrink-0"
+        >
+          {{ initials() }}
+        </div>
 
-      <div class="min-w-0 flex-1">
-        <p class="text-sm font-medium text-white/80 truncate">{{ user?.name }}</p>
-        @if (auth.isAdmin()) {
-          <span class="text-xs text-purple-400">ADMIN</span>
-        } @else {
-          <span class="text-xs text-white/30">USER</span>
-        }
-      </div>
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-medium text-white/80 truncate">{{ user?.name }}</p>
+          @if (auth.isAdmin()) {
+            <span class="text-xs text-purple-400">ADMIN</span>
+          } @else {
+            <span class="text-xs text-white/30">USER</span>
+          }
+        </div>
+      </a>
 
       <button
         (click)="logout()"
