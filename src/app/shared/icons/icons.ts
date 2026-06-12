@@ -20,7 +20,9 @@ export {
   Check,
   AlertTriangle,
   Calendar,
-  TrendingUp, 
+  TrendingUp,
   MapPin,
+  CircleCheck,
+  Copy,
   type LucideIconData,
 } from 'lucide-angular';

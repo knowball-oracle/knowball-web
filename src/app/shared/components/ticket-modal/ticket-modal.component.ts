@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { CircleCheck, Copy } from '../../icons/icons';
 
 @Component({
   selector: 'app-ticket-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './ticket-modal.component.html',
 })
 export class TicketModalComponent {
@@ -12,7 +14,19 @@ export class TicketModalComponent {
   @Input() protocolo = '';
   @Output() closed = new EventEmitter<void>();
 
+  readonly CircleCheck = CircleCheck;
+  readonly Copy = Copy;
+
+  copied = false;
+
   close(): void {
     this.closed.emit();
+  }
+
+  copiar(): void {
+    navigator.clipboard.writeText(this.protocolo).then(() => {
+      this.copied = true;
+      setTimeout(() => (this.copied = false), 2000);
+    });
   }
 }
