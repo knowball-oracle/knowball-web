@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { ArrowLeft, Camera } from '../../../shared/icons/icons';
 import { AuthService } from '../../../core/services/auth.service';
@@ -8,7 +7,7 @@ import { AuthService } from '../../../core/services/auth.service';
 @Component({
   selector: 'app-update-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './update-profile.component.html',
 })
 export class UpdateProfileComponent {
@@ -23,8 +22,8 @@ export class UpdateProfileComponent {
 
   initials(): string {
     return (
-      this.user()?.name
-        ?.split(' ')
+      this.user()
+        ?.name?.split(' ')
         .slice(0, 2)
         .map((n: string) => n[0])
         .join('')

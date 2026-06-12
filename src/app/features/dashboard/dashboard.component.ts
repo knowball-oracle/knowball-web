@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
   private teamSvc = inject(TeamService);
   private reportSvc = inject(ReportService);
 
-  user = this.auth.getUser();
+  user = this.auth.user;
   loading = true;
 
   readonly ArrowRightIcon = ArrowRight;
@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit {
       accent: 'rose',
       count: null,
     },
-    ...(this.user?.role === 'ROLE_ADMIN'
+    ...(this.user()?.role === 'ROLE_ADMIN'
       ? [
           {
             path: '/users',
