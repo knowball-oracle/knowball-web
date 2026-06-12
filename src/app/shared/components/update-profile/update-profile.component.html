@@ -9,7 +9,7 @@
       >
         <lucide-icon [img]="ArrowLeftIcon" size="18" />
       </a>
-      <h1 class="text-lg font-semibold text-white">Edit Profile</h1>
+      <h1 class="text-lg font-semibold text-white">Editar Perfil</h1>
     </div>
 
     <div class="flex flex-col items-center gap-3">
@@ -56,15 +56,15 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
       <div class="space-y-1.5">
-        <label class="text-xs text-white/50 uppercase tracking-wider">Name</label>
+        <label class="text-xs text-white/50 uppercase tracking-wider">Nome</label>
         <input
           formControlName="name"
           type="text"
           class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-orange-500/50 transition"
-          placeholder="Your full name"
+          placeholder="Seu nome completo"
         />
         @if (form.get('name')?.invalid && form.get('name')?.touched) {
-          <p class="text-xs text-red-400">Name must have at least 3 characters.</p>
+          <p class="text-xs text-red-400">Nome deve ter pelo menos 3 caracteres.</p>
         }
       </div>
 
@@ -76,16 +76,16 @@
           disabled
           class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white/30 cursor-not-allowed"
         />
-        <p class="text-xs text-white/25">Email cannot be changed.</p>
+        <p class="text-xs text-white/25">Email não pode ser alterado.</p>
       </div>
 
       <button
         type="submit"
         [disabled]="form.invalid"
-        class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium transition-all duration-200"
+        class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-400 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium transition-all duration-200 cursor-pointer"
       >
         <lucide-icon [img]="SaveIcon" size="15" />
-        Save changes
+        Salvar alterações
       </button>
     </form>
 

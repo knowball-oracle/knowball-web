@@ -172,7 +172,7 @@ export const routes: Routes = [
               import('./features/report/report-form/report-form.component').then(
                 (c) => c.ReportFormComponent,
               ),
-            canActivate: [UserOnlyGuard], // ← única mudança em reports
+            canActivate: [UserOnlyGuard], 
           },
           {
             path: ':id',
