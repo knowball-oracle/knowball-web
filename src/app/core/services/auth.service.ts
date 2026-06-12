@@ -14,7 +14,7 @@ export interface SessionUser {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly TOKEN_KEY = 'token';
@@ -25,12 +25,10 @@ export class AuthService {
   private _user = signal<SessionUser | null>(this._loadUser());
 
   readonly user = this._user.asReadonly();
-  readonly photo = computed(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem(this.PHOTO_KEY) ?? null;
-    }
-    return null;
-  });
+  private _photo = signal<string | null>(
+    typeof window !== 'undefined' ? localStorage.getItem(this.PHOTO_KEY) : null,
+  );
+  readonly photo = this._photo.asReadonly();
 
   constructor(private http: HttpClient) {}
 
@@ -68,11 +66,8 @@ export class AuthService {
 
   savePhoto(base64: string): void {
     localStorage.setItem(this.PHOTO_KEY, base64);
-
-    const current = this._user();
-    if (current) this._user.set({ ...current });
+    this._photo.set(base64);
   }
-
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -97,5 +92,6 @@ export class AuthService {
     localStorage.removeItem(this.USER_KEY);
     localStorage.removeItem(this.PHOTO_KEY);
     this._user.set(null);
+    this._photo.set(null);
   }
 }
