@@ -3,6 +3,7 @@ import { CommonModule, Location } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { ArrowLeft, Camera } from '../../../shared/icons/icons';
 import { AuthService } from '../../../core/services/auth.service';
+import { UserService } from '../../../features/user/services/user.service';
 
 @Component({
   selector: 'app-update-profile',
@@ -12,10 +13,12 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class UpdateProfileComponent {
   private location = inject(Location);
+  private userService = inject(UserService);
   auth = inject(AuthService);
 
   user = this.auth.user;
   photo = this.auth.photo;
+  uploading = false;
 
   readonly ArrowLeftIcon = ArrowLeft;
   readonly CameraIcon = Camera;
@@ -35,9 +38,21 @@ export class UpdateProfileComponent {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
 
+    this.uploading = true;
     const reader = new FileReader();
     reader.onload = () => {
-      this.auth.savePhoto(reader.result as string);
+      const base64 = reader.result as string;
+
+      this.userService.updateMyProfile({ profilePicture: base64 }).subscribe({
+        next: () => {
+          this.auth.savePhoto(base64);
+          this.uploading = false;
+        },
+        error: () => {
+          this.auth.savePhoto(base64);
+          this.uploading = false;
+        },
+      });
     };
     reader.readAsDataURL(file);
   }

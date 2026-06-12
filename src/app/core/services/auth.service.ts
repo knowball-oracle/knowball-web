@@ -48,31 +48,42 @@ export class AuthService {
   }
 
   login(request: LoginRequest): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(`${this.url}/login`, request)
-      .pipe(
-        tap((res) =>
-          this.saveSession(res.token, { email: res.email, name: res.name, role: res.role }),
-        ),
-      );
+    return this.http.post<LoginResponse>(`${this.url}/login`, request).pipe(
+      tap((res) =>
+        this.saveSession(res.token, {
+          email: res.email,
+          name: res.name,
+          role: res.role,
+          photo: res.profilePicture ?? undefined,
+        }),
+      ),
+    );
   }
 
   register(request: RegisterRequest): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(`${this.url}/register`, request)
-      .pipe(
-        tap((res) =>
-          this.saveSession(res.token, { email: res.email, name: res.name, role: res.role }),
-        ),
-      );
+    return this.http.post<LoginResponse>(`${this.url}/register`, request).pipe(
+      tap((res) =>
+        this.saveSession(res.token, {
+          email: res.email,
+          name: res.name,
+          role: res.role,
+          photo: res.profilePicture ?? undefined,
+        }),
+      ),
+    );
   }
 
   saveSession(token: string, user: SessionUser): void {
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     this._user.set(user);
-    const savedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
-    this._photo.set(savedPhoto);
+    if (user.photo) {
+      localStorage.setItem(`${this.PHOTO_KEY}_${user.email}`, user.photo);
+      this._photo.set(user.photo);
+    } else {
+      const savedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
+      this._photo.set(savedPhoto);
+    }
   }
 
   savePhoto(base64: string): void {

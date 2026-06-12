@@ -1,12 +1,24 @@
-import { Injectable } from "@angular/core";
-import { environment } from "../../../../environments/environment";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { UserResponse } from "../../../models/user-response.model";
-import { User } from "../../../models/user.model";
+import { Injectable } from '@angular/core';
+import { environment } from '../../../../environments/environment';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { UserResponse } from '../../../models/user-response.model';
+import { User } from '../../../models/user.model';
+
+export interface UserProfileResponse {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  profilePicture?: string;
+}
+
+export interface UpdateProfileRequest {
+  profilePicture?: string;
+}
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private url = `${environment.apiUrl}/users`;
@@ -14,11 +26,9 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getAll(filters?: { name?: string; email?: string }, page = 0, size = 20): Observable<any> {
-    let params = new HttpParams()
-      .set('page', page)
-      .set('size', size);
+    let params = new HttpParams().set('page', page).set('size', size);
 
-    if (filters?.name)  params = params.set('name', filters.name);
+    if (filters?.name) params = params.set('name', filters.name);
     if (filters?.email) params = params.set('email', filters.email);
 
     return this.http.get(this.url, { params });
@@ -38,5 +48,13 @@ export class UserService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
+  }
+
+  getMyProfile(): Observable<UserProfileResponse> {
+    return this.http.get<UserProfileResponse>(`${this.url}/me`);
+  }
+
+  updateMyProfile(request: UpdateProfileRequest): Observable<UserProfileResponse> {
+    return this.http.put<UserProfileResponse>(`${this.url}/me`, request);
   }
 }

@@ -3,4 +3,5 @@ export interface LoginResponse {
   email: string;
   name: string;
   role: string;
+  profilePicture?: string;
 }
