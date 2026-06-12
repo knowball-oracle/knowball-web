@@ -46,13 +46,20 @@
         class="flex items-center gap-2.5 px-2 py-2 rounded-xl flex-1 min-w-0 hover:bg-white/5 transition-all duration-200"
       >
         <div
-          class="w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-xs font-bold text-orange-400 shrink-0"
+          class="w-8 h-8 rounded-full border flex items-center justify-center shrink-0 overflow-hidden"
+          [class.bg-orange-500/20]="!photo()"
+          [class.border-orange-500/30]="!photo()"
+          [class.border-transparent]="!!photo()"
         >
-          {{ initials() }}
+          @if (photo()) {
+            <img [src]="photo()" alt="Foto de perfil" class="w-full h-full object-cover" />
+          } @else {
+            <span class="text-xs font-bold text-orange-400">{{ initials() }}</span>
+          }
         </div>
 
         <div class="min-w-0 flex-1">
-          <p class="text-sm font-medium text-white/80 truncate">{{ user?.name }}</p>
+          <p class="text-sm font-medium text-white/80 truncate">{{ user()?.name }}</p>
           @if (auth.isAdmin()) {
             <span class="text-xs text-purple-400">ADMIN</span>
           } @else {

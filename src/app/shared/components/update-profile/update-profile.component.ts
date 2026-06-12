@@ -1,36 +1,29 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { CommonModule, Location } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import { ArrowLeft, Camera, Save } from '../../../shared/icons/icons';
+import { ArrowLeft, Camera } from '../../../shared/icons/icons';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-update-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule],
+  imports: [CommonModule, RouterLink, LucideAngularModule],
   templateUrl: './update-profile.component.html',
 })
 export class UpdateProfileComponent {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
+  private location = inject(Location);
   auth = inject(AuthService);
 
-  user = this.auth.getUser();
-  previewPhoto: string | null = null;
+  user = this.auth.user;
+  photo = this.auth.photo;
 
   readonly ArrowLeftIcon = ArrowLeft;
   readonly CameraIcon = Camera;
-  readonly SaveIcon = Save;
-
-  form = this.fb.group({
-    name: [this.user?.name ?? '', [Validators.required, Validators.minLength(3)]],
-  });
 
   initials(): string {
     return (
-      this.user?.name
+      this.user()?.name
         ?.split(' ')
         .slice(0, 2)
         .map((n: string) => n[0])
@@ -45,16 +38,12 @@ export class UpdateProfileComponent {
 
     const reader = new FileReader();
     reader.onload = () => {
-      this.previewPhoto = reader.result as string;
+      this.auth.savePhoto(reader.result as string);
     };
     reader.readAsDataURL(file);
   }
 
-  onSubmit(): void {
-    if (this.form.invalid) return;
-    // TODO: chamar o UserService.updateProfile() quando o endpoint estiver pronto
-    const updatedUser = { ...this.user, name: this.form.value.name };
-    this.auth.saveSession(this.auth.getToken()!, updatedUser);
-    this.router.navigate(['/dashboard']);
+  goBack(): void {
+    this.location.back();
   }
 }

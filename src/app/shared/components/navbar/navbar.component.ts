@@ -26,7 +26,9 @@ export class NavbarComponent {
   private router = inject(Router);
   auth = inject(AuthService);
 
-  user = this.auth.getUser();
+  user = this.auth.user;
+  photo = this.auth.photo;
+
   mobileOpen = false;
 
   readonly MenuIcon = Menu;
@@ -51,10 +53,10 @@ export class NavbarComponent {
 
   initials(): string {
     return (
-      this.user?.name
+      this.user()?.name
         ?.split(' ')
         .slice(0, 2)
-        .map((n: any[]) => n[0])
+        .map((n: any) => n[0])
         .join('')
         .toUpperCase() ?? '?'
     );
