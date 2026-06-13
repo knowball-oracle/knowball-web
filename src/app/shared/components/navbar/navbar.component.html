@@ -39,28 +39,41 @@
   </nav>
 
   <div class="px-3 py-3 border-t border-white/8">
-    <button
-      (click)="themeService.toggle()"
-      [title]="themeService.isDark() ? 'Mudar para tema claro' : 'Mudar para tema escuro'"
-      class="w-full flex items-center gap-3 px-3 py-2.5 mb-1.5 rounded-xl text-sm transition-all duration-200 theme-toggle-btn"
-      aria-label="Alternar tema"
-    >
-      <span class="theme-icon-wrapper">
-        <lucide-icon
-          [img]="SunIcon"
-          size="16"
-          class="theme-icon"
-          [class.theme-icon-visible]="!themeService.isDark()"
-        />
-        <lucide-icon
-          [img]="MoonIcon"
-          size="16"
-          class="theme-icon"
-          [class.theme-icon-visible]="themeService.isDark()"
-        />
-      </span>
-      <span>{{ themeService.isDark() ? 'Tema claro' : 'Tema escuro' }}</span>
-    </button>
+    <div class="flex justify-center mb-3">
+      <button
+        (click)="themeService.toggle()"
+        [title]="themeService.isDark() ? 'Mudar para tema claro' : 'Mudar para tema escuro'"
+        aria-label="Alternar tema"
+        class="theme-pill"
+        [class.theme-pill--light]="!themeService.isDark()"
+      >
+        <span class="theme-pill__thumb" [class.theme-pill__thumb--right]="!themeService.isDark()">
+          <span class="theme-pill__icon">
+            <lucide-icon
+              [img]="SunIcon"
+              size="14"
+              class="theme-pill__lucide"
+              [class.theme-pill__lucide--visible]="!themeService.isDark()"
+            />
+            <lucide-icon
+              [img]="MoonIcon"
+              size="14"
+              class="theme-pill__lucide"
+              [class.theme-pill__lucide--visible]="themeService.isDark()"
+            />
+          </span>
+        </span>
+
+        <span class="theme-pill__bg-icon theme-pill__bg-icon--left">
+          <lucide-icon [img]="SunIcon" size="12" />
+        </span>
+
+        <span class="theme-pill__bg-icon theme-pill__bg-icon--right">
+          <lucide-icon [img]="MoonIcon" size="12" />
+        </span>
+      </button>
+    </div>
+
     <div class="flex items-center gap-2.5">
       <a
         routerLink="/profile"
