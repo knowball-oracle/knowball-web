@@ -36,6 +36,10 @@ body {
   color: rgba(15, 15, 30, 0.9);
 }
 
+[data-theme='light'] .logo-adaptive {
+  filter: invert(1) brightness(0.15);
+}
+
 [data-theme='light'] .glass {
   background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(24px);
@@ -46,11 +50,7 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 [data-theme='light'] .glass-liquid {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.88) 0%,
-    rgba(245, 245, 252, 0.8) 100%
-  );
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(245, 245, 252, 0.8) 100%);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
   border: 1px solid rgba(0, 0, 0, 0.06) !important;
@@ -182,6 +182,17 @@ body {
   color: rgba(15, 15, 30, 0.88) !important;
 }
 
+[data-theme='light'] .hover\:text-white\/50:hover {
+  color: rgba(15, 15, 30, 0.5) !important;
+}
+
+[data-theme='light'] .theme-pill-light .theme-pill-icon-active {
+  color: #f59e0b !important;
+}
+[data-theme='light'] .theme-pill-icon-active {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -258,100 +269,90 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    width: 64px;
-    height: 32px;
+    justify-content: space-between;
+    width: 56px;
+    height: 28px;
     border-radius: 9999px;
     background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow:
       inset 0 2px 6px rgba(0, 0, 0, 0.5),
-      inset 0 -1px 2px rgba(255, 255, 255, 0.04),
-      0 1px 0 rgba(255, 255, 255, 0.06);
+      0 1px 0 rgba(255, 255, 255, 0.05);
+    padding: 0 5px;
     cursor: pointer;
-    border: none;
-    transition: background 0.4s ease, box-shadow 0.4s ease;
-    padding: 0 4px;
+    transition:
+      background 0.4s ease,
+      border-color 0.4s ease,
+      box-shadow 0.4s ease;
+    outline: none;
   }
 
-  .theme-pill--light {
-    background: #dce0f0;
+  .theme-pill:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.4);
+    outline-offset: 2px;
+  }
+
+  /* CORREÇÃO: era theme-pill--light (BEM), precisa ser theme-pill-light (flat) */
+  .theme-pill-light {
+    background: #dde2f0;
+    border-color: rgba(0, 0, 0, 0.1);
     box-shadow:
       inset 0 2px 6px rgba(0, 0, 0, 0.12),
-      inset 0 -1px 2px rgba(255, 255, 255, 0.7),
       0 1px 0 rgba(255, 255, 255, 0.9);
   }
 
-  .theme-pill__thumb {
+  .theme-pill-thumb {
     position: absolute;
-    left: 4px;
-    width: 26px;
-    height: 26px;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
     border-radius: 9999px;
-    background: linear-gradient(145deg, #2a2a45, #1a1a2e);
+    background: linear-gradient(145deg, #2e2e4a, #1a1a2e);
     box-shadow:
-      3px 3px 8px rgba(0, 0, 0, 0.4),
-      -1px -1px 4px rgba(255, 255, 255, 0.06);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.35s ease, box-shadow 0.35s ease;
-    z-index: 2;
-  }
-
-  .theme-pill__thumb--right {
-    left: calc(100% - 30px);
-    background: linear-gradient(145deg, #ffffff, #e8ecf8);
-    box-shadow:
-      3px 3px 8px rgba(0, 0, 0, 0.18),
-      -1px -1px 4px rgba(255, 255, 255, 0.9);
-  }
-
-  .theme-pill__icon {
-    position: relative;
-    width: 14px;
-    height: 14px;
-  }
-
-  .theme-pill__lucide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    transform: scale(0.5) rotate(-45deg);
+      0 2px 8px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
     transition:
-      opacity 0.25s ease,
-      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    color: rgba(255, 255, 255, 0.5);
+      transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.4s ease,
+      box-shadow 0.4s ease;
+    z-index: 2;
+    pointer-events: none;
   }
 
-  .theme-pill__lucide--visible {
-    opacity: 1 !important;
-    transform: scale(1) rotate(0deg) !important;
+  .theme-pill-thumb-right {
+    transform: translateX(28px);
+    background: linear-gradient(145deg, #ffffff, #d0d8f0);
+    box-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
 
-  .theme-pill--light .theme-pill__lucide--visible {
-    color: #8890b0;
-  }
-
-  .theme-pill__bg-icon {
-    position: absolute;
+  .theme-pill-icon {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.18);
+    width: 16px;
+    height: 16px;
+    color: rgba(255, 255, 255, 0.25);
+    transition: color 0.3s ease;
     pointer-events: none;
-    transition: color 0.4s ease;
   }
 
-  .theme-pill__bg-icon--left {
-    left: 8px;
+  .theme-pill-icon lucide-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .theme-pill__bg-icon--right {
-    right: 8px;
+  .theme-pill-icon-active {
+    color: rgba(255, 255, 255, 0.85);
   }
 
-  .theme-pill--light .theme-pill__bg-icon {
-    color: rgba(15, 15, 40, 0.2);
+  .theme-pill-light .theme-pill-icon-active {
+    color: #f59e0b;
   }
 }
 

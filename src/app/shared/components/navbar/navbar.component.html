@@ -17,7 +17,7 @@
 >
   <div class="pl-12 pr-3 py-3 border-b border-white/10 md:pl-3">
     <a routerLink="/dashboard">
-      <img src="/assets/logo.svg" alt="KnowBall" class="h-8 w-auto mt-2" />
+      <img src="/assets/logo.svg" alt="KnowBall" class="h-8 w-auto mt-2 logo-adaptive" />
     </a>
   </div>
 
@@ -38,47 +38,12 @@
     }
   </nav>
 
-  <div class="px-3 py-3 border-t border-white/8">
-    <div class="flex justify-center mb-3">
-      <button
-        (click)="themeService.toggle()"
-        [title]="themeService.isDark() ? 'Mudar para tema claro' : 'Mudar para tema escuro'"
-        aria-label="Alternar tema"
-        class="theme-pill"
-        [class.theme-pill--light]="!themeService.isDark()"
-      >
-        <span class="theme-pill__thumb" [class.theme-pill__thumb--right]="!themeService.isDark()">
-          <span class="theme-pill__icon">
-            <lucide-icon
-              [img]="SunIcon"
-              size="14"
-              class="theme-pill__lucide"
-              [class.theme-pill__lucide--visible]="!themeService.isDark()"
-            />
-            <lucide-icon
-              [img]="MoonIcon"
-              size="14"
-              class="theme-pill__lucide"
-              [class.theme-pill__lucide--visible]="themeService.isDark()"
-            />
-          </span>
-        </span>
-
-        <span class="theme-pill__bg-icon theme-pill__bg-icon--left">
-          <lucide-icon [img]="SunIcon" size="12" />
-        </span>
-
-        <span class="theme-pill__bg-icon theme-pill__bg-icon--right">
-          <lucide-icon [img]="MoonIcon" size="12" />
-        </span>
-      </button>
-    </div>
-
-    <div class="flex items-center gap-2.5">
+  <div class="px-3 pt-2 pb-3 border-t border-white/8">
+    <div class="flex items-center gap-2 py-1.5">
       <a
         routerLink="/profile"
         (click)="mobileOpen = false"
-        class="flex items-center gap-2.5 px-2 py-2 rounded-xl flex-1 min-w-0 hover:bg-white/5 transition-all duration-200"
+        class="flex items-center gap-2.5 px-2 py-1.5 rounded-xl flex-1 min-w-0 hover:bg-white/5 transition-all duration-200"
       >
         <div
           class="w-8 h-8 rounded-full border flex items-center justify-center shrink-0 overflow-hidden"
@@ -92,16 +57,34 @@
             <span class="text-xs font-bold text-orange-400">{{ initials() }}</span>
           }
         </div>
-
         <div class="min-w-0 flex-1">
-          <p class="text-sm font-medium text-white/80 truncate">{{ user()?.name }}</p>
+          <p class="text-sm font-medium text-white/80 truncate leading-tight">{{ user()?.name }}</p>
           @if (auth.isAdmin()) {
-            <span class="text-xs text-purple-400">ADMIN</span>
+            <span class="text-xs text-purple-400 leading-tight">ADMIN</span>
           } @else {
-            <span class="text-xs text-white/30">USER</span>
+            <span class="text-xs text-white/30 leading-tight">USER</span>
           }
         </div>
       </a>
+
+      <button
+        (click)="themeService.toggle()"
+        [title]="themeService.isDark() ? 'Mudar para tema claro' : 'Mudar para tema escuro'"
+        aria-label="Alternar tema"
+        class="theme-pill shrink-0"
+        [class.theme-pill-light]="!themeService.isDark()"
+      >
+        <span class="theme-pill-icon" [class.theme-pill-icon-active]="!themeService.isDark()">
+          <lucide-icon [img]="SunIcon" size="12" />
+        </span>
+        <span
+          class="theme-pill-thumb"
+          [class.theme-pill-thumb-right]="!themeService.isDark()"
+        ></span>
+        <span class="theme-pill-icon" [class.theme-pill-icon-active]="themeService.isDark()">
+          <lucide-icon [img]="MoonIcon" size="12" />
+        </span>
+      </button>
 
       <button
         (click)="logout()"
