@@ -77,6 +77,7 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     this._user.set(user);
+
     if (user.photo) {
       localStorage.setItem(`${this.PHOTO_KEY}_${user.email}`, user.photo);
       this._photo.set(user.photo);

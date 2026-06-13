@@ -41,8 +41,9 @@ export class UpdateProfileComponent {
     this.uploading = true;
     this._compressImage(file, 400, 0.75).then((base64) => {
       this.userService.updateMyProfile({ profilePicture: base64 }).subscribe({
-        next: () => {
-          this.auth.savePhoto(base64);
+        next: (profile) => {
+          const photo = profile.profilePicture ?? base64;
+          this.auth.savePhoto(photo);
           this.uploading = false;
         },
         error: () => {
