@@ -68,10 +68,22 @@
       </a>
 
       <button
+        (click)="logout()"
+        title="Sair"
+        class="p-1.5 rounded-lg text-white/25 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 shrink-0 cursor-pointer"
+      >
+        <lucide-icon [img]="LogOutIcon" size="16" />
+      </button>
+    </div>
+
+    <div class="h-px bg-white/5 mx-2 mb-2"></div>
+
+    <div class="flex justify-center py-1">
+      <button
         (click)="themeService.toggle()"
         [title]="themeService.isDark() ? 'Mudar para tema claro' : 'Mudar para tema escuro'"
         aria-label="Alternar tema"
-        class="theme-pill shrink-0"
+        class="theme-pill"
         [class.theme-pill-light]="!themeService.isDark()"
       >
         <span class="theme-pill-icon" [class.theme-pill-icon-active]="!themeService.isDark()">
@@ -84,14 +96,6 @@
         <span class="theme-pill-icon" [class.theme-pill-icon-active]="themeService.isDark()">
           <lucide-icon [img]="MoonIcon" size="12" />
         </span>
-      </button>
-
-      <button
-        (click)="logout()"
-        title="Sair"
-        class="p-1.5 rounded-lg text-white/25 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 shrink-0 cursor-pointer"
-      >
-        <lucide-icon [img]="LogOutIcon" size="16" />
       </button>
     </div>
   </div>
