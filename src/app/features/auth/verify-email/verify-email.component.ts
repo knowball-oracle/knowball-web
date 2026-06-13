@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoginResponse } from '../../../models/login-response.model';
 import { environment } from '../../../../environments/environment';
@@ -10,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-verify-email',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: 'verify-email.component.html',
 })
 export class VerifyEmailComponent implements OnInit {

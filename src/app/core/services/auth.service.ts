@@ -13,32 +13,32 @@ export interface SessionUser {
   photo?: string;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+export interface RegisterPendingResponse {
+  status: string;
+  email: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly TOKEN_KEY = 'token';
-  private readonly USER_KEY = 'user';
+  private readonly USER_KEY  = 'user';
   private readonly PHOTO_KEY = 'user_photo';
   private url = `${environment.apiUrl}/auth`;
 
-  private _user = signal<SessionUser | null>(this._loadUser());
+  private _user  = signal<SessionUser | null>(this._loadUser());
   private _photo = signal<string | null>(this._loadPhoto());
 
-  readonly user = this._user.asReadonly();
+  readonly user  = this._user.asReadonly();
   readonly photo = this._photo.asReadonly();
 
   constructor(private http: HttpClient) {}
 
   private _isValidBase64Image(value: string): boolean {
     const prefixPattern = /^data:image\/(jpeg|png|webp|gif);base64,/;
-
     if (!prefixPattern.test(value)) return false;
-
     const payloadStart = value.indexOf(',') + 1;
     const payload = value.slice(payloadStart);
     if (payload.includes('data:')) return false;
-
     return true;
   }
 
@@ -51,15 +51,12 @@ export class AuthService {
   private _loadPhoto(): string | null {
     if (typeof window === 'undefined') return null;
     const email =
-      JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')?.email ??
-      'anonymous';
+      JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')?.email ?? 'anonymous';
     const stored = localStorage.getItem(`${this.PHOTO_KEY}_${email}`);
-
     if (stored && !this._isValidBase64Image(stored)) {
       localStorage.removeItem(`${this.PHOTO_KEY}_${email}`);
       return null;
     }
-
     return stored;
   }
 
@@ -73,25 +70,16 @@ export class AuthService {
       tap((res) =>
         this.saveSession(res.token, {
           email: res.email,
-          name: res.name,
-          role: res.role,
+          name:  res.name,
+          role:  res.role,
           photo: res.profilePicture ?? undefined,
         }),
       ),
     );
   }
 
-  register(request: RegisterRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.url}/register`, request).pipe(
-      tap((res) =>
-        this.saveSession(res.token, {
-          email: res.email,
-          name: res.name,
-          role: res.role,
-          photo: res.profilePicture ?? undefined,
-        }),
-      ),
-    );
+  register(request: RegisterRequest): Observable<RegisterPendingResponse> {
+    return this.http.post<RegisterPendingResponse>(`${this.url}/register`, request);
   }
 
   saveSession(token: string, user: SessionUser): void {
@@ -104,13 +92,11 @@ export class AuthService {
         localStorage.setItem(`${this.PHOTO_KEY}_${user.email}`, user.photo);
         this._photo.set(user.photo);
       } else {
-        const savedPhoto =
-          localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
+        const savedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
         this._photo.set(savedPhoto);
       }
     } else {
-      const savedPhoto =
-        localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
+      const savedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
       this._photo.set(savedPhoto);
     }
   }
@@ -120,7 +106,6 @@ export class AuthService {
       console.warn('[AuthService] savePhoto: Base64 inválido, ignorado.');
       return;
     }
-
     localStorage.setItem(this.photoKey(), base64);
     this._photo.set(base64);
   }
