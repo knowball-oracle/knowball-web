@@ -1,0 +1,58 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1 class="auth-title">Verifique seu e-mail</h1>
+      <p class="auth-subtitle">
+        Enviamos um código de 6 dígitos para<br />
+        <strong>{{ email() }}</strong>
+      </p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="code" class="form-label">Código de verificação</label>
+        <input
+          id="code"
+          type="text"
+          formControlName="code"
+          class="form-input"
+          [class.input-error]="code.invalid && code.touched"
+          placeholder="000000"
+          maxlength="6"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+        />
+        @if (code.invalid && code.touched) {
+          <span class="form-error">O código deve ter 6 dígitos.</span>
+        }
+      </div>
+
+      @if (error()) {
+        <div class="alert alert-error">{{ error() }}</div>
+      }
+
+      @if (resendOk()) {
+        <div class="alert alert-success">Novo código enviado com sucesso!</div>
+      }
+
+      <button type="submit" class="btn btn-primary btn-full" [disabled]="form.invalid || loading()">
+        @if (loading()) {
+          Verificando...
+        } @else {
+          Confirmar código
+        }
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <span>Não recebeu o código?</span>
+      <button type="button" class="link-button" (click)="resendCode()" [disabled]="loading()">
+        Reenviar
+      </button>
+    </div>
+
+    <div class="auth-footer">
+      <a routerLink="/auth/register">Voltar ao cadastro</a>
+    </div>
+  </div>
+</div>

@@ -19,6 +19,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/auth/register/register.component').then((c) => c.RegisterComponent),
       },
+      {
+        path: 'verify-email',
+        loadComponent: () =>
+          import('./features/auth/verify-email/verify-email.component').then(
+            (c) => c.VerifyEmailComponent,
+          ),
+      },
       { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
   },
@@ -172,7 +179,7 @@ export const routes: Routes = [
               import('./features/report/report-form/report-form.component').then(
                 (c) => c.ReportFormComponent,
               ),
-            canActivate: [UserOnlyGuard], 
+            canActivate: [UserOnlyGuard],
           },
           {
             path: ':id',

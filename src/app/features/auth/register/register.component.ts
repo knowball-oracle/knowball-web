@@ -37,8 +37,14 @@ export class RegisterComponent {
   onSubmit(): void {
     if (this.form.invalid) return;
     this.loading = true;
+    this.error = '';
+
     this.auth.register(this.form.getRawValue() as any).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: (res) => {
+        this.router.navigate(['/auth/verify-email'], {
+          queryParams: { email: res.email },
+        });
+      },
       error: () => {
         this.error = 'Erro ao cadastrar. E-mail pode já estar em uso.';
         this.loading = false;
