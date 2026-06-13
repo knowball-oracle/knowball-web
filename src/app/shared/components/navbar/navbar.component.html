@@ -39,6 +39,28 @@
   </nav>
 
   <div class="px-3 py-3 border-t border-white/8">
+    <button
+      (click)="themeService.toggle()"
+      [title]="themeService.isDark() ? 'Mudar para tema claro' : 'Mudar para tema escuro'"
+      class="w-full flex items-center gap-3 px-3 py-2.5 mb-1.5 rounded-xl text-sm transition-all duration-200 theme-toggle-btn"
+      aria-label="Alternar tema"
+    >
+      <span class="theme-icon-wrapper">
+        <lucide-icon
+          [img]="SunIcon"
+          size="16"
+          class="theme-icon"
+          [class.theme-icon-visible]="!themeService.isDark()"
+        />
+        <lucide-icon
+          [img]="MoonIcon"
+          size="16"
+          class="theme-icon"
+          [class.theme-icon-visible]="themeService.isDark()"
+        />
+      </span>
+      <span>{{ themeService.isDark() ? 'Tema claro' : 'Tema escuro' }}</span>
+    </button>
     <div class="flex items-center gap-2.5">
       <a
         routerLink="/profile"

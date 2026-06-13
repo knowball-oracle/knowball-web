@@ -27,5 +27,7 @@ export {
   ArrowLeft,
   Camera,
   Save,
+  Sun,
+  Moon,
   type LucideIconData,
 } from 'lucide-angular';

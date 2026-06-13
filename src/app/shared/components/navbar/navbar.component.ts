@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideAngularModule } from 'lucide-angular';
+import { LucideAngularModule, Moon, Sun } from 'lucide-angular';
 import {
   LayoutDashboard,
   Trophy,
@@ -15,6 +15,7 @@ import {
   X,
 } from '../../../shared/icons/icons';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,6 +24,7 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
+  themeService = inject(ThemeService);
   private router = inject(Router);
   auth = inject(AuthService);
 
@@ -34,6 +36,8 @@ export class NavbarComponent {
   readonly MenuIcon = Menu;
   readonly CloseIcon = X;
   readonly LogOutIcon = LogOut;
+  readonly SunIcon = Sun;
+  readonly MoonIcon = Moon;
 
   links = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -53,8 +57,8 @@ export class NavbarComponent {
 
   initials(): string {
     return (
-      this.user()?.name
-        ?.split(' ')
+      this.user()
+        ?.name?.split(' ')
         .slice(0, 2)
         .map((n: any) => n[0])
         .join('')
