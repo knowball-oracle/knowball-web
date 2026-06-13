@@ -30,6 +30,18 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  private _isValidBase64Image(value: string): boolean {
+    const prefixPattern = /^data:image\/(jpeg|png|webp|gif);base64,/;
+
+    if (!prefixPattern.test(value)) return false;
+
+    const payloadStart = value.indexOf(',') + 1;
+    const payload = value.slice(payloadStart);
+    if (payload.includes('data:')) return false;
+
+    return true;
+  }
+
   private _loadUser(): SessionUser | null {
     if (typeof window === 'undefined') return null;
     const u = localStorage.getItem(this.USER_KEY);
@@ -38,8 +50,17 @@ export class AuthService {
 
   private _loadPhoto(): string | null {
     if (typeof window === 'undefined') return null;
-    const email = JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')?.email ?? 'anonymous';
-    return localStorage.getItem(`${this.PHOTO_KEY}_${email}`);
+    const email =
+      JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')?.email ??
+      'anonymous';
+    const stored = localStorage.getItem(`${this.PHOTO_KEY}_${email}`);
+
+    if (stored && !this._isValidBase64Image(stored)) {
+      localStorage.removeItem(`${this.PHOTO_KEY}_${email}`);
+      return null;
+    }
+
+    return stored;
   }
 
   private photoKey(): string {
@@ -79,15 +100,27 @@ export class AuthService {
     this._user.set(user);
 
     if (user.photo) {
-      localStorage.setItem(`${this.PHOTO_KEY}_${user.email}`, user.photo);
-      this._photo.set(user.photo);
+      if (this._isValidBase64Image(user.photo)) {
+        localStorage.setItem(`${this.PHOTO_KEY}_${user.email}`, user.photo);
+        this._photo.set(user.photo);
+      } else {
+        const savedPhoto =
+          localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
+        this._photo.set(savedPhoto);
+      }
     } else {
-      const savedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
+      const savedPhoto =
+        localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
       this._photo.set(savedPhoto);
     }
   }
 
   savePhoto(base64: string): void {
+    if (!this._isValidBase64Image(base64)) {
+      console.warn('[AuthService] savePhoto: Base64 inválido, ignorado.');
+      return;
+    }
+
     localStorage.setItem(this.photoKey(), base64);
     this._photo.set(base64);
   }
