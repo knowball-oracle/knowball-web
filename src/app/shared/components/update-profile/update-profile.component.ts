@@ -39,10 +39,7 @@ export class UpdateProfileComponent {
     if (!file) return;
 
     this.uploading = true;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64 = reader.result as string;
-
+    this._compressImage(file, 400, 0.75).then((base64) => {
       this.userService.updateMyProfile({ profilePicture: base64 }).subscribe({
         next: () => {
           this.auth.savePhoto(base64);
@@ -53,8 +50,36 @@ export class UpdateProfileComponent {
           this.uploading = false;
         },
       });
-    };
-    reader.readAsDataURL(file);
+    });
+  }
+
+  private _compressImage(file: File, maxSize: number, quality: number): Promise<string> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let w = img.width;
+          let h = img.height;
+
+          if (w > h && w > maxSize) {
+            h = (h * maxSize) / w;
+            w = maxSize;
+          } else if (h > maxSize) {
+            w = (w * maxSize) / h;
+            h = maxSize;
+          }
+
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.src = e.target!.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   goBack(): void {
