@@ -29,6 +29,7 @@ export class ChatService {
           }
           const reader = res.body.getReader();
           const decoder = new TextDecoder();
+          let buffer = '';
 
           const read = () => {
             reader.read().then(({ done, value }) => {
@@ -36,14 +37,18 @@ export class ChatService {
                 observer.complete();
                 return;
               }
-              const chunk = decoder.decode(value, { stream: true });
-              console.log('RAW CHUNK:', JSON.stringify(chunk));
-              chunk.split('\n').forEach((line) => {
-                if (line.startsWith('data:')) {
-                  const text = line.slice(6);
-                  if (text && text !== '[DONE]') observer.next(text);
-                }
+
+              buffer += decoder.decode(value, { stream: true });
+
+              const events = buffer.split('\n\n');
+              buffer = events.pop() ?? '';
+
+              events.forEach((event) => {
+                const lines = event.split('\n').filter((l) => l.startsWith('data:'));
+                const text = lines.map((l) => l.slice(5)).join('');
+                if (text && text !== '[DONE]') observer.next(text);
               });
+
               read();
             });
           };
