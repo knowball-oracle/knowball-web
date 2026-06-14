@@ -54,8 +54,8 @@
             <div
               [class]="
                 msg.role === 'user'
-                  ? 'max-w-[80%] bg-white/10 border border-white/10 text-white/90 rounded-2xl rounded-tr-sm px-3 py-2 text-sm wrap-break-word whitespace-pre-wrap leading-relaxed'
-                  : 'max-w-[80%] bg-white/5 border border-white/8 text-white/85 rounded-2xl rounded-tl-sm px-3 py-2 text-sm wrap-break-word whitespace-pre-wrap leading-relaxed'
+                  ? 'max-w-[80%] bg-white/10 border border-white/10 text-white/90 rounded-2xl rounded-tr-sm px-3 py-2 text-sm wrap-break-words leading-relaxed'
+                  : 'max-w-[80%] bg-white/5 border border-white/8 text-white/85 rounded-2xl rounded-tl-sm px-3 py-2 text-sm wrap-break-words leading-relaxed'
               "
             >
               <span [innerHTML]="formatMessage(msg.content)"></span>
@@ -83,7 +83,7 @@
           @for (s of SUGGESTIONS; track s) {
             <button
               (click)="sendSuggestion(s)"
-              class="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-white/90 hover:bg-white/10 transition-all duration-150"
+              class="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-white/90 hover:bg-white/10 transition-all duration-150 cursor-pointer"
             >
               {{ s }}
             </button>
