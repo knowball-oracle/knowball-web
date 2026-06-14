@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -36,7 +36,10 @@ export class ReportDetailComponent implements OnInit {
   selectedStatus = '';
   selectedResult = '';
 
+  currentUserId = signal<number | null>(null);
+
   ngOnInit(): void {
+    this.currentUserId.set(this.auth.getUser()?.id ?? null);
     this.load();
   }
 
@@ -78,7 +81,9 @@ export class ReportDetailComponent implements OnInit {
   }
 
   canDelete(): boolean {
-    return this.auth.isAuthenticated();
+    if (this.auth.isAdmin()) return true;
+    if (!this.report?.user?.id || !this.currentUserId()) return false;
+    return this.report.user.id === this.currentUserId();
   }
 
   confirmDelete(): void {

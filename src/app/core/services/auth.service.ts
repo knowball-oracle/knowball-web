@@ -7,6 +7,7 @@ import { LoginResponse } from '../../models/login-response.model';
 import { RegisterRequest } from '../../models/register-request.model';
 
 export interface SessionUser {
+  id?: number;
   email: string;
   name: string;
   role: string;
@@ -63,6 +64,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.url}/login`, request).pipe(
       tap((res) =>
         this.saveSession(res.token, {
+          id: res.id,
           email: res.email,
           name: res.name,
           role: res.role,
