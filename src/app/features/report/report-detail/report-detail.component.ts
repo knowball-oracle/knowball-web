@@ -91,13 +91,14 @@ export class ReportDetailComponent implements OnInit {
   }
 
   deleteReport(): void {
-    if (!this.report?.id || this.deleting) return;
+    const reportId = this.report?.id ?? Number(this.id);
+    if (!reportId || this.deleting) return;
 
     this.deleting = true;
     this.deleteError = '';
     this.showDeleteConfirm = false;
 
-    this.service.delete(this.report.id).subscribe({
+    this.service.delete(reportId).subscribe({
       next: () => {
         this.router.navigate(['/reports']);
       },
