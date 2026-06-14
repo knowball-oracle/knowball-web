@@ -39,7 +39,7 @@ export class ChatService {
               const chunk = decoder.decode(value, { stream: true });
               chunk.split('\n').forEach((line) => {
                 if (line.startsWith('data:')) {
-                  const text = line.slice(5).trim();
+                  const text = line.slice(6);
                   if (text && text !== '[DONE]') observer.next(text);
                 }
               });
