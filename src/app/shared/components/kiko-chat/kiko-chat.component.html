@@ -54,11 +54,11 @@
             <div
               [class]="
                 msg.role === 'user'
-                  ? 'max-w-[80%] bg-white/10 border border-white/10 text-white/90 rounded-2xl rounded-tr-sm px-3 py-2 text-sm wrap-break-words leading-relaxed'
-                  : 'max-w-[80%] bg-white/5 border border-white/8 text-white/85 rounded-2xl rounded-tl-sm px-3 py-2 text-sm wrap-break-words leading-relaxed'
+                  ? 'max-w-[80%] bg-white/10 border border-white/10 text-white/90 rounded-2xl rounded-tr-sm px-3 py-2 text-sm break-words leading-relaxed'
+                  : 'max-w-[80%] bg-white/5 border border-white/8 text-white/85 rounded-2xl rounded-tl-sm px-3 py-2 text-sm break-words leading-relaxed'
               "
             >
-              <span [innerHTML]="formatMessage(msg.content)"></span>
+              <span [innerHTML]="formatMessage(msg)"></span>
 
               @if (msg.streaming) {
                 <span class="inline-flex gap-0.5 ml-1 align-middle">

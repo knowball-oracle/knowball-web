@@ -128,12 +128,19 @@ export class KikoChatComponent implements AfterViewChecked {
     }
   }
 
-  formatMessage(content: string): string {
-    return content
+  formatMessage(msg: ChatMessage): string {
+    if (msg.streaming) {
+      return msg.content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    return msg.content
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`(.*?)`/g, '<code class="bg-white/10 px-1 rounded text-xs">$1</code>')
-      .replace(/\n\n/g, '</p><p class="mt-2">')
+      .replace(/`(.*?)`/g, '<code class="bg-white/10 px-1 rounded text-xs font-mono">$1</code>')
+      .replace(/\n\n/g, '<br><br>')
       .replace(/\n/g, '<br>');
   }
 }
