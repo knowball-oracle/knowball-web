@@ -37,6 +37,7 @@ export class ChatService {
                 return;
               }
               const chunk = decoder.decode(value, { stream: true });
+              console.log('RAW CHUNK:', JSON.stringify(chunk));
               chunk.split('\n').forEach((line) => {
                 if (line.startsWith('data:')) {
                   const text = line.slice(6);
