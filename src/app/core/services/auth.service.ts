@@ -13,22 +13,17 @@ export interface SessionUser {
   photo?: string;
 }
 
-export interface RegisterPendingResponse {
-  status: string;
-  email: string;
-}
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly TOKEN_KEY = 'token';
-  private readonly USER_KEY  = 'user';
+  private readonly USER_KEY = 'user';
   private readonly PHOTO_KEY = 'user_photo';
   private url = `${environment.apiUrl}/auth`;
 
-  private _user  = signal<SessionUser | null>(this._loadUser());
+  private _user = signal<SessionUser | null>(this._loadUser());
   private _photo = signal<string | null>(this._loadPhoto());
 
-  readonly user  = this._user.asReadonly();
+  readonly user = this._user.asReadonly();
   readonly photo = this._photo.asReadonly();
 
   constructor(private http: HttpClient) {}
@@ -50,8 +45,7 @@ export class AuthService {
 
   private _loadPhoto(): string | null {
     if (typeof window === 'undefined') return null;
-    const email =
-      JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')?.email ?? 'anonymous';
+    const email = JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')?.email ?? 'anonymous';
     const stored = localStorage.getItem(`${this.PHOTO_KEY}_${email}`);
     if (stored && !this._isValidBase64Image(stored)) {
       localStorage.removeItem(`${this.PHOTO_KEY}_${email}`);
@@ -70,16 +64,16 @@ export class AuthService {
       tap((res) =>
         this.saveSession(res.token, {
           email: res.email,
-          name:  res.name,
-          role:  res.role,
+          name: res.name,
+          role: res.role,
           photo: res.profilePicture ?? undefined,
         }),
       ),
     );
   }
 
-  register(request: RegisterRequest): Observable<RegisterPendingResponse> {
-    return this.http.post<RegisterPendingResponse>(`${this.url}/register`, request);
+  register(request: RegisterRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.url}/register`, request);
   }
 
   saveSession(token: string, user: SessionUser): void {

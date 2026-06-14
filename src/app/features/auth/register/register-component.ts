@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { LoginResponse } from '../../../models/login-response.model';
 
 @Component({
   selector: 'app-register',
@@ -40,10 +41,14 @@ export class RegisterComponent {
     this.error = '';
 
     this.auth.register(this.form.getRawValue() as any).subscribe({
-      next: (res) => {
-        this.router.navigate(['/auth/verify-email'], {
-          queryParams: { email: res.email },
+      next: (res: LoginResponse) => {
+        this.auth.saveSession(res.token, {
+          email: res.email,
+          name: res.name,
+          role: res.role,
+          photo: res.profilePicture ?? undefined,
         });
+        this.router.navigate(['/dashboard']);
       },
       error: () => {
         this.error = 'Erro ao cadastrar. E-mail pode já estar em uso.';

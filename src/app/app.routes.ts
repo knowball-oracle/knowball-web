@@ -19,13 +19,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/auth/register/register-component').then((c) => c.RegisterComponent),
       },
-      {
-        path: 'verify-email',
-        loadComponent: () =>
-          import('./features/auth/verify-email/verify-email.component').then(
-            (c) => c.VerifyEmailComponent,
-          ),
-      },
       { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
   },
