@@ -4,11 +4,12 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { LoadingService } from './core/services/loading.service';
+import { KikoChatComponent } from "./shared/components/kiko-chat/kiko-chat.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent],
+  imports: [CommonModule, RouterOutlet, NavbarComponent, KikoChatComponent],
   templateUrl: './app.html',
 })
 export class AppComponent {
