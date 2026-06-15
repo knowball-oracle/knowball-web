@@ -90,3 +90,4 @@ export class ReportListComponent implements OnInit {
     return map[result] ?? '';
   }
 }
+
