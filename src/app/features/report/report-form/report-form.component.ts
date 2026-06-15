@@ -72,7 +72,17 @@ export class ReportFormComponent implements OnInit {
       this.referees = [];
       this.form.get('referee.id')!.setValue(null);
 
-      if (!gameId) return;
+      if (!gameId) {
+        this.form.get('date')!.setValue('');
+        return;
+      }
+
+      const selectedGame = this.games.find((g) => g.id === Number(gameId));
+      if (selectedGame && selectedGame.matchDate) {
+        const d = new Date(selectedGame.matchDate);
+        const iso = d.toISOString().substring(0, 10);
+        this.form.get('date')!.setValue(iso);
+      }
 
       this.loadingReferees = true;
       this.refereeingService.getByGame(Number(gameId)).subscribe({
