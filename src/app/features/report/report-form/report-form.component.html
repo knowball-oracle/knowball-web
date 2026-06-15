@@ -84,6 +84,7 @@
               type="date"
               class="input-field"
               [class.border-red-500/40]="date.invalid && date.touched"
+              readonly
             />
             @if (date.invalid && date.touched) {
               <p class="text-xs text-red-400 mt-1">Data obrigatória.</p>
