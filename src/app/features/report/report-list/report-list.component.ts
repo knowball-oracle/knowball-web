@@ -35,6 +35,8 @@ export class ReportListComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+
+    this.filters.valueChanges.subscribe(() => this.applyFilters());
   }
 
   load(): void {
@@ -57,7 +59,8 @@ export class ReportListComponent implements OnInit {
 
     this.items = this.allItems.filter((item) => {
       const matchProtocol =
-        !protocol || item.protocol.toLowerCase().includes(protocol.toLowerCase());
+        !protocol ||
+        (item.protocol && item.protocol.toLowerCase().includes(protocol.toLowerCase()));
 
       const matchStatus = !status || item.status === status;
 
@@ -67,11 +70,6 @@ export class ReportListComponent implements OnInit {
 
   onFilterSubmit(): void {
     this.applyFilters();
-  }
-
-  clearFilters(): void {
-    this.filters.reset();
-    this.items = [...this.allItems];
   }
 
   statusStyle(status: string): string {

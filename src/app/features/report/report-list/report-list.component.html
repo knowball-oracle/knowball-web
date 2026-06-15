@@ -32,18 +32,11 @@
 
     <div class="flex-1 min-w-40 max-w-xs">
       <select formControlName="status" class="input-field">
-        <option value="">Todos os status</option>
+        <option value="">Status (Todos)</option>
         <option value="NEW">NOVO</option>
         <option value="UNDER_REVIEW">EM ANÁLISE</option>
         <option value="RESOLVED">RESOLVIDO</option>
       </select>
-    </div>
-
-    <div class="flex gap-2">
-      <button type="submit" class="btn-primary text-sm cursor-pointer">Buscar</button>
-      <button type="button" (click)="clearFilters()" class="btn-secondary text-sm cursor-pointer">
-        Limpar
-      </button>
     </div>
   </form>
 
@@ -74,6 +67,56 @@
           </a>
         }
       </div>
-    } @else {}
+    } @else {
+      <div class="glass rounded-2xl overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="border-b border-white/8">
+            <tr class="text-white/30 uppercase text-xs tracking-wider">
+              <th class="px-5 py-3">Protocolo</th>
+              <th class="px-5 py-3">Data</th>
+              <th class="px-5 py-3">Status</th>
+              <th class="px-5 py-3">Resultado</th>
+              <th class="px-5 py-3 text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            @for (item of items; track item.id) {
+              <tr class="hover:bg-white/4 transition-colors duration-150">
+                <td class="px-5 py-3.5 font-mono text-white/70 text-xs">
+                  {{ item.protocol }}
+                </td>
+                <td class="px-5 py-3.5 text-white/50 tabular-nums">
+                  {{ item.date | date: 'dd/MM/yyyy' }}
+                </td>
+                <td class="px-5 py-3.5">
+                  <span class="badge" [class]="statusStyle(item.status)">
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td class="px-5 py-3.5">
+                  @if (item.analysisResult) {
+                    <span class="badge" [class]="resultStyle(item.analysisResult)">
+                      {{ item.analysisResult }}
+                    </span>
+                  } @else {
+                    <span class="text-white/20 text-xs">—</span>
+                  }
+                </td>
+                <td class="px-5 py-3.5">
+                  <div class="flex items-center justify-end">
+                    <a
+                      [routerLink]="['/reports', item.id]"
+                      class="p-2 rounded-lg text-white/30 hover:text-white/80 hover:bg-white/8 transition-all duration-200"
+                    >
+                      <lucide-icon [img]="EyeIcon" size="14" />
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   }
 </div>
