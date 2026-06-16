@@ -39,25 +39,30 @@ export class ReportDetailComponent implements OnInit {
   currentUserId = signal<number | null>(null);
 
   ngOnInit(): void {
-    this.currentUserId.set(this.auth.getUser()?.id ?? null);
+    const currentUser = this.auth.getUser();
+    console.log('Auth user in detail:', currentUser);
+    this.currentUserId.set(currentUser?.id ?? null);
     this.load();
   }
 
   load(): void {
-    this.loading = true;
-    this.service.getById(Number(this.id)).subscribe({
-      next: (data) => {
-        this.report = data;
-        this.selectedStatus = data.status;
-        this.selectedResult = data.analysisResult ?? '';
-        this.loading = false;
-      },
-      error: () => {
-        this.error = 'Erro ao carregar denúncia.';
-        this.loading = false;
-      },
-    });
-  }
+  this.loading = true;
+  this.service.getById(Number(this.id)).subscribe({
+    next: (data) => {
+      this.report = data;
+      console.log('Loaded report:', data);
+      console.log('canDelete? ', this.canDelete());
+
+      this.selectedStatus = data.status;
+      this.selectedResult = data.analysisResult ?? '';
+      this.loading = false;
+    },
+    error: () => {
+      this.error = 'Erro ao carregar denúncia.';
+      this.loading = false;
+    },
+  });
+}
 
   updateStatus(): void {
     this.updateError = '';
