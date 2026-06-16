@@ -57,7 +57,27 @@
                 <td class="px-5 py-3.5 font-medium text-white/80">{{ item.name }}</td>
                 <td class="px-5 py-3.5 text-white/50 tabular-nums">{{ item.year }}</td>
                 <td class="px-5 py-3.5">
-                  <span class="badge bg-amber-400/10 text-amber-400">{{ item.category }}</span>
+                  @if (item.category === 'SUB_13') {
+                    <span class="badge bg-blue-500/10 text-blue-400">
+                      {{ item.category }}
+                    </span>
+                  } @else if (item.category === 'SUB_15') {
+                    <span class="badge bg-emerald-500/10 text-emerald-400">
+                      {{ item.category }}
+                    </span>
+                  } @else if (item.category === 'SUB_17') {
+                    <span class="badge bg-amber-500/10 text-amber-400">
+                      {{ item.category }}
+                    </span>
+                  } @else if (item.category === 'SUB_20') {
+                    <span class="badge bg-rose-500/10 text-rose-400">
+                      {{ item.category }}
+                    </span>
+                  } @else {
+                    <span class="badge bg-slate-500/10 text-slate-300">
+                      {{ item.category }}
+                    </span>
+                  }
                 </td>
                 @if (auth.isAdmin()) {
                   <td class="px-5 py-3.5">
