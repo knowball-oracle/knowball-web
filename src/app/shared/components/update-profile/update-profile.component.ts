@@ -54,6 +54,22 @@ export class UpdateProfileComponent {
     });
   }
 
+  removePhoto(): void {
+    if (this.uploading) return;
+
+    this.uploading = true;
+
+    this.userService.updateMyProfile({ profilePicture: '' }).subscribe({
+      next: () => {
+        this.auth.clearPhoto();
+        this.uploading = false;
+      },
+      error: () => {
+        this.uploading = false;
+      },
+    });
+  }
+
   private _compressImage(file: File, maxSize: number, quality: number): Promise<string> {
     return new Promise((resolve) => {
       const reader = new FileReader();

@@ -56,6 +56,17 @@
         />
       </div>
 
+      @if (photo()) {
+        <button
+          type="button"
+          class="text-xs text-red-400 hover:text-red-300 underline underline-offset-2"
+          [disabled]="uploading"
+          (click)="removePhoto()"
+        >
+          Remover foto
+        </button>
+      }
+
       <div class="text-center">
         <p class="text-sm font-medium text-white/80">{{ user()?.name }}</p>
         @if (auth.isAdmin()) {

@@ -106,6 +106,19 @@ export class AuthService {
     this._photo.set(base64);
   }
 
+  clearPhoto(): void {
+    const email = this._user()?.email ?? 'anonymous';
+    localStorage.removeItem(`${this.PHOTO_KEY}_${email}`);
+    this._photo.set(null);
+
+    const current = this._user();
+    if (current) {
+      const updated = { ...current, photo: undefined };
+      localStorage.setItem(this.USER_KEY, JSON.stringify(updated));
+      this._user.set(updated);
+    }
+  }
+
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
