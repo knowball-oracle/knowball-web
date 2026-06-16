@@ -46,23 +46,23 @@ export class ReportDetailComponent implements OnInit {
   }
 
   load(): void {
-  this.loading = true;
-  this.service.getById(Number(this.id)).subscribe({
-    next: (data) => {
-      this.report = data;
-      console.log('Loaded report:', data);
-      console.log('canDelete? ', this.canDelete());
+    this.loading = true;
+    this.service.getById(Number(this.id)).subscribe({
+      next: (data) => {
+        this.report = data;
+        console.log('Loaded report:', data);
+        console.log('canDelete? ', this.canDelete());
 
-      this.selectedStatus = data.status;
-      this.selectedResult = data.analysisResult ?? '';
-      this.loading = false;
-    },
-    error: () => {
-      this.error = 'Erro ao carregar denúncia.';
-      this.loading = false;
-    },
-  });
-}
+        this.selectedStatus = data.status;
+        this.selectedResult = data.analysisResult ?? '';
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Erro ao carregar denúncia.';
+        this.loading = false;
+      },
+    });
+  }
 
   updateStatus(): void {
     this.updateError = '';
@@ -86,9 +86,15 @@ export class ReportDetailComponent implements OnInit {
   }
 
   canDelete(): boolean {
+    if (!this.report) return false;
+
     if (this.auth.isAdmin()) return true;
-    if (!this.report?.user?.id || !this.currentUserId()) return false;
-    return this.report.user.id === this.currentUserId();
+
+    if (!this.report.user?.id || !this.currentUserId()) return false;
+
+    const isOwner = this.report.user.id === this.currentUserId();
+
+    return isOwner && this.report.status === 'NEW';
   }
 
   confirmDelete(): void {
