@@ -11,6 +11,38 @@
     }
   </div>
 
+  @if (!loading && !error && items.length > 0) {
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <button
+        (click)="selectedCategory = null"
+        class="px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-200 cursor-pointer"
+        [class]="
+          selectedCategory === null
+            ? 'border-white/40 text-white bg-white/8'
+            : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
+        "
+      >
+        Todos
+        <span class="ml-1 opacity-60">({{ items.length }})</span>
+      </button>
+
+      @for (cat of categories; track cat) {
+        <button
+          (click)="selectedCategory = selectedCategory === cat ? null : cat"
+          class="px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-200 cursor-pointer"
+          [class]="
+            selectedCategory === cat
+              ? categoryBorderClass(cat) + ' bg-white/5'
+              : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
+          "
+        >
+          {{ cat }}
+          <span class="ml-1 opacity-60"> ({{ countByCategory(cat) }}) </span>
+        </button>
+      }
+    </div>
+  }
+
   @if (loading) {
     <div class="space-y-2">
       @for (_ of [1, 2, 3, 4]; track $index) {
@@ -38,6 +70,16 @@
           </a>
         }
       </div>
+    } @else if (filteredItems.length === 0) {
+      <div class="glass rounded-2xl py-12 text-center">
+        <p class="text-white/30 text-sm">Nenhum campeonato para esta categoria.</p>
+        <button
+          (click)="selectedCategory = null"
+          class="inline-block mt-3 text-sm text-white/50 hover:text-white transition cursor-pointer"
+        >
+          Limpar filtro →
+        </button>
+      </div>
     } @else {
       <div class="glass rounded-2xl overflow-x-auto">
         <table class="w-full text-sm text-left">
@@ -52,32 +94,18 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-white/5">
-            @for (item of items; track item.id) {
+            @for (item of filteredItems; track item.id) {
               <tr class="hover:bg-white/4 transition-colors duration-150">
-                <td class="px-5 py-3.5 font-medium text-white/80">{{ item.name }}</td>
-                <td class="px-5 py-3.5 text-white/50 tabular-nums">{{ item.year }}</td>
+                <td class="px-5 py-3.5 font-medium text-white/80">
+                  {{ item.name }}
+                </td>
+                <td class="px-5 py-3.5 text-white/50 tabular-nums">
+                  {{ item.year }}
+                </td>
                 <td class="px-5 py-3.5">
-                  @if (item.category === 'SUB_13') {
-                    <span class="badge bg-blue-500/10 text-blue-400">
-                      {{ item.category }}
-                    </span>
-                  } @else if (item.category === 'SUB_15') {
-                    <span class="badge bg-emerald-500/10 text-emerald-400">
-                      {{ item.category }}
-                    </span>
-                  } @else if (item.category === 'SUB_17') {
-                    <span class="badge bg-amber-500/10 text-amber-400">
-                      {{ item.category }}
-                    </span>
-                  } @else if (item.category === 'SUB_20') {
-                    <span class="badge bg-rose-500/10 text-rose-400">
-                      {{ item.category }}
-                    </span>
-                  } @else {
-                    <span class="badge bg-slate-500/10 text-slate-300">
-                      {{ item.category }}
-                    </span>
-                  }
+                  <span class="badge" [ngClass]="categoryClass(item.category)">
+                    {{ item.category }}
+                  </span>
                 </td>
                 @if (auth.isAdmin()) {
                   <td class="px-5 py-3.5">
