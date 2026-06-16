@@ -27,12 +27,26 @@ export class RefereeListComponent implements OnInit {
   readonly TrashIcon = Trash2;
   readonly PlusIcon = Plus;
 
+  readonly statuses = ['ACTIVE', 'INACTIVE', 'SUSPENDED'] as const;
+  selectedStatus: string | null = null;
+
+  get filteredItems(): Referee[] {
+    if (!this.selectedStatus) return this.items;
+    return this.items.filter((i) => i.status === this.selectedStatus);
+  }
+
+  countByStatus(status: string): number {
+    return this.items.filter((i) => i.status === status).length;
+  }
+
   ngOnInit(): void {
     this.load();
   }
 
   load(): void {
     this.loading = true;
+    this.error = '';
+
     this.service.getAll().subscribe({
       next: (data) => {
         this.items = data;
