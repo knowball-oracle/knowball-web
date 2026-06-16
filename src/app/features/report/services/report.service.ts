@@ -12,7 +12,6 @@ interface ReportRequest {
   referee: { id: number };
   protocol: string;
   content: string;
-  date: string;
   analysisResult?: AnalysisResultType;
 }
 

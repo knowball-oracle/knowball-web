@@ -73,7 +73,8 @@
           <thead class="border-b border-white/8">
             <tr class="text-white/30 uppercase text-xs tracking-wider">
               <th class="px-5 py-3">Protocolo</th>
-              <th class="px-5 py-3">Data</th>
+              <th class="px-5 py-3">Data da denúncia</th>
+              <th class="px-5 py-3">Data da partida</th>
               <th class="px-5 py-3">Status</th>
               <th class="px-5 py-3">Resultado</th>
               <th class="px-5 py-3 text-right">Ações</th>
@@ -85,9 +86,15 @@
                 <td class="px-5 py-3.5 font-mono text-white/70 text-xs">
                   {{ item.protocol }}
                 </td>
+
                 <td class="px-5 py-3.5 text-white/50 tabular-nums">
-                  {{ item.date | date: 'dd/MM/yyyy' }}
+                  {{ item.date | date: 'dd/MM/yyyy HH:mm' }}
                 </td>
+
+                <td class="px-5 py-3.5 text-white/50 tabular-nums">
+                  {{ item.game.matchDate | date: 'dd/MM/yyyy' }}
+                </td>
+
                 <td class="px-5 py-3.5">
                   <span class="badge" [class]="statusStyle(item.status)">
                     {{ item.status }}

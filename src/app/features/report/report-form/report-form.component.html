@@ -74,24 +74,6 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4">
-          <div>
-            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-              Data
-            </label>
-            <input
-              formControlName="date"
-              type="date"
-              class="input-field"
-              [class.border-red-500/40]="date.invalid && date.touched"
-              readonly
-            />
-            @if (date.invalid && date.touched) {
-              <p class="text-xs text-red-400 mt-1">Data obrigatória.</p>
-            }
-          </div>
-        </div>
-
         <div>
           <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
             Conteúdo
