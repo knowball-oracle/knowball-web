@@ -27,12 +27,85 @@ export class TeamListComponent implements OnInit {
   readonly TrashIcon = Trash2;
   readonly PlusIcon = Plus;
 
+  selectedState: string | null = null;
+
+  get states(): string[] {
+    const set = new Set<string>();
+    for (const t of this.items) {
+      if (t.state) set.add(t.state);
+    }
+    return Array.from(set).sort();
+  }
+
+  get filteredItems(): Team[] {
+    if (!this.selectedState) return this.items;
+    return this.items.filter((t) => t.state === this.selectedState);
+  }
+
+  countByState(uf: string): number {
+    return this.items.filter((t) => t.state === uf).length;
+  }
+
+  stateBadgeClass(uf: string | null | undefined): string {
+    switch (uf) {
+      case 'SP':
+        return 'bg-blue-500/10 text-blue-400';
+      case 'RJ':
+        return 'bg-emerald-500/10 text-emerald-400';
+      case 'MG':
+        return 'bg-amber-500/10 text-amber-400';
+      case 'RS':
+        return 'bg-rose-500/10 text-rose-400';
+      case 'PR':
+        return 'bg-purple-500/10 text-purple-400';
+      case 'BA':
+        return 'bg-red-500/10 text-red-400';
+      case 'CE':
+        return 'bg-cyan-500/10 text-cyan-400';
+      case 'PE':
+        return 'bg-lime-500/10 text-lime-400';
+      case 'SC':
+        return 'bg-fuchsia-500/10 text-fuchsia-400';
+      case 'GO':
+        return 'bg-orange-500/10 text-orange-400';
+      case 'DF':
+        return 'bg-sky-500/10 text-sky-400';
+      case 'AM':
+        return 'bg-teal-500/10 text-teal-400';
+      case 'ES':
+        return 'bg-indigo-500/10 text-indigo-400';
+      case 'RN':
+        return 'bg-pink-500/10 text-pink-400';
+      case 'MT':
+        return 'bg-yellow-500/10 text-yellow-400';
+      default:
+        return 'bg-white/8 text-white/50';
+    }
+  }
+
+  stateFilterBorderClass(uf: string): string {
+    switch (uf) {
+      case 'SP':
+        return 'border-blue-400/60 text-blue-400';
+      case 'RJ':
+        return 'border-emerald-400/60 text-emerald-400';
+      case 'MG':
+        return 'border-amber-400/60 text-amber-400';
+      case 'RS':
+        return 'border-rose-400/60 text-rose-400';
+      default:
+        return 'border-white/40 text-white/70';
+    }
+  }
+
   ngOnInit(): void {
     this.load();
   }
 
   load(): void {
     this.loading = true;
+    this.error = '';
+
     this.service.getAll().subscribe({
       next: (data) => {
         this.items = data;

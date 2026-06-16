@@ -11,6 +11,38 @@
     }
   </div>
 
+  @if (!loading && !error && items.length > 0) {
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <button
+        (click)="selectedState = null"
+        class="px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-200 cursor-pointer"
+        [class]="
+          selectedState === null
+            ? 'border-white/40 text-white bg-white/8'
+            : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
+        "
+      >
+        Todos
+        <span class="ml-1 opacity-60">({{ items.length }})</span>
+      </button>
+
+      @for (uf of states; track uf) {
+        <button
+          (click)="selectedState = selectedState === uf ? null : uf"
+          class="px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-200 cursor-pointer uppercase"
+          [class]="
+            selectedState === uf
+              ? stateFilterBorderClass(uf) + ' bg-white/5'
+              : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
+          "
+        >
+          {{ uf }}
+          <span class="ml-1 opacity-60"> ({{ countByState(uf) }}) </span>
+        </button>
+      }
+    </div>
+  }
+
   @if (loading) {
     <div class="space-y-2">
       @for (_ of [1, 2, 3, 4]; track $index) {
@@ -38,6 +70,16 @@
           </a>
         }
       </div>
+    } @else if (filteredItems.length === 0) {
+      <div class="glass rounded-2xl py-12 text-center">
+        <p class="text-white/30 text-sm">Nenhum time para esta UF.</p>
+        <button
+          (click)="selectedState = null"
+          class="inline-block mt-3 text-sm text-white/50 hover:text-white transition cursor-pointer"
+        >
+          Limpar filtro →
+        </button>
+      </div>
     } @else {
       <div class="glass rounded-2xl overflow-x-auto">
         <table class="w-full text-sm text-left">
@@ -52,12 +94,18 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-white/5">
-            @for (item of items; track item.id) {
+            @for (item of filteredItems; track item.id) {
               <tr class="hover:bg-white/4 transition-colors duration-150">
-                <td class="px-5 py-3.5 font-medium text-white/80">{{ item.name }}</td>
-                <td class="px-5 py-3.5 text-white/50">{{ item.city }}</td>
+                <td class="px-5 py-3.5 font-medium text-white/80">
+                  {{ item.name }}
+                </td>
+                <td class="px-5 py-3.5 text-white/50">
+                  {{ item.city }}
+                </td>
                 <td class="px-5 py-3.5">
-                  <span class="badge bg-white/8 text-white/50 uppercase">{{ item.state }}</span>
+                  <span class="badge uppercase" [ngClass]="stateBadgeClass(item.state)">
+                    {{ item.state }}
+                  </span>
                 </td>
                 @if (auth.isAdmin()) {
                   <td class="px-5 py-3.5">
