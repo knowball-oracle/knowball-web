@@ -33,14 +33,15 @@ export class TeamListComponent implements OnInit {
   get states(): string[] {
     const set = new Set<string>();
     for (const t of this.items) {
-      if (t.state) set.add(t.state);
+      if (t.state) set.add(t.state.toUpperCase());
     }
     return Array.from(set).sort();
   }
 
   get filteredItems(): Team[] {
     if (!this.selectedState) return this.items;
-    return this.items.filter((t) => t.state === this.selectedState);
+    const uf = this.selectedState.toUpperCase();
+    return this.items.filter((t) => t.state && t.state.toUpperCase() === uf);
   }
 
   stateBadgeClass(uf: string | null | undefined): string {
@@ -90,7 +91,10 @@ export class TeamListComponent implements OnInit {
 
     this.service.getAll().subscribe({
       next: (data) => {
-        this.items = data;
+        this.items = data.map((t) => ({
+          ...t,
+          state: t.state ? t.state.toUpperCase() : t.state,
+        }));
         this.loading = false;
       },
       error: () => {
