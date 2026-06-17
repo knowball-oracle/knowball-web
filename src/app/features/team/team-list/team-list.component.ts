@@ -7,11 +7,12 @@ import { TeamService } from '../services/team.service';
 import { Team } from '../../../models/team.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-team-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule, ConfirmDialogComponent],
+  imports: [CommonModule, FormsModule, RouterLink, LucideAngularModule, ConfirmDialogComponent],
   templateUrl: './team-list.component.html',
 })
 export class TeamListComponent implements OnInit {
@@ -27,7 +28,7 @@ export class TeamListComponent implements OnInit {
   readonly TrashIcon = Trash2;
   readonly PlusIcon = Plus;
 
-  selectedState: string | null = null;
+  selectedState: string = '';
 
   get states(): string[] {
     const set = new Set<string>();
@@ -40,10 +41,6 @@ export class TeamListComponent implements OnInit {
   get filteredItems(): Team[] {
     if (!this.selectedState) return this.items;
     return this.items.filter((t) => t.state === this.selectedState);
-  }
-
-  countByState(uf: string): number {
-    return this.items.filter((t) => t.state === uf).length;
   }
 
   stateBadgeClass(uf: string | null | undefined): string {
@@ -80,21 +77,6 @@ export class TeamListComponent implements OnInit {
         return 'bg-yellow-500/10 text-yellow-400';
       default:
         return 'bg-white/8 text-white/50';
-    }
-  }
-
-  stateFilterBorderClass(uf: string): string {
-    switch (uf) {
-      case 'SP':
-        return 'border-blue-400/60 text-blue-400';
-      case 'RJ':
-        return 'border-emerald-400/60 text-emerald-400';
-      case 'MG':
-        return 'border-amber-400/60 text-amber-400';
-      case 'RS':
-        return 'border-rose-400/60 text-rose-400';
-      default:
-        return 'border-white/40 text-white/70';
     }
   }
 
