@@ -102,7 +102,7 @@ export class TeamListComponent implements OnInit {
         this.loading = false;
       },
     });
-  }
+  }-
 
   confirmDelete(id: number): void {
     this.pendingDeleteId = id;

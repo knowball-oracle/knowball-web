@@ -50,6 +50,7 @@
         <div class="px-5 py-4 border-b border-white/8">
           <app-participation-form
             [gameId]="id"
+            [existingParticipations]="participations"
             (saved)="onParticipationSaved()"
             (cancelled)="showParticipationForm = false"
           />
@@ -98,6 +99,7 @@
         <div class="px-5 py-4 border-b border-white/8">
           <app-refereeing-form
             [gameId]="id"
+            [existingRefereeings]="refereeings"
             (saved)="onRefereeingSaved()"
             (cancelled)="showRefereeingForm = false"
           />

@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ParticipationService } from '../services/participation.service';
 import { TeamService } from '../../team/services/team.service';
 import { Team } from '../../../models/team.model';
+import { Participation } from '../../../models/participation.model';
 import { ParticipationType } from '../../../models';
 
 @Component({
@@ -14,6 +15,7 @@ import { ParticipationType } from '../../../models';
 })
 export class ParticipationFormComponent implements OnInit {
   @Input() gameId!: string;
+  @Input() existingParticipations: Participation[] = [];
   @Output() saved = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 
@@ -22,15 +24,28 @@ export class ParticipationFormComponent implements OnInit {
   private teamService = inject(TeamService);
 
   teams: Team[] = [];
-  types = Object.values(ParticipationType);
   saving = false;
   error = '';
 
   form = this.fb.group({
     game: this.fb.group({ id: [null as number | null, Validators.required] }),
-    team: this.fb.group({ id: [null, Validators.required] }),
+    team: this.fb.group({ id: [null as number | null, Validators.required] }),
     type: ['', Validators.required],
   });
+
+  get availableTypes(): string[] {
+    const usedTypes = this.existingParticipations.map((p) => p.type);
+    return Object.values(ParticipationType).filter((t) => !usedTypes.includes(t));
+  }
+
+  get availableTeams(): Team[] {
+    const usedTeamIds = this.existingParticipations.map((p) => p.team.id);
+    return this.teams.filter((t) => !usedTeamIds.includes(t.id));
+  }
+
+  get isFull(): boolean {
+    return this.existingParticipations.length >= 2;
+  }
 
   ngOnInit(): void {
     this.form.get('game.id')!.setValue(Number(this.gameId));
@@ -39,8 +54,31 @@ export class ParticipationFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.invalid) return;
+
+    if (this.isFull) {
+      this.error = 'A partida já possui os dois times cadastrados.';
+      return;
+    }
+
+    const payload = this.form.getRawValue() as any;
+    const selectedType = payload.type;
+    const selectedTeamId = payload.team?.id;
+
+    const typeJaUsado = this.existingParticipations.some((p) => p.type === selectedType);
+    if (typeJaUsado) {
+      this.error = `Já existe um time cadastrado como ${selectedType}.`;
+      return;
+    }
+
+    const timeJaVinculado = this.existingParticipations.some((p) => p.team.id === selectedTeamId);
+    if (timeJaVinculado) {
+      this.error = 'Este time já está vinculado a esta partida.';
+      return;
+    }
+
     this.saving = true;
-    this.participationService.create(this.form.getRawValue() as any).subscribe({
+    this.error = '';
+    this.participationService.create(payload).subscribe({
       next: () => {
         this.saving = false;
         this.saved.emit();
