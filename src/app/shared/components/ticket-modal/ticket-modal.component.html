@@ -31,6 +31,19 @@
         <p class="text-xs text-green-400 -mt-2">✓ Protocolo copiado!</p>
       }
 
+      @if (email) {
+        <div
+          class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-3 w-full"
+        >
+          <lucide-icon [img]="Mail" class="text-white/40 shrink-0" [size]="16" />
+          <p class="text-xs text-white/50 text-left">
+            Verifique o e-mail
+            <span class="text-white/80 font-medium break-all">{{ email }}</span>
+            — enviamos a confirmação da sua denúncia.
+          </p>
+        </div>
+      }
+
       <p class="text-xs text-white/30">Use este código para acompanhar o status da sua denúncia.</p>
 
       <button (click)="close()" class="btn-primary w-full mt-1 cursor-pointer">Entendido</button>

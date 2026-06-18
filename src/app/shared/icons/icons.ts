@@ -29,5 +29,6 @@ export {
   Save,
   Sun,
   Moon,
+  Mail,
   type LucideIconData,
 } from 'lucide-angular';

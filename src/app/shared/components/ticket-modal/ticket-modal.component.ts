@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
-import { CircleCheck, Copy } from '../../icons/icons';
+import { CircleCheck, Copy, Mail } from '../../icons/icons';
 
 @Component({
   selector: 'app-ticket-modal',
@@ -12,10 +12,13 @@ import { CircleCheck, Copy } from '../../icons/icons';
 export class TicketModalComponent {
   @Input() visible = false;
   @Input() protocolo = '';
+  @Input() email = '';
+
   @Output() closed = new EventEmitter<void>();
 
   readonly CircleCheck = CircleCheck;
   readonly Copy = Copy;
+  readonly Mail = Mail;
 
   copied = false;
 

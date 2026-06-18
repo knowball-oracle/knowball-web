@@ -32,6 +32,7 @@ export class ReportFormComponent implements OnInit {
   statuses = Object.values(ReportStatusType);
   ticketVisible = false;
   ticketProtocolo = '';
+  ticketEmail = '';
 
   form = this.fb.group({
     game: this.fb.group({ id: [null as number | null, Validators.required] }),
@@ -92,6 +93,7 @@ export class ReportFormComponent implements OnInit {
     this.reportService.create(this.form.getRawValue() as any).subscribe({
       next: (response: any) => {
         this.ticketProtocolo = response.protocol;
+        this.ticketEmail = response.email;
         this.ticketVisible = true;
         this.saving = false;
         this.form.reset();
