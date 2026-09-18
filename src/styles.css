@@ -311,7 +311,6 @@ body {
     outline-offset: 2px;
   }
 
-  /* CORREÇÃO: era theme-pill--light (BEM), precisa ser theme-pill-light (flat) */
   .theme-pill-light {
     background: #dde2f0;
     border-color: rgba(0, 0, 0, 0.1);

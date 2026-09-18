@@ -144,4 +144,8 @@ export class AuthService {
     this._user.set(null);
     this._photo.set(null);
   }
+
+  redirectToGoogleLogin(): void {
+    window.location.href = `${environment.apiUrl}/oauth2/authorization/google`;
+  }
 }

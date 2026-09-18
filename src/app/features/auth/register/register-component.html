@@ -5,85 +5,218 @@
       radial-gradient(ellipse at 60% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 60%), #06060f;
   "
 >
-  <div class="glass-liquid rounded-3xl p-10 w-full max-w-md">
-    <div class="flex justify-center mb-8">
+  <div class="w-full max-w-md">
+    <div class="flex justify-center mb-6">
       <img src="/assets/logo.svg" alt="KnowBall" class="h-12 w-auto logo-adaptive" />
     </div>
 
-    <h2 class="text-lg font-semibold text-white mb-1">Criar conta</h2>
-    <p class="text-sm text-white/40 mb-6">Preencha os dados para se cadastrar.</p>
+    <p class="text-center text-[11px] font-semibold text-white/40 uppercase tracking-[0.2em] mb-2">
+      Comece agora
+    </p>
+    <h2 class="text-2xl font-semibold text-white text-center mb-1">Crie sua conta Knowball</h2>
+    <p class="text-sm text-white/40 text-center mb-8">
+      Complete seu cadastro passo a passo para começar a denunciar.
+    </p>
 
-    @if (error) {
-      <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-        {{ error }}
-      </div>
-    }
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-      <div>
-        <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
-          Nome
-        </label>
-        <input
-          formControlName="name"
-          type="text"
-          placeholder="Seu nome completo"
-          class="input-field"
-          [class.border-red-500/40]="form.get('name')!.invalid && form.get('name')!.touched"
-        />
-        @if (form.get('name')!.invalid && form.get('name')!.touched) {
-          <p class="text-xs text-red-400 mt-1">Nome obrigatório.</p>
-        }
-      </div>
-
-      <div>
-        <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
-          E-mail
-        </label>
-        <input
-          formControlName="email"
-          type="email"
-          placeholder="seu@email.com"
-          class="input-field"
-          [class.border-red-500/40]="form.get('email')!.invalid && form.get('email')!.touched"
-        />
-        @if (form.get('email')!.invalid && form.get('email')!.touched) {
-          <p class="text-xs text-red-400 mt-1">
-            {{
-              form.get('email')!.hasError('required') ? 'E-mail obrigatório.' : 'E-mail inválido.'
-            }}
-          </p>
-        }
+    <div class="flex items-center justify-center mb-8 px-2">
+      <div class="flex items-center flex-1">
+        <button
+          type="button"
+          (click)="goToStep(1)"
+          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 shrink-0"
+          [class.bg-white]="currentStep() >= 1"
+          [class.text-black]="currentStep() >= 1"
+          [class.bg-white_5]="currentStep() < 1"
+          [ngClass]="
+            currentStep() >= 1
+              ? 'bg-white text-black'
+              : 'bg-white/5 text-white/40 border border-white/10'
+          "
+        >
+          1
+        </button>
+        <div
+          class="flex-1 h-px mx-2"
+          [ngClass]="currentStep() > 1 ? 'bg-white/40' : 'bg-white/10'"
+        ></div>
       </div>
 
-      <div>
-        <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
-          Senha
-        </label>
-        <input
-          formControlName="password"
-          type="password"
-          placeholder="••••••••"
-          class="input-field"
-          [class.border-red-500/40]="form.get('password')!.invalid && form.get('password')!.touched"
-        />
-        @if (form.get('password')!.invalid && form.get('password')!.touched) {
-          <p class="text-xs text-red-400 mt-1">Senha deve ter no mínimo 6 caracteres.</p>
-        }
+      <div class="flex items-center flex-1">
+        <button
+          type="button"
+          (click)="goToStep(2)"
+          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 shrink-0"
+          [ngClass]="
+            currentStep() >= 2
+              ? 'bg-white text-black'
+              : 'bg-white/5 text-white/40 border border-white/10'
+          "
+        >
+          2
+        </button>
+        <div
+          class="flex-1 h-px mx-2"
+          [ngClass]="currentStep() > 2 ? 'bg-white/40' : 'bg-white/10'"
+        ></div>
       </div>
 
       <button
-        type="submit"
-        [disabled]="loading"
-        class="w-full btn-primary mt-2 py-2.5 text-sm font-semibold disabled:opacity-40 cursor-pointer"
+        type="button"
+        (click)="goToStep(3)"
+        class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 shrink-0"
+        [ngClass]="
+          currentStep() >= 3
+            ? 'bg-white text-black'
+            : 'bg-white/5 text-white/40 border border-white/10'
+        "
       >
-        {{ loading ? 'Cadastrando...' : 'Criar conta' }}
+        3
       </button>
-    </form>
+    </div>
 
-    <p class="text-center text-sm text-white/30 mt-6">
-      Já tem conta?
-      <a routerLink="/auth/login" class="text-white/70 hover:text-white transition"> Entrar </a>
+    <div class="flex items-center justify-between mb-6 px-1">
+      <span
+        class="text-[11px] font-medium uppercase tracking-wider"
+        [ngClass]="currentStep() === 1 ? 'text-white/70' : 'text-white/25'"
+      >
+        Seu nome
+      </span>
+      <span
+        class="text-[11px] font-medium uppercase tracking-wider"
+        [ngClass]="currentStep() === 2 ? 'text-white/70' : 'text-white/25'"
+      >
+        Seu e-mail
+      </span>
+      <span
+        class="text-[11px] font-medium uppercase tracking-wider"
+        [ngClass]="currentStep() === 3 ? 'text-white/70' : 'text-white/25'"
+      >
+        Sua senha
+      </span>
+    </div>
+
+    <div class="glass-liquid rounded-3xl p-10">
+      @if (error) {
+        <div
+          class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm"
+        >
+          {{ error }}
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="nextStep()">
+        @if (currentStep() === 1) {
+          <p class="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-1">
+            Etapa 1
+          </p>
+          <h3 class="text-lg font-semibold text-white mb-1">Como podemos te chamar?</h3>
+          <p class="text-sm text-white/40 mb-6">Use o nome pelo qual sua equipe te conhece.</p>
+
+          <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
+            Seu nome
+          </label>
+          <input
+            formControlName="name"
+            type="text"
+            placeholder="Ex.: Gabriel Rossi"
+            class="input-field"
+            [class.border-red-500/40]="name.invalid && name.touched"
+            autofocus
+          />
+          @if (name.invalid && name.touched) {
+            <p class="text-xs text-red-400 mt-1">Nome obrigatório.</p>
+          }
+        }
+
+        @if (currentStep() === 2) {
+          <p class="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-1">
+            Etapa 2
+          </p>
+          <h3 class="text-lg font-semibold text-white mb-1">Qual é o seu e-mail?</h3>
+          <p class="text-sm text-white/40 mb-6">
+            Usaremos para você acompanhar suas denúncias e receber atualizações.
+          </p>
+
+          <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
+            Seu e-mail
+          </label>
+          <input
+            formControlName="email"
+            type="email"
+            placeholder="seu@email.com"
+            class="input-field"
+            [class.border-red-500/40]="email.invalid && email.touched"
+            autofocus
+          />
+          @if (email.invalid && email.touched) {
+            <p class="text-xs text-red-400 mt-1">
+              {{ email.hasError('required') ? 'E-mail obrigatório.' : 'E-mail inválido.' }}
+            </p>
+          }
+        }
+
+        @if (currentStep() === 3) {
+          <p class="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-1">
+            Etapa 3
+          </p>
+          <h3 class="text-lg font-semibold text-white mb-1">Crie uma senha segura</h3>
+          <p class="text-sm text-white/40 mb-6">Use no mínimo 6 caracteres.</p>
+
+          <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
+            Sua senha
+          </label>
+          <input
+            formControlName="password"
+            type="password"
+            placeholder="••••••••"
+            class="input-field"
+            [class.border-red-500/40]="password.invalid && password.touched"
+            autofocus
+          />
+          @if (password.invalid && password.touched) {
+            <p class="text-xs text-red-400 mt-1">Senha deve ter no mínimo 6 caracteres.</p>
+          }
+        }
+
+        <div class="flex gap-3 mt-6">
+          @if (currentStep() > 1) {
+            <button
+              type="button"
+              (click)="previousStep()"
+              class="btn-ghost py-2.5 px-4 text-sm font-semibold cursor-pointer"
+            >
+              ← Voltar
+            </button>
+          }
+
+          <button
+            type="submit"
+            [disabled]="loading"
+            class="flex-1 btn-primary py-2.5 text-sm font-semibold disabled:opacity-40 cursor-pointer flex items-center justify-center gap-2"
+          >
+            @if (currentStep() < 3) {
+              Continuar
+              <span aria-hidden="true">→</span>
+            } @else {
+              {{ loading ? 'Cadastrando...' : 'Criar minha conta' }}
+            }
+          </button>
+        </div>
+      </form>
+
+      <div class="border-t border-white/5 mt-6 pt-6 text-center">
+        <p class="text-sm text-white/30">
+          Já tem uma conta?
+          <a routerLink="/auth/login" class="text-white/70 hover:text-white transition font-medium">
+            Entrar
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <p class="text-center text-xs text-white/25 mt-6 leading-relaxed px-4">
+      Ao criar sua conta, você poderá registrar denúncias, acompanhar campeonatos e receber
+      atualizações do Knowball.
     </p>
   </div>
 </div>

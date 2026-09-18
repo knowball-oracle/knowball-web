@@ -16,6 +16,7 @@ export class LoginComponent {
   private router = inject(Router);
 
   loading = false;
+  googleLoading = false;
   error = '';
 
   form = this.fb.group({
@@ -31,7 +32,10 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.loading = true;
     this.error = '';
@@ -43,5 +47,10 @@ export class LoginComponent {
         this.loading = false;
       },
     });
+  }
+
+  loginWithGoogle(): void {
+    this.googleLoading = true;
+    this.auth.redirectToGoogleLogin();
   }
 }
