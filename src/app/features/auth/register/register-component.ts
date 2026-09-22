@@ -81,11 +81,6 @@ export class RegisterComponent {
     return this.form.get('code')!;
   }
 
-  /**
-   * Aceita `number` (o template passa um número simples do array [1,2,3,4]).
-   * A validação de range acontece aqui dentro, evitando cast de union type
-   * dentro do HTML (que quebra o parser do Angular por causa do "|").
-   */
   private controlForStep(step: number) {
     switch (step) {
       case 1:
@@ -207,9 +202,19 @@ export class RegisterComponent {
         });
         this.router.navigate(['/dashboard']);
       },
-      error: () => {
-        this.error = 'Erro ao cadastrar. E-mail pode já estar em uso.';
+      error: (err) => {
         this.loading = false;
+
+        const backendMessage: string = typeof err?.error === 'string' ? err.error : '';
+
+        if (backendMessage.toLowerCase().includes('verifica')) {
+          this.codeError = backendMessage || 'Verificação expirada. Solicite um novo código.';
+          this.currentStep.set(4);
+          this.sendVerificationCode();
+          return;
+        }
+
+        this.error = backendMessage || 'Erro ao cadastrar. E-mail pode já estar em uso.';
         this.currentStep.set(2);
       },
     });
