@@ -18,60 +18,29 @@
       Complete seu cadastro passo a passo para começar a denunciar.
     </p>
 
-    <div class="flex items-center justify-center mb-8 px-2">
-      <div class="flex items-center flex-1">
-        <button
-          type="button"
-          (click)="goToStep(1)"
-          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 shrink-0"
-          [class.bg-white]="currentStep() >= 1"
-          [class.text-black]="currentStep() >= 1"
-          [class.bg-white_5]="currentStep() < 1"
-          [ngClass]="
-            currentStep() >= 1
-              ? 'bg-white text-black'
-              : 'bg-white/5 text-white/40 border border-white/10'
-          "
-        >
-          1
-        </button>
-        <div
-          class="flex-1 h-px mx-2"
-          [ngClass]="currentStep() > 1 ? 'bg-white/40' : 'bg-white/10'"
-        ></div>
-      </div>
-
-      <div class="flex items-center flex-1">
-        <button
-          type="button"
-          (click)="goToStep(2)"
-          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 shrink-0"
-          [ngClass]="
-            currentStep() >= 2
-              ? 'bg-white text-black'
-              : 'bg-white/5 text-white/40 border border-white/10'
-          "
-        >
-          2
-        </button>
-        <div
-          class="flex-1 h-px mx-2"
-          [ngClass]="currentStep() > 2 ? 'bg-white/40' : 'bg-white/10'"
-        ></div>
-      </div>
-
-      <button
-        type="button"
-        (click)="goToStep(3)"
-        class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 shrink-0"
-        [ngClass]="
-          currentStep() >= 3
-            ? 'bg-white text-black'
-            : 'bg-white/5 text-white/40 border border-white/10'
-        "
-      >
-        3
-      </button>
+    <div class="flex items-center justify-center mb-6 px-2">
+      @for (step of [1, 2, 3, 4]; track step; let last = $last) {
+        <div class="flex items-center" [class.flex-1]="!last">
+          <button
+            type="button"
+            (click)="goToStep(step)"
+            class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-200 shrink-0"
+            [ngClass]="
+              currentStep() >= step
+                ? 'bg-white text-black'
+                : 'bg-white/5 text-white/40 border border-white/10'
+            "
+          >
+            {{ step }}
+          </button>
+          @if (!last) {
+            <div
+              class="flex-1 h-px mx-2"
+              [ngClass]="currentStep() > step ? 'bg-white/40' : 'bg-white/10'"
+            ></div>
+          }
+        </div>
+      }
     </div>
 
     <div class="flex items-center justify-between mb-6 px-1">
@@ -79,19 +48,25 @@
         class="text-[11px] font-medium uppercase tracking-wider"
         [ngClass]="currentStep() === 1 ? 'text-white/70' : 'text-white/25'"
       >
-        Seu nome
+        Nome
       </span>
       <span
         class="text-[11px] font-medium uppercase tracking-wider"
         [ngClass]="currentStep() === 2 ? 'text-white/70' : 'text-white/25'"
       >
-        Seu e-mail
+        E-mail
       </span>
       <span
         class="text-[11px] font-medium uppercase tracking-wider"
         [ngClass]="currentStep() === 3 ? 'text-white/70' : 'text-white/25'"
       >
-        Sua senha
+        Senha
+      </span>
+      <span
+        class="text-[11px] font-medium uppercase tracking-wider"
+        [ngClass]="currentStep() === 4 ? 'text-white/70' : 'text-white/25'"
+      >
+        Verificação
       </span>
     </div>
 
@@ -105,6 +80,7 @@
       }
 
       <form [formGroup]="form" (ngSubmit)="nextStep()">
+        <!-- Etapa 1: Nome -->
         @if (currentStep() === 1) {
           <p class="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-1">
             Etapa 1
@@ -118,6 +94,7 @@
           <input
             formControlName="name"
             type="text"
+            placeholder="Ex.: Gabriel Rossi"
             class="input-field"
             [class.border-red-500/40]="name.invalid && name.touched"
             autofocus
@@ -127,13 +104,14 @@
           }
         }
 
+        <!-- Etapa 2: E-mail -->
         @if (currentStep() === 2) {
           <p class="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-1">
             Etapa 2
           </p>
           <h3 class="text-lg font-semibold text-white mb-1">Qual é o seu e-mail?</h3>
           <p class="text-sm text-white/40 mb-6">
-            Usaremos para você acompanhar suas denúncias e receber atualizações.
+            Enviaremos um código de verificação para confirmar que ele é seu.
           </p>
 
           <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
@@ -154,6 +132,7 @@
           }
         }
 
+        <!-- Etapa 3: Senha + Repetir senha -->
         @if (currentStep() === 3) {
           <p class="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-1">
             Etapa 3
@@ -161,20 +140,101 @@
           <h3 class="text-lg font-semibold text-white mb-1">Crie uma senha segura</h3>
           <p class="text-sm text-white/40 mb-6">Use no mínimo 6 caracteres.</p>
 
+          <div class="space-y-4">
+            <div>
+              <label
+                class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider"
+              >
+                Sua senha
+              </label>
+              <input
+                formControlName="password"
+                type="password"
+                placeholder="••••••••"
+                class="input-field"
+                [class.border-red-500/40]="password.invalid && password.touched"
+                autofocus
+              />
+              @if (password.invalid && password.touched) {
+                <p class="text-xs text-red-400 mt-1">Senha deve ter no mínimo 6 caracteres.</p>
+              }
+            </div>
+
+            <div>
+              <label
+                class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider"
+              >
+                Repetir senha
+              </label>
+              <input
+                formControlName="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                class="input-field"
+                [class.border-red-500/40]="confirmPassword.invalid && confirmPassword.touched"
+              />
+              @if (confirmPassword.touched && confirmPassword.hasError('required')) {
+                <p class="text-xs text-red-400 mt-1">Repita a senha para confirmar.</p>
+              }
+              @if (confirmPassword.touched && confirmPassword.hasError('mismatch')) {
+                <p class="text-xs text-red-400 mt-1">As senhas não coincidem.</p>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Etapa 4: Verificação de código por e-mail -->
+        @if (currentStep() === 4) {
+          <p class="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-1">
+            Etapa 4
+          </p>
+          <h3 class="text-lg font-semibold text-white mb-1">Verifique seu e-mail</h3>
+          <p class="text-sm text-white/40 mb-6">
+            Enviamos um código de 6 dígitos para
+            <span class="text-white/70 font-medium">{{ email.value }}</span
+            >.
+          </p>
+
+          @if (codeError) {
+            <div
+              class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm"
+            >
+              {{ codeError }}
+            </div>
+          }
+
           <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
-            Sua senha
+            Código de verificação
           </label>
           <input
-            formControlName="password"
-            type="password"
-            placeholder="••••••••"
-            class="input-field"
-            [class.border-red-500/40]="password.invalid && password.touched"
+            formControlName="code"
+            type="text"
+            inputmode="numeric"
+            maxlength="6"
+            placeholder="000000"
+            class="input-field text-center text-lg tracking-[0.5em] font-semibold"
+            [class.border-red-500/40]="code.invalid && code.touched"
             autofocus
           />
-          @if (password.invalid && password.touched) {
-            <p class="text-xs text-red-400 mt-1">Senha deve ter no mínimo 6 caracteres.</p>
+          @if (code.invalid && code.touched) {
+            <p class="text-xs text-red-400 mt-1">Digite os 6 dígitos recebidos por e-mail.</p>
           }
+
+          <div class="flex items-center justify-between mt-4">
+            <span class="text-xs text-white/30">
+              {{ sendingCode ? 'Enviando código...' : 'Não recebeu?' }}
+            </span>
+            <button
+              type="button"
+              (click)="resendCode()"
+              [disabled]="resendCooldown() > 0 || sendingCode"
+              class="text-xs font-medium text-white/70 hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+            >
+              {{
+                resendCooldown() > 0 ? 'Reenviar em ' + resendCooldown() + 's' : 'Reenviar código'
+              }}
+            </button>
+          </div>
         }
 
         <div class="flex gap-3 mt-6">
@@ -190,14 +250,14 @@
 
           <button
             type="submit"
-            [disabled]="loading"
+            [disabled]="loading || sendingCode"
             class="flex-1 btn-primary py-2.5 text-sm font-semibold disabled:opacity-40 cursor-pointer flex items-center justify-center gap-2"
           >
-            @if (currentStep() < 3) {
+            @if (currentStep() < 4) {
               Continuar
               <span aria-hidden="true">→</span>
             } @else {
-              {{ loading ? 'Cadastrando...' : 'Criar minha conta' }}
+              {{ loading ? 'Verificando...' : 'Confirmar e criar conta' }}
             }
           </button>
         </div>

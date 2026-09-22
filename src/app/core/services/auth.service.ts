@@ -148,4 +148,12 @@ export class AuthService {
   redirectToGoogleLogin(): void {
     window.location.href = `${environment.apiUrl}/oauth2/authorization/google`;
   }
+
+  sendVerificationCode(email: string): Observable<void> {
+    return this.http.post<void>(`${this.url}/verification/send`, { email });
+  }
+
+  confirmVerificationCode(email: string, code: string): Observable<void> {
+    return this.http.post<void>(`${this.url}/verification/confirm`, { email, code });
+  }
 }

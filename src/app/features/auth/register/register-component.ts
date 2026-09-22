@@ -1,9 +1,37 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { LoginResponse } from '../../../models/login-response.model';
+
+function passwordsMatchValidator(): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    const confirmControl = group.get('confirmPassword');
+
+    if (!confirmControl) return null;
+
+    if (password !== confirmPassword) {
+      confirmControl.setErrors({ ...confirmControl.errors, mismatch: true });
+    } else if (confirmControl.hasError('mismatch')) {
+      const { mismatch, ...rest } = confirmControl.errors ?? {};
+      confirmControl.setErrors(Object.keys(rest).length ? rest : null);
+    }
+
+    return null;
+  };
+}
+
+type Step = 1 | 2 | 3 | 4;
 
 @Component({
   selector: 'app-register',
@@ -17,15 +45,25 @@ export class RegisterComponent {
   private router = inject(Router);
 
   loading = false;
+  sendingCode = false;
   error = '';
+  codeError = '';
 
-  currentStep = signal<1 | 2 | 3>(1);
+  currentStep = signal<Step>(1);
 
-  form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-  });
+  resendCooldown = signal(0);
+  private cooldownTimer?: ReturnType<typeof setInterval>;
+
+  form = this.fb.group(
+    {
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+      code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
+    },
+    { validators: passwordsMatchValidator() },
+  );
 
   get name() {
     return this.form.get('name')!;
@@ -36,53 +74,130 @@ export class RegisterComponent {
   get password() {
     return this.form.get('password')!;
   }
+  get confirmPassword() {
+    return this.form.get('confirmPassword')!;
+  }
+  get code() {
+    return this.form.get('code')!;
+  }
 
-  private controlForStep(step: 1 | 2 | 3) {
+  /**
+   * Aceita `number` (o template passa um número simples do array [1,2,3,4]).
+   * A validação de range acontece aqui dentro, evitando cast de union type
+   * dentro do HTML (que quebra o parser do Angular por causa do "|").
+   */
+  private controlForStep(step: number) {
     switch (step) {
       case 1:
         return this.name;
       case 2:
         return this.email;
       case 3:
-        return this.password;
+        return this.confirmPassword;
+      default:
+        return this.code;
     }
   }
 
-  goToStep(step: 1 | 2 | 3): void {
+  goToStep(step: number): void {
+    if (step < 1 || step > 4) return;
     if (step < this.currentStep()) {
-      this.currentStep.set(step);
+      this.currentStep.set(step as Step);
     }
   }
 
   nextStep(): void {
-    const control = this.controlForStep(this.currentStep());
-    control.markAsTouched();
+    const step = this.currentStep();
 
-    if (control.invalid) return;
+    if (step === 4) {
+      this.confirmCode();
+      return;
+    }
 
-    if (this.currentStep() < 3) {
-      this.currentStep.set((this.currentStep() + 1) as 1 | 2 | 3);
+    if (step === 3) {
+      this.password.markAsTouched();
+      this.confirmPassword.markAsTouched();
+      if (this.password.invalid || this.confirmPassword.invalid) return;
     } else {
-      this.onSubmit();
+      const control = this.controlForStep(step);
+      control.markAsTouched();
+      if (control.invalid) return;
+    }
+
+    const nextStepValue = (step + 1) as Step;
+    this.currentStep.set(nextStepValue);
+
+    if (nextStepValue === 4) {
+      this.sendVerificationCode();
     }
   }
 
   previousStep(): void {
     if (this.currentStep() > 1) {
-      this.currentStep.set((this.currentStep() - 1) as 1 | 2 | 3);
+      this.stopCooldown();
+      this.currentStep.set((this.currentStep() - 1) as Step);
     }
   }
 
-  onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+  sendVerificationCode(): void {
+    this.sendingCode = true;
+    this.codeError = '';
+    this.code.reset();
+
+    this.auth.sendVerificationCode(this.email.value!).subscribe({
+      next: () => {
+        this.sendingCode = false;
+        this.startCooldown(60);
+      },
+      error: () => {
+        this.sendingCode = false;
+        this.codeError = 'Não foi possível enviar o código. Tente reenviar.';
+      },
+    });
+  }
+
+  resendCode(): void {
+    if (this.resendCooldown() > 0) return;
+    this.sendVerificationCode();
+  }
+
+  private startCooldown(seconds: number): void {
+    this.resendCooldown.set(seconds);
+    this.cooldownTimer = setInterval(() => {
+      const current = this.resendCooldown();
+      if (current <= 1) {
+        this.stopCooldown();
+      } else {
+        this.resendCooldown.set(current - 1);
+      }
+    }, 1000);
+  }
+
+  private stopCooldown(): void {
+    if (this.cooldownTimer) clearInterval(this.cooldownTimer);
+    this.resendCooldown.set(0);
+  }
+
+  confirmCode(): void {
+    this.code.markAsTouched();
+    if (this.code.invalid) return;
 
     this.loading = true;
-    this.error = '';
+    this.codeError = '';
 
-    this.auth.register(this.form.getRawValue() as any).subscribe({
+    this.auth.confirmVerificationCode(this.email.value!, this.code.value!).subscribe({
+      next: () => this.onSubmit(),
+      error: () => {
+        this.loading = false;
+        this.codeError = 'Código inválido ou expirado. Tente novamente ou reenvie.';
+      },
+    });
+  }
+
+  private onSubmit(): void {
+    const { name, email, password } = this.form.getRawValue();
+
+    this.auth.register({ name, email, password } as any).subscribe({
       next: (res: LoginResponse) => {
         this.auth.saveSession(res.token, {
           email: res.email,
