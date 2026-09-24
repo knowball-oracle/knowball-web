@@ -22,9 +22,9 @@
 
   @if (isOpen()) {
     <div
-      class="fixed bottom-24 right-6 z-50 w-90 max-h-140 flex flex-col glass-liquid rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-200"
+      class="fixed z-50 flex flex-col glass-liquid rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-200 bottom-24 left-4 right-4 h-[70vh] max-h-155 sm:left-auto sm:right-6 sm:w-105 sm:h-170 sm:max-h-[78vh]"
     >
-      <div class="flex items-center gap-3 px-4 py-3 border-b border-white/8">
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-white/8 shrink-0">
         <div
           class="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-white/5 border border-white/10"
         >
@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <div #messagesContainer class="flex-1 overflow-y-auto px-4 py-3 space-y-3 min-h-0 max-h-95">
+      <div #messagesContainer class="flex-1 overflow-y-auto px-4 py-3 space-y-3 min-h-0">
         @for (msg of messages(); track $index) {
           <div [class]="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start gap-2'">
             @if (msg.role === 'assistant') {
@@ -54,8 +54,8 @@
             <div
               [class]="
                 msg.role === 'user'
-                  ? 'max-w-[80%] bg-white/10 border border-white/10 text-white/90 rounded-2xl rounded-tr-sm px-3 py-2 text-sm break-words leading-relaxed'
-                  : 'max-w-[80%] bg-white/5 border border-white/8 text-white/85 rounded-2xl rounded-tl-sm px-3 py-2 text-sm break-words leading-relaxed'
+                  ? 'max-w-[80%] bg-white/10 border border-white/10 text-white/90 rounded-2xl rounded-tr-sm px-3 py-2 text-sm wrap-break-word leading-relaxed'
+                  : 'max-w-[80%] bg-white/5 border border-white/8 text-white/85 rounded-2xl rounded-tl-sm px-3 py-2 text-sm wrap-break-word leading-relaxed'
               "
             >
               <span [innerHTML]="formatMessage(msg)"></span>
@@ -79,7 +79,7 @@
       </div>
 
       @if (messages().length === 1) {
-        <div class="px-4 pb-2 flex flex-wrap gap-1.5">
+        <div class="px-4 pb-2 flex flex-wrap gap-1.5 shrink-0">
           @for (s of SUGGESTIONS; track s) {
             <button
               (click)="sendSuggestion(s)"
@@ -91,7 +91,7 @@
         </div>
       }
 
-      <div class="px-3 pb-3">
+      <div class="px-3 pb-3 shrink-0">
         <div class="flex items-end gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2">
           <textarea
             class="flex-1 bg-transparent text-sm text-white/90 placeholder-white/25 resize-none outline-none leading-relaxed max-h-24"
