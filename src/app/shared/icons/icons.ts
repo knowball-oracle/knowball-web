@@ -31,5 +31,7 @@ export {
   Moon,
   Mail,
   Shield,
+  BarChart3,
+  PieChart,
   type LucideIconData,
 } from 'lucide-angular';

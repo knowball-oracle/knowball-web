@@ -15,6 +15,8 @@ import {
   TrendingUp,
   Calendar,
   MapPin,
+  BarChart3,
+  PieChart,
   type LucideIconData,
 } from '../../shared/icons/icons';
 import { AuthService } from '../../core/services/auth.service';
@@ -41,6 +43,25 @@ interface NavCard {
   count: number | null;
 }
 
+interface StatusChartItem {
+  label: string;
+  value: number;
+  color: string;
+  bar: string;
+}
+
+interface MonthlyChartItem {
+  label: string;
+  value: number;
+  height: number;
+}
+
+interface ChampionshipChartItem {
+  label: string;
+  value: number;
+  width: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -62,11 +83,18 @@ export class DashboardComponent implements OnInit {
   readonly TrendingUpIcon = TrendingUp;
   readonly CalendarIcon = Calendar;
   readonly MapPinIcon = MapPin;
+  readonly BarChartIcon = BarChart3;
+  readonly PieChartIcon = PieChart;
   readonly today = new Date();
 
   stats: StatCard[] = [];
   recentGames: any[] = [];
   pendingReports: any[] = [];
+  statusChart: StatusChartItem[] = [];
+  monthlyChart: MonthlyChartItem[] = [];
+  championshipChart: ChampionshipChartItem[] = [];
+  reportTotal = 0;
+  maxMonthlyReports = 1;
 
   cards: NavCard[] = [
     {
@@ -172,6 +200,11 @@ export class DashboardComponent implements OnInit {
         },
       ];
 
+      this.reportTotal = res.reports.length;
+      this.statusChart = this.buildStatusChart(res.reports);
+      this.monthlyChart = this.buildMonthlyChart(res.reports);
+      this.championshipChart = this.buildChampionshipChart(res.games);
+
       this.recentGames = [...res.games]
         .sort((a: any, b: any) => new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime())
         .slice(0, 4);
@@ -182,6 +215,76 @@ export class DashboardComponent implements OnInit {
 
       this.loading = false;
     });
+  }
+
+  private buildStatusChart(reports: any[]): StatusChartItem[] {
+    const items = [
+      {
+        label: 'Novas',
+        value: reports.filter((r) => r.status === 'NEW').length,
+        color: 'bg-blue-400',
+        text: 'text-blue-400',
+      },
+      {
+        label: 'Em análise',
+        value: reports.filter((r) => r.status === 'UNDER_REVIEW').length,
+        color: 'bg-amber-400',
+        text: 'text-amber-400',
+      },
+      {
+        label: 'Resolvidas',
+        value: reports.filter((r) => r.status === 'RESOLVED').length,
+        color: 'bg-emerald-400',
+        text: 'text-emerald-400',
+      },
+    ];
+    const max = Math.max(...items.map((i) => i.value), 1);
+    return items.map((i) => ({
+      ...i,
+      bar: `${Math.max((i.value / max) * 100, i.value ? 8 : 0)}%`,
+    }));
+  }
+
+  private buildMonthlyChart(reports: any[]): MonthlyChartItem[] {
+    const now = new Date();
+    const months: MonthlyChartItem[] = [];
+
+    for (let offset = 5; offset >= 0; offset--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - offset, 1);
+      const value = reports.filter((r) => {
+        const reportDate = new Date(r.date);
+        return (
+          reportDate.getFullYear() === date.getFullYear() &&
+          reportDate.getMonth() === date.getMonth()
+        );
+      }).length;
+      months.push({
+        label: date.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', ''),
+        value,
+        height: 0,
+      });
+    }
+
+    this.maxMonthlyReports = Math.max(...months.map((m) => m.value), 1);
+    return months.map((m) => ({
+      ...m,
+      height: m.value ? Math.max((m.value / this.maxMonthlyReports) * 100, 12) : 4,
+    }));
+  }
+
+  private buildChampionshipChart(games: any[]): ChampionshipChartItem[] {
+    const counts = new Map<string, number>();
+    games.forEach((game) => {
+      const name = game.championship?.name ?? 'Sem campeonato';
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    });
+    const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const max = Math.max(...sorted.map(([, value]) => value), 1);
+    return sorted.map(([label, value]) => ({
+      label,
+      value,
+      width: `${Math.max((value / max) * 100, 8)}%`,
+    }));
   }
 
   accentClasses(accent: string) {
