@@ -30,5 +30,6 @@ export {
   Sun,
   Moon,
   Mail,
+  Shield,
   type LucideIconData,
 } from 'lucide-angular';

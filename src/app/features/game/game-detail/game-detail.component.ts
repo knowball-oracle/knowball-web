@@ -2,7 +2,7 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import { Plus, X } from '../../../shared/icons/icons';
+import { Plus, X, MapPin } from '../../../shared/icons/icons';
 import { GameService } from '../services/game.service';
 import { ParticipationService } from '../services/participation.service';
 import { RefereeingService } from '../services/refereeing.service';
@@ -12,6 +12,7 @@ import { Refereeing } from '../../../models/refereeing.model';
 import { ParticipationFormComponent } from '../participation-form/participation-form.component';
 import { RefereeingFormComponent } from '../refereeing-form/refereeing-form.component';
 import { AuthService } from '../../../core/services/auth.service';
+import { TeamBadgeComponent } from '../../../shared/components/team-badge/team-badge.component';
 
 @Component({
   selector: 'app-game-detail',
@@ -22,6 +23,7 @@ import { AuthService } from '../../../core/services/auth.service';
     LucideAngularModule,
     ParticipationFormComponent,
     RefereeingFormComponent,
+    TeamBadgeComponent
   ],
   templateUrl: './game-detail.component.html',
 })
@@ -43,6 +45,7 @@ export class GameDetailComponent implements OnInit {
 
   readonly PlusIcon = Plus;
   readonly XIcon = X;
+  readonly MapPinIcon = MapPin;
 
   ngOnInit(): void {
     this.load();
@@ -92,5 +95,25 @@ export class GameDetailComponent implements OnInit {
       FOURTH_REFEREE: 'bg-white/8 text-white/50',
     };
     return map[role] ?? 'bg-white/8 text-white/50';
+  }
+
+  get homeTeamName(): string {
+    return this.participations.find((p) => p.type === 'HOME')?.team?.name ?? 'A definir';
+  }
+
+  get awayTeamName(): string {
+    return this.participations.find((p) => p.type === 'AWAY')?.team?.name ?? 'A definir';
+  }
+
+  get statusLabel(): string {
+    if (!this.game) return '';
+    const date = new Date(this.game.matchDate);
+    const now = new Date();
+    const isToday = date.toDateString() === now.toDateString();
+    const isPast = date.getTime() < now.getTime() && !isToday;
+
+    if (isToday) return 'Hoje';
+    if (isPast) return 'Fim de jogo';
+    return 'Agendado';
   }
 }
