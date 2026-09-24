@@ -2,7 +2,14 @@ import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { LucideAngularModule, Trash2 } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  Trash2,
+  MapPin,
+  CalendarDays,
+  UserRound,
+  Ticket,
+} from 'lucide-angular';
 import { ReportService } from '../services/report.service';
 import { Report } from '../../../models/report.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -23,6 +30,10 @@ export class ReportDetailComponent implements OnInit {
   auth = inject(AuthService);
 
   readonly TrashIcon = Trash2;
+  readonly MapPinIcon = MapPin;
+  readonly CalendarIcon = CalendarDays;
+  readonly UserIcon = UserRound;
+  readonly TicketIcon = Ticket;
 
   report: Report | null = null;
   loading = true;
@@ -40,7 +51,6 @@ export class ReportDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const currentUser = this.auth.getUser();
-    console.log('Auth user in detail:', currentUser);
     this.currentUserId.set(currentUser?.id ?? null);
     this.load();
   }
@@ -50,9 +60,6 @@ export class ReportDetailComponent implements OnInit {
     this.service.getById(Number(this.id)).subscribe({
       next: (data) => {
         this.report = data;
-        console.log('Loaded report:', data);
-        console.log('canDelete? ', this.canDelete());
-
         this.selectedStatus = data.status;
         this.selectedResult = data.analysisResult ?? '';
         this.loading = false;
@@ -87,14 +94,10 @@ export class ReportDetailComponent implements OnInit {
 
   canDelete(): boolean {
     if (!this.report) return false;
-
     if (this.auth.isAdmin()) return true;
-
     if (!this.report.user?.id || !this.currentUserId()) return false;
 
-    const isOwner = this.report.user.id === this.currentUserId();
-
-    return isOwner && this.report.status === 'NEW';
+    return this.report.user.id === this.currentUserId() && this.report.status === 'NEW';
   }
 
   confirmDelete(): void {
@@ -115,7 +118,6 @@ export class ReportDetailComponent implements OnInit {
       },
       error: (err) => {
         this.deleting = false;
-
         if (err.status === 403) {
           this.deleteError = 'Você não tem permissão para excluir esta denúncia.';
           return;
@@ -124,27 +126,56 @@ export class ReportDetailComponent implements OnInit {
           this.deleteError = 'Denúncia não encontrada.';
           return;
         }
-
         this.deleteError = 'Erro ao excluir denúncia.';
       },
     });
   }
 
+  statusLabel(status: string): string {
+    const map: Record<string, string> = {
+      NEW: 'Nova',
+      UNDER_REVIEW: 'Em análise',
+      RESOLVED: 'Resolvida',
+    };
+    return map[status] ?? status;
+  }
+
+  resultLabel(result: string): string {
+    const map: Record<string, string> = {
+      POSITIVE: 'Positivo',
+      NEUTRAL: 'Neutro',
+      NEGATIVE: 'Negativo',
+    };
+    return map[result] ?? result;
+  }
+
   statusColor(status: string): string {
     const map: Record<string, string> = {
-      NEW: 'bg-blue-500/20 text-blue-400',
-      UNDER_REVIEW: 'bg-yellow-500/20 text-yellow-400',
-      RESOLVED: 'bg-green-500/20 text-green-400',
+      NEW: 'bg-blue-500/20 text-blue-400 border-blue-400/20',
+      UNDER_REVIEW: 'bg-yellow-500/20 text-yellow-400 border-yellow-400/20',
+      RESOLVED: 'bg-emerald-500/20 text-emerald-400 border-emerald-400/20',
     };
-    return map[status] ?? 'bg-white/10 text-white/40';
+    return map[status] ?? 'bg-white/10 text-white/40 border-white/10';
   }
 
   resultColor(result: string): string {
     const map: Record<string, string> = {
-      POSITIVE: 'bg-green-500/20 text-green-400',
-      NEUTRAL: 'bg-white/10 text-white/40',
-      NEGATIVE: 'bg-red-500/20 text-red-400',
+      POSITIVE: 'bg-emerald-500/20 text-emerald-400 border-emerald-400/20',
+      NEUTRAL: 'bg-white/10 text-white/40 border-white/10',
+      NEGATIVE: 'bg-red-500/20 text-red-400 border-red-400/20',
     };
     return map[result] ?? '';
+  }
+
+  barcodeBars(protocol: string): number[] {
+    const source = protocol || 'KNOWBALL';
+    const bars: number[] = [];
+
+    for (let i = 0; i < 44; i++) {
+      const charCode = source.charCodeAt(i % source.length);
+      bars.push(((charCode + i * 7) % 4) + 1);
+    }
+
+    return bars;
   }
 }
