@@ -23,7 +23,7 @@ import { TeamBadgeComponent } from '../../../shared/components/team-badge/team-b
     LucideAngularModule,
     ParticipationFormComponent,
     RefereeingFormComponent,
-    TeamBadgeComponent
+    TeamBadgeComponent,
   ],
   templateUrl: './game-detail.component.html',
 })
@@ -103,6 +103,14 @@ export class GameDetailComponent implements OnInit {
 
   get awayTeamName(): string {
     return this.participations.find((p) => p.type === 'AWAY')?.team?.name ?? 'A definir';
+  }
+
+  get homeTeamLogo(): string | undefined {
+    return this.participations.find((p) => p.type === 'HOME')?.team?.logoUrl;
+  }
+
+  get awayTeamLogo(): string | undefined {
+    return this.participations.find((p) => p.type === 'AWAY')?.team?.logoUrl;
   }
 
   get statusLabel(): string {

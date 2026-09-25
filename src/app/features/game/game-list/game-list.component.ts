@@ -16,6 +16,8 @@ import { TeamBadgeComponent } from '../../../shared/components/team-badge/team-b
 interface GameWithTeams extends Game {
   homeTeamName?: string;
   awayTeamName?: string;
+  homeTeamLogo?: string;
+  awayTeamLogo?: string;
   statusLabel: string;
   isToday: boolean;
   isPast: boolean;
@@ -74,7 +76,6 @@ export class GameListComponent implements OnInit {
     });
   }
 
-  /** Busca as participações de todas as partidas em paralelo e monta os grupos por campeonato. */
   private enrichWithTeams(games: Game[]): void {
     if (games.length === 0) {
       this.groups = [];
@@ -95,6 +96,8 @@ export class GameListComponent implements OnInit {
           ...game,
           homeTeamName: home?.team?.name,
           awayTeamName: away?.team?.name,
+          homeTeamLogo: home?.team?.logoUrl,
+          awayTeamLogo: away?.team?.logoUrl,
           ...this.resolveStatus(game.matchDate),
         };
       });

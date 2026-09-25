@@ -76,7 +76,12 @@
 
         <div class="flex items-center justify-center gap-5 sm:gap-10">
           <div class="flex flex-col items-center gap-2 w-24 sm:w-32">
-            <app-team-badge [name]="homeTeamName" [size]="52" [showName]="false" />
+            <app-team-badge
+              [name]="homeTeamName"
+              [logoUrl]="homeTeamLogo"
+              [size]="52"
+              [showName]="false"
+            />
             <p class="text-xs sm:text-sm font-semibold text-white leading-tight truncate w-full">
               {{ homeTeamName }}
             </p>
@@ -87,7 +92,12 @@
           </div>
 
           <div class="flex flex-col items-center gap-2 w-24 sm:w-32">
-            <app-team-badge [name]="awayTeamName" [size]="52" [showName]="false" />
+            <app-team-badge
+              [name]="awayTeamName"
+              [logoUrl]="awayTeamLogo"
+              [size]="52"
+              [showName]="false"
+            />
             <p class="text-xs sm:text-sm font-semibold text-white leading-tight truncate w-full">
               {{ awayTeamName }}
             </p>
@@ -156,7 +166,7 @@
             @for (p of participations; track p.id) {
               <tr class="hover:bg-white/4 transition-colors duration-150">
                 <td class="px-5 py-3.5">
-                  <app-team-badge [name]="p.team.name" [size]="22" />
+                  <app-team-badge [name]="p.team.name" [logoUrl]="p.team.logoUrl" [size]="22" />
                 </td>
                 <td class="px-5 py-3.5">
                   <span class="badge" [class]="participationTypeStyle(p.type)">{{ p.type }}</span>

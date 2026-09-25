@@ -42,7 +42,6 @@
       <div class="space-y-8">
         @for (group of groups; track group.championshipId) {
           <section>
-            <!-- Cabeçalho do grupo (campeonato) -->
             <div class="flex items-center gap-2.5 mb-3 px-1">
               <div
                 class="w-7 h-7 rounded-full bg-white/8 border border-white/10 flex items-center justify-center shrink-0"
@@ -52,18 +51,17 @@
               <h2 class="text-sm font-semibold text-white/85">{{ group.championshipName }}</h2>
             </div>
 
-            <!-- Grid de cards de partida -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               @for (game of group.games; track game.id) {
                 <a
                   [routerLink]="['/games', game.id]"
                   class="glass rounded-2xl p-4 flex items-center gap-3 hover:bg-white/6 transition-colors duration-150 group"
                 >
-                  <!-- Times (mandante em cima, visitante embaixo) -->
                   <div class="flex-1 min-w-0 space-y-2">
                     <div class="flex items-center justify-between gap-2">
                       <app-team-badge
                         [name]="game.homeTeamName || 'A definir'"
+                        [logoUrl]="game.homeTeamLogo"
                         [size]="24"
                         nameClass="text-sm font-medium text-white/85 truncate"
                       />
@@ -74,6 +72,7 @@
                     <div class="flex items-center justify-between gap-2">
                       <app-team-badge
                         [name]="game.awayTeamName || 'A definir'"
+                        [logoUrl]="game.awayTeamLogo"
                         [size]="24"
                         nameClass="text-sm font-medium text-white/85 truncate"
                       />
@@ -83,7 +82,6 @@
                     </div>
                   </div>
 
-                  <!-- Status -->
                   <div class="text-right shrink-0 pl-2 border-l border-white/8">
                     <p
                       class="text-xs font-semibold"
@@ -106,7 +104,6 @@
         }
       </div>
 
-      <!-- Tabela de gestão (admin) — mantém ações de editar/excluir -->
       @if (auth.isAdmin()) {
         <div class="mt-10">
           <h2 class="text-sm font-semibold text-white/50 mb-3 px-1">Gerenciar partidas</h2>
