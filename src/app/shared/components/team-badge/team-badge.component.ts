@@ -8,13 +8,14 @@ import { teamAvatarColorClass, teamInitials } from '../../utils/team-avatar.util
   imports: [CommonModule],
   template: `
     <div class="flex items-center gap-2 min-w-0">
-      @if (logoUrl) {
+      @if (logoUrl && !imageFailed) {
         <img
           [src]="logoUrl"
-          [alt]="name"
-          class="shrink-0 rounded-full object-cover border border-white/10"
+          [alt]="'Escudo do ' + (name || 'time')"
+          class="shrink-0 rounded-full object-contain border border-white/10 bg-white/5"
           [style.width.px]="size"
           [style.height.px]="size"
+          (error)="onImageError()"
         />
       } @else {
         <div
@@ -27,6 +28,7 @@ import { teamAvatarColorClass, teamInitials } from '../../utils/team-avatar.util
           {{ initials }}
         </div>
       }
+
       @if (showName) {
         <span class="truncate" [class]="nameClass">{{ name }}</span>
       }
@@ -40,11 +42,17 @@ export class TeamBadgeComponent {
   @Input() showName = true;
   @Input() nameClass = 'text-sm font-medium text-white/80';
 
+  imageFailed = false;
+
   get initials(): string {
     return teamInitials(this.name);
   }
 
   get colorClass(): string {
     return teamAvatarColorClass(this.name);
+  }
+
+  onImageError(): void {
+    this.imageFailed = true;
   }
 }
