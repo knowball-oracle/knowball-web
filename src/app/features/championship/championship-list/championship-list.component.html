@@ -73,7 +73,7 @@
         <div class="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
           <button
             (click)="selectedCategory = null"
-            class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl bg-linear-to-br from-slate-500 to-slate-800 p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
+            class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl bg-linear-to-br from-slate-500 to-slate-800 p-3 text-left transition-all duration-300"
             [ngClass]="
               selectedCategory === null
                 ? 'ring-2 ring-slate-300/80'
@@ -93,7 +93,7 @@
           @for (cat of categories; track cat) {
             <button
               (click)="toggleCategory(cat)"
-              class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
+              class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl p-3 text-left transition-all duration-300"
               [ngClass]="[
                 meta(cat).gradient,
                 selectedCategory === cat
@@ -212,7 +212,7 @@
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @for (item of group.items; track item.id) {
                   <article
-                    class="glass group overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-0.5"
+                    class="glass group overflow-hidden rounded-2xl transition-all duration-300"
                   >
                     <div
                       class="relative flex h-20 items-start justify-between px-4 py-3"

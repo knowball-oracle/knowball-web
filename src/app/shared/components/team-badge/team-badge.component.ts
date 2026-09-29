@@ -7,23 +7,28 @@ import { teamAvatarColorClass, teamInitials } from '../../utils/team-avatar.util
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="flex items-center gap-2 min-w-0">
+    <div class="flex min-w-0 items-center gap-2">
       @if (logoUrl && !imageFailed) {
-        <img
-          [src]="logoUrl"
-          [alt]="'Escudo do ' + (name || 'time')"
-          class="shrink-0 rounded-full object-contain border border-white/10 bg-white/5"
+        <span
+          class="flex shrink-0 items-center justify-center"
           [style.width.px]="size"
           [style.height.px]="size"
-          (error)="onImageError()"
-        />
+        >
+          <img
+            [src]="logoUrl"
+            [alt]="'Escudo do ' + (name || 'time')"
+            class="block h-full w-full object-contain"
+            (error)="onImageError()"
+          />
+        </span>
       } @else {
         <div
-          class="shrink-0 rounded-full border flex items-center justify-center font-bold"
+          class="flex shrink-0 items-center justify-center rounded-full border font-bold"
           [class]="colorClass"
           [style.width.px]="size"
           [style.height.px]="size"
           [style.fontSize.px]="size * 0.38"
+          [attr.aria-label]="'Sem escudo: ' + (name || 'time')"
         >
           {{ initials }}
         </div>

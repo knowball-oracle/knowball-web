@@ -76,7 +76,7 @@
           <!-- Todos -->
           <button
             (click)="selectedStatus = null"
-            class="group relative h-28 w-40 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl bg-linear-to-br from-slate-500 to-slate-800 p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
+            class="group relative h-28 w-40 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl bg-linear-to-br from-slate-500 to-slate-800 p-3 text-left transition-all duration-300"
             [ngClass]="
               selectedStatus === null ? 'ring-2 ring-slate-300/80' : 'opacity-80 hover:opacity-100'
             "
@@ -94,7 +94,7 @@
           @for (status of statuses; track status) {
             <button
               (click)="toggleStatus(status)"
-              class="group relative h-28 w-40 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
+              class="group relative h-28 w-40 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl p-3 text-left transition-all duration-300"
               [ngClass]="[
                 meta(status).gradient,
                 selectedStatus === status
@@ -132,7 +132,7 @@
               type="text"
               [(ngModel)]="search"
               placeholder="Buscar árbitro pelo nome..."
-              class="input-field pl-10"
+              class="input-field pl-15"
             />
           </div>
 
@@ -218,7 +218,7 @@
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             @for (item of filteredItems; track item.id) {
               <article
-                class="glass group overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-0.5"
+                class="glass overflow-hidden rounded-2xl"
               >
                 <div
                   class="relative flex h-24 items-start justify-between px-4 py-3"
