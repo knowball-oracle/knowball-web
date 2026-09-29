@@ -1,135 +1,289 @@
-<div class="p-6 md:p-8 max-w-5xl mx-auto">
-  <div class="flex items-center justify-between mb-6">
+<div class="mx-auto max-w-6xl space-y-6 p-4 sm:p-6 md:p-8">
+  <!-- Cabeçalho da página -->
+  <div class="flex items-start justify-between gap-4">
     <div>
-      <h1 class="text-xl font-bold text-white">Campeonatos</h1>
-      <p class="text-sm text-white/40 mt-0.5">Gerencie os campeonatos cadastrados.</p>
+      <h1 class="text-xl font-bold text-white sm:text-2xl">Campeonatos</h1>
+      <p class="mt-0.5 text-sm text-white/40">
+        Gerencie os campeonatos cadastrados.
+        @if (!loading && !error) {
+          <span class="text-white/30">· {{ items.length }} no total</span>
+        }
+      </p>
     </div>
+
     @if (auth.isAdmin()) {
-      <a routerLink="/championships/new" class="btn-primary text-sm flex items-center gap-1.5">
-        <lucide-icon [img]="PlusIcon" size="15" /> Novo
+      <a routerLink="/championships/new" class="btn-primary flex items-center gap-1.5 text-sm">
+        <lucide-icon [img]="PlusIcon" size="15" />
+        Novo
       </a>
     }
   </div>
 
-  @if (!loading && !error && items.length > 0) {
-    <div class="flex flex-wrap items-center gap-2 mb-4">
-      <button
-        (click)="selectedCategory = null"
-        class="px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-200 cursor-pointer"
-        [class]="
-          selectedCategory === null
-            ? 'border-white/40 text-white bg-white/8'
-            : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
-        "
-      >
-        Todos
-        <span class="ml-1 opacity-60">({{ items.length }})</span>
-      </button>
-
-      @for (cat of categories; track cat) {
-        <button
-          (click)="selectedCategory = selectedCategory === cat ? null : cat"
-          class="px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-200 cursor-pointer"
-          [class]="
-            selectedCategory === cat
-              ? categoryBorderClass(cat) + ' bg-white/5'
-              : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
-          "
-        >
-          {{ cat }}
-          <span class="ml-1 opacity-60"> ({{ countByCategory(cat) }}) </span>
-        </button>
-      }
-    </div>
-  }
-
+  <!-- Estado de carregamento -->
   @if (loading) {
-    <div class="space-y-2">
-      @for (_ of [1, 2, 3, 4]; track $index) {
-        <div class="skeleton h-14 rounded-xl"></div>
+    <div class="flex gap-3 overflow-hidden">
+      @for (_ of [1, 2, 3, 4, 5]; track $index) {
+        <div class="skeleton h-28 w-36 shrink-0 rounded-2xl"></div>
+      }
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      @for (_ of [1, 2, 3, 4, 5, 6]; track $index) {
+        <div class="skeleton h-40 rounded-2xl"></div>
       }
     </div>
   }
 
+  <!-- Estado de erro -->
   @if (error) {
-    <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+    <div class="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
       {{ error }}
     </div>
   }
 
   @if (!loading && !error) {
+    <!-- Estado sem campeonatos cadastrados -->
     @if (items.length === 0) {
       <div class="glass rounded-2xl py-16 text-center">
-        <p class="text-white/30 text-sm">Nenhum campeonato cadastrado.</p>
+        <p class="text-sm text-white/30">Nenhum campeonato cadastrado.</p>
+
         @if (auth.isAdmin()) {
           <a
             routerLink="/championships/new"
-            class="inline-block mt-3 text-sm text-white/50 hover:text-white transition"
+            class="mt-3 inline-block text-sm text-white/50 transition hover:text-white"
           >
             Criar o primeiro →
           </a>
         }
       </div>
-    } @else if (filteredItems.length === 0) {
-      <div class="glass rounded-2xl py-12 text-center">
-        <p class="text-white/30 text-sm">Nenhum campeonato para esta categoria.</p>
-        <button
-          (click)="selectedCategory = null"
-          class="inline-block mt-3 text-sm text-white/50 hover:text-white transition cursor-pointer"
-        >
-          Limpar filtro →
-        </button>
-      </div>
     } @else {
-      <div class="glass rounded-2xl overflow-x-auto">
-        <table class="w-full text-sm text-left">
-          <thead class="border-b border-white/8">
-            <tr class="text-white/30 uppercase text-xs tracking-wider">
-              <th class="px-5 py-3">Nome</th>
-              <th class="px-5 py-3">Ano</th>
-              <th class="px-5 py-3">Categoria</th>
-              @if (auth.isAdmin()) {
-                <th class="px-5 py-3 text-right">Ações</th>
-              }
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-white/5">
-            @for (item of filteredItems; track item.id) {
-              <tr class="hover:bg-white/4 transition-colors duration-150">
-                <td class="px-5 py-3.5 font-medium text-white/80">
-                  {{ item.name }}
-                </td>
-                <td class="px-5 py-3.5 text-white/50 tabular-nums">
-                  {{ item.year }}
-                </td>
-                <td class="px-5 py-3.5">
-                  <span class="badge" [ngClass]="categoryClass(item.category)">
-                    {{ item.category }}
-                  </span>
-                </td>
-                @if (auth.isAdmin()) {
-                  <td class="px-5 py-3.5">
-                    <div class="flex items-center justify-end gap-1">
-                      <a
-                        [routerLink]="['/championships', item.id, 'edit']"
-                        class="p-2 rounded-lg text-white/30 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-200"
+      <!-- Categorias principais -->
+      <section>
+        <div class="mb-3 flex items-end justify-between gap-4">
+          <div>
+            <h2 class="text-sm font-semibold text-white/85">Explorar por categoria</h2>
+            <p class="text-xs text-white/30">Selecione uma categoria para filtrar a lista.</p>
+          </div>
+
+          @if (selectedCategory) {
+            <button
+              (click)="selectedCategory = null"
+              class="cursor-pointer text-xs text-white/40 transition hover:text-white/70"
+            >
+              Ver todas →
+            </button>
+          }
+        </div>
+
+        <div class="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
+          <!-- Card de todos os campeonatos -->
+          <button
+            (click)="selectedCategory = null"
+            class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl bg-linear-to-br from-slate-500 to-slate-800 p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
+            [ngClass]="
+              selectedCategory === null
+                ? 'ring-2 ring-slate-300/80'
+                : 'opacity-80 hover:opacity-100'
+            "
+          >
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-black/25 text-kb-primary">
+              <lucide-icon [img]="TrophyIcon" size="17" />
+            </div>
+
+            <p class="mt-3 text-sm font-bold text-kb-primary">Todos</p>
+            <p class="text-[11px] text-kb-primary/70">{{ items.length }} campeonatos</p>
+          </button>
+
+          <!-- Cards por categoria -->
+          @for (cat of categories; track cat) {
+            <button
+              (click)="toggleCategory(cat)"
+              class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
+              [ngClass]="[
+                meta(cat).gradient,
+                selectedCategory === cat
+                  ? 'ring-2 ' + meta(cat).ring
+                  : 'opacity-80 hover:opacity-100',
+              ]"
+            >
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-black/25 text-kb-primary">
+                <lucide-icon [img]="TrophyIcon" size="17" />
+              </div>
+
+              <p class="mt-3 text-sm font-bold text-kb-primary">{{ meta(cat).title }}</p>
+              <p class="text-[11px] text-kb-primary/70">
+                {{ countByCategory(cat) }}
+                {{ countByCategory(cat) === 1 ? 'campeonato' : 'campeonatos' }}
+              </p>
+            </button>
+          }
+        </div>
+      </section>
+
+      <!-- Busca, ordenação e filtros rápidos -->
+      <section class="space-y-3">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div class="relative flex-1">
+            <lucide-icon
+              [img]="SearchIcon"
+              size="15"
+              class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30"
+            />
+
+            <input
+              type="text"
+              [(ngModel)]="search"
+              placeholder="Buscar campeonato pelo nome..."
+              class="input-field pl-10"
+            />
+          </div>
+
+          <select [(ngModel)]="sortBy" class="input-field sm:w-52">
+            <option value="recent">Mais recentes</option>
+            <option value="name">Nome (A–Z)</option>
+          </select>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            (click)="selectedCategory = null"
+            class="cursor-pointer rounded-lg border px-3 py-1 text-xs font-medium transition-all duration-200"
+            [ngClass]="
+              selectedCategory === null
+                ? 'border-white/40 bg-white/5 text-white'
+                : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
+            "
+          >
+            Todos
+            <span class="ml-1 opacity-60">({{ items.length }})</span>
+          </button>
+
+          @for (cat of categories; track cat) {
+            <button
+              (click)="toggleCategory(cat)"
+              class="flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-medium transition-all duration-200"
+              [ngClass]="
+                selectedCategory === cat
+                  ? meta(cat).activeChip + ' bg-white/5'
+                  : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
+              "
+            >
+              <span class="h-1.5 w-1.5 rounded-full" [ngClass]="meta(cat).dot"></span>
+              {{ cat }}
+              <span class="opacity-60">({{ countByCategory(cat) }})</span>
+            </button>
+          }
+
+          @if (hasActiveFilters) {
+            <button
+              (click)="clearFilters()"
+              class="ml-auto flex cursor-pointer items-center gap-1 text-xs text-white/40 transition hover:text-white/70"
+            >
+              <lucide-icon [img]="XIcon" size="12" />
+              Limpar filtros
+            </button>
+          }
+        </div>
+
+        <p class="text-xs text-white/30">
+          Exibindo {{ filteredItems.length }} de {{ items.length }} campeonatos
+        </p>
+      </section>
+
+            @if (filteredItems.length === 0) {
+        <div class="glass rounded-2xl py-12 text-center">
+          <p class="text-sm text-white/30">Nenhum campeonato encontrado com esses filtros.</p>
+
+          <button
+            (click)="clearFilters()"
+            class="mt-3 inline-block cursor-pointer text-sm text-white/50 transition hover:text-white"
+          >
+            Limpar filtros →
+          </button>
+        </div>
+      } @else {
+        <div class="space-y-8">
+          @for (group of groups; track group.key) {
+            <section>
+              <div class="mb-3 flex items-center gap-2">
+                <span class="h-2 w-2 rounded-full" [ngClass]="group.meta.dot"></span>
+
+                <h3 class="text-sm font-semibold text-white/85">
+                  {{ group.meta.title }}
+                </h3>
+
+                <span class="text-xs text-white/30">
+                  · {{ group.items.length }}
+                  {{ group.items.length === 1 ? 'campeonato' : 'campeonatos' }}
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                @for (item of group.items; track item.id) {
+                  <article
+                    class="glass group overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-0.5"
+                  >
+                    <div
+                      class="relative flex h-20 items-start justify-between px-4 py-3"
+                      [ngClass]="meta(item.category).gradient"
+                    >
+                      <div
+                        class="flex h-10 w-10 items-center justify-center rounded-full bg-black/25 text-xs font-bold text-kb-primary"
                       >
-                        <lucide-icon [img]="PencilIcon" size="14" />
-                      </a>
-                      <button
-                        (click)="confirmDelete(item.id!)"
-                        class="p-2 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
+                        {{ initials(item.name) }}
+                      </div>
+
+                      <span
+                        class="rounded-full bg-black/25 px-2.5 py-0.5 text-[11px] font-semibold tabular-nums text-kb-primary"
                       >
-                        <lucide-icon [img]="TrashIcon" size="14" />
-                      </button>
+                        {{ item.year }}
+                      </span>
+
+                      <lucide-icon
+                        [img]="TrophyIcon"
+                        size="54"
+                        class="pointer-events-none absolute -bottom-3 right-3 text-kb-primary/15"
+                      />
                     </div>
-                  </td>
+
+                    <div class="p-4">
+                      <h4 class="line-clamp-2 min-h-10 text-sm font-semibold leading-5 text-white/85">
+                        {{ item.name }}
+                      </h4>
+
+                      <div class="mt-3 flex items-center justify-between">
+                        <span class="badge" [ngClass]="meta(item.category).badge">
+                          {{ item.category }}
+                        </span>
+
+                        @if (auth.isAdmin()) {
+                          <div class="flex items-center gap-1">
+                            <a
+                              [routerLink]="['/championships', item.id, 'edit']"
+                              class="rounded-lg p-2 text-white/30 transition-all duration-200 hover:bg-blue-500/10 hover:text-blue-400"
+                              aria-label="Editar campeonato"
+                            >
+                              <lucide-icon [img]="PencilIcon" size="14" />
+                            </a>
+
+                            <button
+                              (click)="confirmDelete(item.id!)"
+                              class="cursor-pointer rounded-lg p-2 text-white/30 transition-all duration-200 hover:bg-red-500/10 hover:text-red-400"
+                              aria-label="Excluir campeonato"
+                            >
+                              <lucide-icon [img]="TrashIcon" size="14" />
+                            </button>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </article>
                 }
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+              </div>
+            </section>
+          }
+        </div>
+      }
     }
   }
 </div>
