@@ -98,19 +98,31 @@ export class GameDetailComponent implements OnInit {
   }
 
   get homeTeamName(): string {
-    return this.participations.find((p) => p.type === 'HOME')?.team?.name ?? 'A definir';
+    return (
+      this.participations.find((participation) => participation.type === 'HOME')?.team?.name ??
+      'A definir'
+    );
   }
 
   get awayTeamName(): string {
-    return this.participations.find((p) => p.type === 'AWAY')?.team?.name ?? 'A definir';
+    return (
+      this.participations.find((participation) => participation.type === 'AWAY')?.team?.name ??
+      'A definir'
+    );
   }
 
   get homeTeamLogo(): string | undefined {
-    return this.participations.find((p) => p.type === 'HOME')?.team?.logoUrl;
+    return (
+      this.participations.find((participation) => participation.type === 'HOME')?.team?.logoUrl ??
+      undefined
+    );
   }
 
   get awayTeamLogo(): string | undefined {
-    return this.participations.find((p) => p.type === 'AWAY')?.team?.logoUrl;
+    return (
+      this.participations.find((participation) => participation.type === 'AWAY')?.team?.logoUrl ??
+      undefined
+    );
   }
 
   get statusLabel(): string {

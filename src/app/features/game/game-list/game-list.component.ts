@@ -83,27 +83,37 @@ export class GameListComponent implements OnInit {
       return;
     }
 
-    const requests = games.map((g) =>
-      this.participationSvc.getByGame(g.id!).pipe(catchError(() => of([] as Participation[]))),
+    const requests = games.map((game) =>
+      this.participationSvc.getByGame(game.id!).pipe(catchError(() => of([] as Participation[]))),
     );
 
-    forkJoin(requests).subscribe((allParticipations) => {
-      const enriched: GameWithTeams[] = games.map((game, i) => {
-        const parts = allParticipations[i];
-        const home = parts.find((p) => p.type === 'HOME');
-        const away = parts.find((p) => p.type === 'AWAY');
-        return {
-          ...game,
-          homeTeamName: home?.team?.name,
-          awayTeamName: away?.team?.name,
-          homeTeamLogo: home?.team?.logoUrl,
-          awayTeamLogo: away?.team?.logoUrl,
-          ...this.resolveStatus(game.matchDate),
-        };
-      });
+    forkJoin(requests).subscribe({
+      next: (allParticipations) => {
+        const enriched: GameWithTeams[] = games.map((game, index) => {
+          const participations = allParticipations[index];
+          const home = participations.find((participation) => participation.type === 'HOME');
+          const away = participations.find((participation) => participation.type === 'AWAY');
 
-      this.groups = this.groupByChampionship(enriched);
-      this.loading = false;
+          return {
+            ...game,
+            homeTeamName: home?.team?.name,
+            awayTeamName: away?.team?.name,
+
+            // Normaliza null para undefined.
+            homeTeamLogo: home?.team?.logoUrl ?? undefined,
+            awayTeamLogo: away?.team?.logoUrl ?? undefined,
+
+            ...this.resolveStatus(game.matchDate),
+          };
+        });
+
+        this.groups = this.groupByChampionship(enriched);
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Erro ao carregar os times participantes das partidas.';
+        this.loading = false;
+      },
     });
   }
 
@@ -114,27 +124,48 @@ export class GameListComponent implements OnInit {
   } {
     const date = new Date(matchDate);
     const now = new Date();
+
     const isToday = date.toDateString() === now.toDateString();
     const isPast = date.getTime() < now.getTime() && !isToday;
 
-    if (isToday) return { statusLabel: 'Hoje', isToday: true, isPast: false };
-    if (isPast) return { statusLabel: 'Fim de jogo', isToday: false, isPast: true };
-    return { statusLabel: 'Agendado', isToday: false, isPast: false };
+    if (isToday) {
+      return {
+        statusLabel: 'Hoje',
+        isToday: true,
+        isPast: false,
+      };
+    }
+
+    if (isPast) {
+      return {
+        statusLabel: 'Fim de jogo',
+        isToday: false,
+        isPast: true,
+      };
+    }
+
+    return {
+      statusLabel: 'Agendado',
+      isToday: false,
+      isPast: false,
+    };
   }
 
   private groupByChampionship(games: GameWithTeams[]): ChampionshipGroup[] {
     const map = new Map<number, ChampionshipGroup>();
 
     for (const game of games) {
-      const id = game.championship.id!;
-      if (!map.has(id)) {
-        map.set(id, {
-          championshipId: id,
+      const championshipId = game.championship.id!;
+
+      if (!map.has(championshipId)) {
+        map.set(championshipId, {
+          championshipId,
           championshipName: game.championship.name,
           games: [],
         });
       }
-      map.get(id)!.games.push(game);
+
+      map.get(championshipId)!.games.push(game);
     }
 
     for (const group of map.values()) {
@@ -149,11 +180,18 @@ export class GameListComponent implements OnInit {
   }
 
   delete(): void {
-    if (!this.pendingDeleteId) return;
+    if (!this.pendingDeleteId) {
+      return;
+    }
+
     this.service.delete(this.pendingDeleteId).subscribe({
       next: () => {
         this.pendingDeleteId = null;
         this.load();
+      },
+      error: () => {
+        this.error = 'Erro ao excluir partida.';
+        this.pendingDeleteId = null;
       },
     });
   }
