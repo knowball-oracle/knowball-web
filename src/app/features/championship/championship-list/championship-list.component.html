@@ -53,6 +53,7 @@
         }
       </div>
     } @else {
+
       <section>
         <div class="mb-3 flex items-end justify-between gap-4">
           <div>
@@ -71,18 +72,17 @@
         </div>
 
         <div class="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
+
           <button
             (click)="selectedCategory = null"
-            class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl bg-linear-to-br from-slate-500 to-slate-800 p-3 text-left transition-all duration-300"
+            class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl bg-linear-to-br from-slate-500 to-slate-800 p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
             [ngClass]="
               selectedCategory === null
                 ? 'ring-2 ring-slate-300/80'
                 : 'opacity-80 hover:opacity-100'
             "
           >
-            <div
-              class="flex h-9 w-9 items-center justify-center rounded-full bg-black/25 text-kb-primary"
-            >
+            <div class="flex h-9 w-9 items-center justify-center rounded-full bg-black/25 text-kb-primary">
               <lucide-icon [img]="TrophyIcon" size="17" />
             </div>
 
@@ -93,7 +93,7 @@
           @for (cat of categories; track cat) {
             <button
               (click)="toggleCategory(cat)"
-              class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl p-3 text-left transition-all duration-300"
+              class="group relative h-28 w-36 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl p-3 text-left transition-all duration-300 hover:-translate-y-0.5"
               [ngClass]="[
                 meta(cat).gradient,
                 selectedCategory === cat
@@ -101,9 +101,7 @@
                   : 'opacity-80 hover:opacity-100',
               ]"
             >
-              <div
-                class="flex h-9 w-9 items-center justify-center rounded-full bg-black/25 text-kb-primary"
-              >
+              <div class="flex h-9 w-9 items-center justify-center rounded-full bg-black/25 text-kb-primary">
                 <lucide-icon [img]="TrophyIcon" size="17" />
               </div>
 
@@ -133,6 +131,11 @@
               class="input-field pl-15"
             />
           </div>
+
+          <select [(ngModel)]="sortBy" class="input-field sm:w-52">
+            <option value="recent">Mais recentes</option>
+            <option value="name">Nome (A–Z)</option>
+          </select>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
@@ -181,7 +184,7 @@
         </p>
       </section>
 
-      @if (filteredItems.length === 0) {
+            @if (filteredItems.length === 0) {
         <div class="glass rounded-2xl py-12 text-center">
           <p class="text-sm text-white/30">Nenhum campeonato encontrado com esses filtros.</p>
 
@@ -212,7 +215,7 @@
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @for (item of group.items; track item.id) {
                   <article
-                    class="glass group overflow-hidden rounded-2xl transition-all duration-300"
+                    class="glass group overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-0.5"
                   >
                     <div
                       class="relative flex h-20 items-start justify-between px-4 py-3"
@@ -238,9 +241,7 @@
                     </div>
 
                     <div class="p-4">
-                      <h4
-                        class="line-clamp-2 min-h-10 text-sm font-semibold leading-5 text-white/85"
-                      >
+                      <h4 class="line-clamp-2 min-h-10 text-sm font-semibold leading-5 text-white/85">
                         {{ item.name }}
                       </h4>
 
