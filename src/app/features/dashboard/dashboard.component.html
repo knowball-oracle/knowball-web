@@ -1,49 +1,67 @@
-<div class="p-4 sm:p-6 md:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8">
+<div class="mx-auto max-w-6xl space-y-6 p-4 sm:space-y-8 sm:p-6 md:p-8">
   <div class="flex items-start justify-between">
     <div>
-      <p class="text-xs uppercase tracking-[0.18em] text-white/25 mb-1">{{ greeting() }}</p>
-      <h1 class="text-xl sm:text-3xl font-semibold text-white/70">
+      <p class="mb-1 text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-white/25">
+        {{ greeting() }}
+      </p>
+
+      <h1 class="text-xl font-semibold text-slate-700 sm:text-3xl dark:text-white/70">
         Olá,
-        <span class="text-white font-bold">{{ (user()?.name?.split(' ') ?? [])[0] ?? '' }}</span>
+        <span class="font-bold text-slate-950 dark:text-white">
+          {{ (user()?.name?.split(' ') ?? [])[0] ?? '' }}
+        </span>
       </h1>
-      <p class="text-sm text-white/40 mt-1">Aqui está um resumo do sistema Knowball.</p>
+
+      <p class="mt-1 text-sm text-slate-500 dark:text-white/40">
+        Aqui está um resumo do sistema Knowball.
+      </p>
     </div>
-    <div class="glass rounded-xl px-4 py-2 text-xs text-white/30 tabular-nums hidden sm:block">
+
+    <div
+      class="glass hidden rounded-xl px-4 py-2 text-xs tabular-nums text-slate-400 sm:block dark:text-white/30"
+    >
       {{ today | date: 'dd/MM/yyyy' }}
     </div>
   </div>
 
   @if (loading) {
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
       @for (_ of [1, 2, 3, 4, 5]; track $index) {
         <div class="skeleton h-20 rounded-2xl"></div>
       }
     </div>
   } @else {
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
       @for (stat of stats; track stat.label) {
         <a
           [routerLink]="stat.path"
-          class="glass rounded-2xl p-4 flex flex-col gap-2 border border-white/5 transition-all duration-300 hover:bg-white/5 hover:-translate-y-0.5 group"
+          class="glass group flex flex-col gap-2 rounded-2xl border border-slate-200 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 dark:border-white/5 dark:hover:bg-white/5"
           [ngClass]="accentClasses(stat.accent).border"
         >
           <div class="flex items-center justify-between">
-            <div class="p-1.5 rounded-lg" [ngClass]="accentClasses(stat.accent).glow">
+            <div class="rounded-lg p-1.5" [ngClass]="accentClasses(stat.accent).glow">
               <lucide-icon
                 [img]="stat.icon"
                 size="14"
                 [ngClass]="accentClasses(stat.accent).icon"
               />
             </div>
+
             <lucide-icon
               [img]="TrendingUpIcon"
               size="11"
-              class="text-white/10 group-hover:text-white/30 transition-colors"
+              class="text-slate-300 transition-colors group-hover:text-slate-600 dark:text-white/10 dark:group-hover:text-white/30"
             />
           </div>
+
           <div>
-            <p class="text-2xl font-bold text-white tabular-nums leading-none">{{ stat.count }}</p>
-            <p class="text-xs text-white/35 mt-0.5 leading-tight">{{ stat.label }}</p>
+            <p class="text-2xl font-bold leading-none tabular-nums text-slate-900 dark:text-white">
+              {{ stat.count }}
+            </p>
+
+            <p class="mt-0.5 text-xs leading-tight text-slate-500 dark:text-white/35">
+              {{ stat.label }}
+            </p>
           </div>
         </a>
       }
@@ -51,21 +69,28 @@
   }
 
   @if (!loading) {
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-      <!-- Distribuição das denúncias -->
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+
       <section class="glass rounded-2xl p-5 sm:p-6">
-        <div class="flex items-center justify-between mb-5">
+        <div class="mb-5 flex items-center justify-between">
           <div class="flex items-center gap-2">
             <lucide-icon [img]="PieChartIcon" size="15" class="text-rose-400" />
+
             <div>
-              <p class="text-sm font-semibold text-white/85">Status das denúncias</p>
-              <p class="text-xs text-white/30">Distribuição atual</p>
+              <p class="text-sm font-semibold text-slate-800 dark:text-white/85">
+                Status das denúncias
+              </p>
+
+              <p class="text-xs text-slate-500 dark:text-white/30">Distribuição atual</p>
             </div>
           </div>
-          <span class="text-xl font-bold text-white tabular-nums">{{ reportTotal }}</span>
+
+          <span class="text-xl font-bold tabular-nums text-slate-900 dark:text-white">
+            {{ reportTotal }}
+          </span>
         </div>
 
-        <div class="flex h-3 rounded-full overflow-hidden bg-white/5 mb-5">
+        <div class="mb-5 flex h-3 overflow-hidden rounded-full bg-slate-100 dark:bg-white/5">
           @for (item of statusChart; track item.label) {
             <div
               [class]="item.color"
@@ -78,21 +103,30 @@
         <div class="space-y-3">
           @for (item of statusChart; track item.label) {
             <div class="flex items-center justify-between gap-3">
-              <div class="flex items-center gap-2 min-w-0">
-                <span class="w-2 h-2 rounded-full shrink-0" [class]="item.color"></span>
-                <span class="text-xs text-white/45 truncate">{{ item.label }}</span>
+              <div class="flex min-w-0 items-center gap-2">
+                <span class="h-2 w-2 shrink-0 rounded-full" [class]="item.color"></span>
+
+                <span class="truncate text-xs text-slate-600 dark:text-white/45">
+                  {{ item.label }}
+                </span>
               </div>
-              <div class="flex items-center gap-2 shrink-0">
-                <div class="w-20 h-1.5 rounded-full bg-white/5 overflow-hidden hidden sm:block">
+
+              <div class="flex shrink-0 items-center gap-2">
+                <div
+                  class="hidden h-1.5 w-20 overflow-hidden rounded-full bg-slate-100 sm:block dark:bg-white/5"
+                >
                   <div
                     class="h-full rounded-full"
                     [class]="item.color"
                     [style.width]="item.bar"
                   ></div>
                 </div>
-                <span class="text-xs font-semibold text-white/75 tabular-nums w-5 text-right">{{
-                  item.value
-                }}</span>
+
+                <span
+                  class="w-5 text-right text-xs font-semibold tabular-nums text-slate-700 dark:text-white/75"
+                >
+                  {{ item.value }}
+                </span>
               </div>
             </div>
           }
@@ -100,58 +134,78 @@
       </section>
 
       <section class="glass rounded-2xl p-5 sm:p-6">
-        <div class="flex items-center justify-between mb-5">
+        <div class="mb-5 flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <lucide-icon [img]="BarChartIcon" size="15" class="text-amber-400" />
+            <lucide-icon [img]="BarChartIcon" size="15" class="text-amber-500 dark:text-amber-400" />
+
             <div>
-              <p class="text-sm font-semibold text-white/85">Evolução mensal</p>
-              <p class="text-xs text-white/30">Denúncias registradas</p>
+              <p class="text-sm font-semibold text-slate-800 dark:text-white/85">Evolução mensal</p>
+
+              <p class="text-xs text-slate-500 dark:text-white/30">Denúncias registradas</p>
             </div>
           </div>
-          <span class="text-xs text-white/25">últimos 6 meses</span>
+
+          <span class="text-xs text-slate-400 dark:text-white/25">últimos 6 meses</span>
         </div>
 
-        <div class="h-40 flex items-end gap-2 sm:gap-3 border-b border-white/8 px-1">
+        <div
+          class="flex h-40 items-end gap-2 border-b border-slate-200 px-1 sm:gap-3 dark:border-white/8"
+        >
           @for (item of monthlyChart; track $index) {
-            <div class="flex-1 h-full flex flex-col items-center justify-end gap-2 group">
+            <div class="group flex h-full flex-1 flex-col items-center justify-end gap-2">
               <span
-                class="text-[10px] text-white/30 opacity-0 group-hover:opacity-100 transition-opacity"
-                >{{ item.value }}</span
+                class="text-[10px] text-slate-500 opacity-0 transition-opacity group-hover:opacity-100 dark:text-white/30"
               >
+                {{ item.value }}
+              </span>
+
               <div
-                class="w-full max-w-10 rounded-t-lg bg-linear-to-t from-amber-500/35 to-amber-300/80 transition-all duration-500 group-hover:from-amber-500/55 group-hover:to-amber-200"
+                class="w-full max-w-10 rounded-t-lg bg-linear-to-t from-amber-500/45 to-amber-300/90 transition-all duration-500 group-hover:from-amber-500/65 group-hover:to-amber-200 dark:from-amber-500/35 dark:to-amber-300/80 dark:group-hover:from-amber-500/55"
                 [style.height.%]="item.height"
               ></div>
-              <span class="text-[10px] text-white/30 capitalize">{{ item.label }}</span>
+
+              <span class="text-[10px] capitalize text-slate-500 dark:text-white/30">
+                {{ item.label }}
+              </span>
             </div>
           }
         </div>
       </section>
 
       <section class="glass rounded-2xl p-5 sm:p-6">
-        <div class="flex items-center gap-2 mb-5">
-          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-400" />
+        <div class="mb-5 flex items-center gap-2">
+          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-500 dark:text-emerald-400" />
+
           <div>
-            <p class="text-sm font-semibold text-white/85">Partidas por campeonato</p>
-            <p class="text-xs text-white/30">Competições com mais jogos</p>
+            <p class="text-sm font-semibold text-slate-800 dark:text-white/85">
+              Partidas por campeonato
+            </p>
+
+            <p class="text-xs text-slate-500 dark:text-white/30">Competições com mais jogos</p>
           </div>
         </div>
 
         @if (championshipChart.length === 0) {
-          <p class="text-sm text-white/25 py-8 text-center">Nenhuma partida cadastrada.</p>
+          <p class="py-8 text-center text-sm text-slate-400 dark:text-white/25">
+            Nenhuma partida cadastrada.
+          </p>
         } @else {
           <div class="space-y-4">
             @for (item of championshipChart; track item.label) {
               <div>
-                <div class="flex items-center justify-between gap-3 mb-1.5">
-                  <span class="text-xs text-white/50 truncate">{{ item.label }}</span>
-                  <span class="text-xs font-semibold text-white/75 tabular-nums">{{
-                    item.value
-                  }}</span>
+                <div class="mb-1.5 flex items-center justify-between gap-3">
+                  <span class="truncate text-xs text-slate-600 dark:text-white/50">
+                    {{ item.label }}
+                  </span>
+
+                  <span class="text-xs font-semibold tabular-nums text-slate-700 dark:text-white/75">
+                    {{ item.value }}
+                  </span>
                 </div>
-                <div class="h-2 rounded-full bg-white/5 overflow-hidden">
+
+                <div class="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-white/5">
                   <div
-                    class="h-full rounded-full bg-linear-to-r from-emerald-500/50 to-emerald-300/90 transition-all duration-500"
+                    class="h-full rounded-full bg-linear-to-r from-emerald-500/60 to-emerald-400/90 transition-all duration-500 dark:from-emerald-500/50 dark:to-emerald-300/90"
                     [style.width]="item.width"
                   ></div>
                 </div>
@@ -163,67 +217,83 @@
     </div>
   }
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-    <div class="md:col-span-1 lg:col-span-2 glass rounded-2xl overflow-hidden">
-      <div class="flex items-center justify-between px-5 py-4 border-b border-white/8">
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+
+    <div class="glass overflow-hidden rounded-2xl md:col-span-1 lg:col-span-2">
+      <div
+        class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/8"
+      >
         <div class="flex items-center gap-2">
-          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-400" />
-          <p class="text-sm font-semibold text-white/80">Últimas Partidas</p>
+          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-500 dark:text-emerald-400" />
+
+          <p class="text-sm font-semibold text-slate-800 dark:text-white/80">Últimas Partidas</p>
         </div>
+
         <a
           routerLink="/games"
-          class="text-xs text-white/30 hover:text-white/70 flex items-center gap-1 transition"
+          class="flex items-center gap-1 text-xs text-slate-500 transition hover:text-slate-800 dark:text-white/30 dark:hover:text-white/70"
         >
           Ver todas <lucide-icon [img]="ArrowRightIcon" size="12" />
         </a>
       </div>
 
       @if (loading) {
-        <div class="p-4 space-y-2">
+        <div class="space-y-2 p-4">
           @for (_ of [1, 2, 3, 4]; track $index) {
             <div class="skeleton h-12 rounded-xl"></div>
           }
         </div>
       } @else if (recentGames.length === 0) {
         <div class="py-12 text-center">
-          <p class="text-white/20 text-sm">Nenhuma partida cadastrada.</p>
+          <p class="text-sm text-slate-400 dark:text-white/20">Nenhuma partida cadastrada.</p>
+
           <a
             routerLink="/games/new"
-            class="inline-block mt-2 text-xs text-white/40 hover:text-white transition"
-            >Cadastrar primeira →</a
+            class="mt-2 inline-block text-xs text-slate-500 transition hover:text-slate-900 dark:text-white/40 dark:hover:text-white"
           >
+            Cadastrar primeira →
+          </a>
         </div>
       } @else {
-        <div class="divide-y divide-white/5">
+        <div class="divide-y divide-slate-200 dark:divide-white/5">
           @for (game of recentGames; track game.id) {
             <a
               [routerLink]="['/games', game.id]"
-              class="flex items-center justify-between px-5 py-3.5 hover:bg-white/4 transition-colors duration-150 group"
+              class="group flex items-center justify-between px-5 py-3.5 transition-colors duration-150 hover:bg-slate-100/80 dark:hover:bg-white/4"
             >
-              <div class="flex items-center gap-3 min-w-0">
-                <div class="p-1.5 rounded-lg bg-emerald-400/8 shrink-0">
-                  <lucide-icon [img]="MapPinIcon" size="13" class="text-emerald-400" />
+              <div class="flex min-w-0 items-center gap-3">
+                <div class="shrink-0 rounded-lg bg-emerald-500/10 p-1.5 dark:bg-emerald-400/8">
+                  <lucide-icon [img]="MapPinIcon" size="13" class="text-emerald-500 dark:text-emerald-400" />
                 </div>
+
                 <div class="min-w-0">
-                  <p class="text-sm font-medium text-white/80 truncate">
+                  <p class="truncate text-sm font-medium text-slate-800 dark:text-white/80">
                     {{ game.championship?.name }}
                   </p>
-                  <p class="text-xs text-white/35 truncate">{{ game.place }}</p>
+
+                  <p class="truncate text-xs text-slate-500 dark:text-white/35">
+                    {{ game.place }}
+                  </p>
                 </div>
               </div>
-              <div class="flex items-center gap-4 shrink-0 ml-4">
+
+              <div class="ml-4 flex shrink-0 items-center gap-4">
                 <div class="text-right">
-                  <p class="text-base font-bold text-white tabular-nums">
-                    {{ game.homeScore }} <span class="text-white/25">×</span> {{ game.awayScore }}
+                  <p class="text-base font-bold tabular-nums text-slate-900 dark:text-white">
+                    {{ game.homeScore }}
+                    <span class="text-slate-400 dark:text-white/25">×</span>
+                    {{ game.awayScore }}
                   </p>
-                  <p class="text-xs text-white/30 tabular-nums">
+
+                  <p class="text-xs tabular-nums text-slate-400 dark:text-white/30">
                     {{ game.matchDate | date: 'dd/MM/yy' }}
                   </p>
                 </div>
+
                 <lucide-icon
                   [img]="ArrowRightIcon"
                   size="13"
-                  class="text-white/15 group-hover:text-white/50 transition-colors"
+                  class="text-slate-300 transition-colors group-hover:text-slate-700 dark:text-white/15 dark:group-hover:text-white/50"
                 />
               </div>
             </a>
@@ -232,52 +302,58 @@
       }
     </div>
 
-    <div class="glass rounded-2xl overflow-hidden">
-      <div class="flex items-center justify-between px-5 py-4 border-b border-white/8">
+    <div class="glass overflow-hidden rounded-2xl">
+      <div
+        class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/8"
+      >
         <div class="flex items-center gap-2">
-          <lucide-icon [img]="cards[4]?.icon" size="15" class="text-rose-400" />
-          <p class="text-sm font-semibold text-white/80">Denúncias</p>
+          <lucide-icon [img]="cards[4]?.icon" size="15" class="text-rose-500 dark:text-rose-400" />
+
+          <p class="text-sm font-semibold text-slate-800 dark:text-white/80">Denúncias</p>
         </div>
+
         <a
           routerLink="/reports"
-          class="text-xs text-white/30 hover:text-white/70 flex items-center gap-1 transition"
+          class="flex items-center gap-1 text-xs text-slate-500 transition hover:text-slate-800 dark:text-white/30 dark:hover:text-white/70"
         >
           Ver todas <lucide-icon [img]="ArrowRightIcon" size="12" />
         </a>
       </div>
 
       @if (loading) {
-        <div class="p-4 space-y-2">
+        <div class="space-y-2 p-4">
           @for (_ of [1, 2, 3]; track $index) {
             <div class="skeleton h-14 rounded-xl"></div>
           }
         </div>
       } @else if (pendingReports.length === 0) {
-        <div class="py-12 text-center px-4">
+        <div class="px-4 py-12 text-center">
           <div
-            class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-400/10 mb-3"
+            class="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 dark:bg-emerald-400/10"
           >
-            <lucide-icon [img]="TrendingUpIcon" size="16" class="text-emerald-400" />
+            <lucide-icon [img]="TrendingUpIcon" size="16" class="text-emerald-500 dark:text-emerald-400" />
           </div>
-          <p class="text-white/40 text-sm">Nenhuma denúncia pendente.</p>
+
+          <p class="text-sm text-slate-500 dark:text-white/40">Nenhuma denúncia pendente.</p>
         </div>
       } @else {
-        <div class="divide-y divide-white/5">
+        <div class="divide-y divide-slate-200 dark:divide-white/5">
           @for (report of pendingReports; track report.id) {
             <a
               [routerLink]="['/reports', report.id]"
-              class="flex items-start justify-between gap-3 px-5 py-3.5 hover:bg-white/4 transition-colors duration-150 group"
+              class="group flex items-start justify-between gap-3 px-5 py-3.5 transition-colors duration-150 hover:bg-slate-100/80 dark:hover:bg-white/4"
             >
               <div class="min-w-0">
-                <p class="text-sm font-mono text-white/60 truncate">
+                <p class="truncate font-mono text-sm text-slate-700 dark:text-white/60">
                   {{ report.protocol }}
                 </p>
-                <p class="text-xs text-white/30 tabular-nums mt-0.5">
+
+                <p class="mt-0.5 text-xs tabular-nums text-slate-400 dark:text-white/30">
                   {{ report.date | date: 'dd/MM/yy' }}
                 </p>
               </div>
 
-              <span class="badge shrink-0 mt-0.5" [class]="reportStatusStyle(report.status)">
+              <span class="badge mt-0.5 shrink-0" [class]="reportStatusStyle(report.status)">
                 {{ report.status === 'NEW' ? 'Nova' : 'Em análise' }}
               </span>
             </a>
@@ -288,17 +364,17 @@
   </div>
 
   <div>
-    <p class="text-xs text-white/25 uppercase tracking-widest mb-3">Módulos</p>
+    <p class="mb-3 text-xs uppercase tracking-widest text-slate-400 dark:text-white/25">Módulos</p>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
       @for (card of cards; track card.path) {
         <a
           [routerLink]="card.path"
-          class="group glass rounded-2xl p-4 border border-white/5 transition-all duration-300 hover:bg-white/5 hover:-translate-y-0.5 flex flex-col gap-3"
+          class="glass group flex flex-col gap-3 rounded-2xl border border-slate-200 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 dark:border-white/5 dark:hover:bg-white/5"
           [ngClass]="accentClasses(card.accent).border"
         >
           <div class="flex items-center justify-between">
-            <div class="p-2 rounded-xl" [ngClass]="accentClasses(card.accent).glow">
+            <div class="rounded-xl p-2" [ngClass]="accentClasses(card.accent).glow">
               <lucide-icon
                 [img]="card.icon"
                 size="16"
@@ -317,11 +393,11 @@
           </div>
 
           <div>
-            <p class="text-sm font-semibold text-white/80 leading-tight">
+            <p class="text-sm font-semibold leading-tight text-slate-800 dark:text-white/80">
               {{ card.label }}
             </p>
 
-            <p class="text-xs text-white/30 mt-0.5 leading-tight hidden sm:block">
+            <p class="mt-0.5 hidden text-xs leading-tight text-slate-500 sm:block dark:text-white/30">
               {{ card.description }}
             </p>
           </div>
