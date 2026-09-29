@@ -8,11 +8,19 @@ import { Team } from '../../../models/team.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { TeamBadgeComponent } from '../../../shared/components/team-badge/team-badge.component';
 
 @Component({
   selector: 'app-team-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, LucideAngularModule, ConfirmDialogComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    LucideAngularModule,
+    ConfirmDialogComponent,
+    TeamBadgeComponent,
+  ],
   templateUrl: './team-list.component.html',
 })
 export class TeamListComponent implements OnInit {
