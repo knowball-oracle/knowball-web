@@ -79,6 +79,12 @@ export class DashboardComponent implements OnInit {
   user = this.auth.user;
   loading = true;
 
+  get firstName(): string {
+    const name = this.user()?.name?.trim() ?? '';
+
+    return name ? name.split(/\s+/)[0] : '';
+  }
+
   readonly ArrowRightIcon = ArrowRight;
   readonly TrendingUpIcon = TrendingUp;
   readonly CalendarIcon = Calendar;
