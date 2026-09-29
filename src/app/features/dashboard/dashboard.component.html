@@ -1,25 +1,21 @@
 <div class="mx-auto max-w-6xl space-y-6 p-4 sm:space-y-8 sm:p-6 md:p-8">
   <div class="flex items-start justify-between">
     <div>
-      <p class="mb-1 text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-white/25">
+      <p class="mb-1 text-xs uppercase tracking-[0.18em] text-white/25">
         {{ greeting() }}
       </p>
 
-      <h1 class="text-xl font-semibold text-slate-700 sm:text-3xl dark:text-white/70">
+      <h1 class="text-xl font-semibold text-white/70 sm:text-3xl">
         Olá,
-        <span class="font-bold text-slate-950 dark:text-white">
+        <span class="font-bold text-white">
           {{ (user()?.name?.split(' ') ?? [])[0] ?? '' }}
         </span>
       </h1>
 
-      <p class="mt-1 text-sm text-slate-500 dark:text-white/40">
-        Aqui está um resumo do sistema Knowball.
-      </p>
+      <p class="mt-1 text-sm text-white/40">Aqui está um resumo do sistema Knowball.</p>
     </div>
 
-    <div
-      class="glass hidden rounded-xl px-4 py-2 text-xs tabular-nums text-slate-400 sm:block dark:text-white/30"
-    >
+    <div class="glass hidden rounded-xl px-4 py-2 text-xs tabular-nums text-white/30 sm:block">
       {{ today | date: 'dd/MM/yyyy' }}
     </div>
   </div>
@@ -35,7 +31,7 @@
       @for (stat of stats; track stat.label) {
         <a
           [routerLink]="stat.path"
-          class="glass group flex flex-col gap-2 rounded-2xl border border-slate-200 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 dark:border-white/5 dark:hover:bg-white/5"
+          class="glass group flex flex-col gap-2 rounded-2xl border border-white/5 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/5"
           [ngClass]="accentClasses(stat.accent).border"
         >
           <div class="flex items-center justify-between">
@@ -50,16 +46,16 @@
             <lucide-icon
               [img]="TrendingUpIcon"
               size="11"
-              class="text-slate-300 transition-colors group-hover:text-slate-600 dark:text-white/10 dark:group-hover:text-white/30"
+              class="text-white/10 transition-colors group-hover:text-white/30"
             />
           </div>
 
           <div>
-            <p class="text-2xl font-bold leading-none tabular-nums text-slate-900 dark:text-white">
+            <p class="text-2xl font-bold leading-none tabular-nums text-white">
               {{ stat.count }}
             </p>
 
-            <p class="mt-0.5 text-xs leading-tight text-slate-500 dark:text-white/35">
+            <p class="mt-0.5 text-xs leading-tight text-white/35">
               {{ stat.label }}
             </p>
           </div>
@@ -70,27 +66,25 @@
 
   @if (!loading) {
     <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
-
+      <!-- Distribuição das denúncias -->
       <section class="glass rounded-2xl p-5 sm:p-6">
         <div class="mb-5 flex items-center justify-between">
           <div class="flex items-center gap-2">
             <lucide-icon [img]="PieChartIcon" size="15" class="text-rose-400" />
 
             <div>
-              <p class="text-sm font-semibold text-slate-800 dark:text-white/85">
-                Status das denúncias
-              </p>
+              <p class="text-sm font-semibold text-white/85">Status das denúncias</p>
 
-              <p class="text-xs text-slate-500 dark:text-white/30">Distribuição atual</p>
+              <p class="text-xs text-white/30">Distribuição atual</p>
             </div>
           </div>
 
-          <span class="text-xl font-bold tabular-nums text-slate-900 dark:text-white">
+          <span class="text-xl font-bold tabular-nums text-white">
             {{ reportTotal }}
           </span>
         </div>
 
-        <div class="mb-5 flex h-3 overflow-hidden rounded-full bg-slate-100 dark:bg-white/5">
+        <div class="mb-5 flex h-3 overflow-hidden rounded-full bg-white/5">
           @for (item of statusChart; track item.label) {
             <div
               [class]="item.color"
@@ -106,15 +100,13 @@
               <div class="flex min-w-0 items-center gap-2">
                 <span class="h-2 w-2 shrink-0 rounded-full" [class]="item.color"></span>
 
-                <span class="truncate text-xs text-slate-600 dark:text-white/45">
+                <span class="truncate text-xs text-white/45">
                   {{ item.label }}
                 </span>
               </div>
 
               <div class="flex shrink-0 items-center gap-2">
-                <div
-                  class="hidden h-1.5 w-20 overflow-hidden rounded-full bg-slate-100 sm:block dark:bg-white/5"
-                >
+                <div class="hidden h-1.5 w-20 overflow-hidden rounded-full bg-white/5 sm:block">
                   <div
                     class="h-full rounded-full"
                     [class]="item.color"
@@ -122,9 +114,7 @@
                   ></div>
                 </div>
 
-                <span
-                  class="w-5 text-right text-xs font-semibold tabular-nums text-slate-700 dark:text-white/75"
-                >
+                <span class="w-5 text-right text-xs font-semibold tabular-nums text-white/75">
                   {{ item.value }}
                 </span>
               </div>
@@ -133,38 +123,37 @@
         </div>
       </section>
 
+      <!-- Evolução mensal -->
       <section class="glass rounded-2xl p-5 sm:p-6">
         <div class="mb-5 flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <lucide-icon [img]="BarChartIcon" size="15" class="text-amber-500 dark:text-amber-400" />
+            <lucide-icon [img]="BarChartIcon" size="15" class="text-amber-400" />
 
             <div>
-              <p class="text-sm font-semibold text-slate-800 dark:text-white/85">Evolução mensal</p>
+              <p class="text-sm font-semibold text-white/85">Evolução mensal</p>
 
-              <p class="text-xs text-slate-500 dark:text-white/30">Denúncias registradas</p>
+              <p class="text-xs text-white/30">Denúncias registradas</p>
             </div>
           </div>
 
-          <span class="text-xs text-slate-400 dark:text-white/25">últimos 6 meses</span>
+          <span class="text-xs text-white/25">últimos 6 meses</span>
         </div>
 
-        <div
-          class="flex h-40 items-end gap-2 border-b border-slate-200 px-1 sm:gap-3 dark:border-white/8"
-        >
+        <div class="flex h-40 items-end gap-2 border-b border-white/8 px-1 sm:gap-3">
           @for (item of monthlyChart; track $index) {
             <div class="group flex h-full flex-1 flex-col items-center justify-end gap-2">
               <span
-                class="text-[10px] text-slate-500 opacity-0 transition-opacity group-hover:opacity-100 dark:text-white/30"
+                class="text-[10px] text-white/30 opacity-0 transition-opacity group-hover:opacity-100"
               >
                 {{ item.value }}
               </span>
 
               <div
-                class="w-full max-w-10 rounded-t-lg bg-linear-to-t from-amber-500/45 to-amber-300/90 transition-all duration-500 group-hover:from-amber-500/65 group-hover:to-amber-200 dark:from-amber-500/35 dark:to-amber-300/80 dark:group-hover:from-amber-500/55"
+                class="w-full max-w-10 rounded-t-lg bg-linear-to-t from-amber-500/35 to-amber-300/80 transition-all duration-500 group-hover:from-amber-500/55 group-hover:to-amber-200"
                 [style.height.%]="item.height"
               ></div>
 
-              <span class="text-[10px] capitalize text-slate-500 dark:text-white/30">
+              <span class="text-[10px] capitalize text-white/30">
                 {{ item.label }}
               </span>
             </div>
@@ -172,40 +161,37 @@
         </div>
       </section>
 
+      <!-- Partidas por campeonato -->
       <section class="glass rounded-2xl p-5 sm:p-6">
         <div class="mb-5 flex items-center gap-2">
-          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-500 dark:text-emerald-400" />
+          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-400" />
 
           <div>
-            <p class="text-sm font-semibold text-slate-800 dark:text-white/85">
-              Partidas por campeonato
-            </p>
+            <p class="text-sm font-semibold text-white/85">Partidas por campeonato</p>
 
-            <p class="text-xs text-slate-500 dark:text-white/30">Competições com mais jogos</p>
+            <p class="text-xs text-white/30">Competições com mais jogos</p>
           </div>
         </div>
 
         @if (championshipChart.length === 0) {
-          <p class="py-8 text-center text-sm text-slate-400 dark:text-white/25">
-            Nenhuma partida cadastrada.
-          </p>
+          <p class="py-8 text-center text-sm text-white/25">Nenhuma partida cadastrada.</p>
         } @else {
           <div class="space-y-4">
             @for (item of championshipChart; track item.label) {
               <div>
                 <div class="mb-1.5 flex items-center justify-between gap-3">
-                  <span class="truncate text-xs text-slate-600 dark:text-white/50">
+                  <span class="truncate text-xs text-white/50">
                     {{ item.label }}
                   </span>
 
-                  <span class="text-xs font-semibold tabular-nums text-slate-700 dark:text-white/75">
+                  <span class="text-xs font-semibold tabular-nums text-white/75">
                     {{ item.value }}
                   </span>
                 </div>
 
-                <div class="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-white/5">
+                <div class="h-2 overflow-hidden rounded-full bg-white/5">
                   <div
-                    class="h-full rounded-full bg-linear-to-r from-emerald-500/60 to-emerald-400/90 transition-all duration-500 dark:from-emerald-500/50 dark:to-emerald-300/90"
+                    class="h-full rounded-full bg-linear-to-r from-emerald-500/50 to-emerald-300/90 transition-all duration-500"
                     [style.width]="item.width"
                   ></div>
                 </div>
@@ -218,20 +204,18 @@
   }
 
   <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-
+    <!-- Últimas partidas -->
     <div class="glass overflow-hidden rounded-2xl md:col-span-1 lg:col-span-2">
-      <div
-        class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/8"
-      >
+      <div class="flex items-center justify-between border-b border-white/8 px-5 py-4">
         <div class="flex items-center gap-2">
-          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-500 dark:text-emerald-400" />
+          <lucide-icon [img]="CalendarIcon" size="15" class="text-emerald-400" />
 
-          <p class="text-sm font-semibold text-slate-800 dark:text-white/80">Últimas Partidas</p>
+          <p class="text-sm font-semibold text-white/80">Últimas Partidas</p>
         </div>
 
         <a
           routerLink="/games"
-          class="flex items-center gap-1 text-xs text-slate-500 transition hover:text-slate-800 dark:text-white/30 dark:hover:text-white/70"
+          class="flex items-center gap-1 text-xs text-white/30 transition hover:text-white/70"
         >
           Ver todas <lucide-icon [img]="ArrowRightIcon" size="12" />
         </a>
@@ -245,33 +229,33 @@
         </div>
       } @else if (recentGames.length === 0) {
         <div class="py-12 text-center">
-          <p class="text-sm text-slate-400 dark:text-white/20">Nenhuma partida cadastrada.</p>
+          <p class="text-sm text-white/20">Nenhuma partida cadastrada.</p>
 
           <a
             routerLink="/games/new"
-            class="mt-2 inline-block text-xs text-slate-500 transition hover:text-slate-900 dark:text-white/40 dark:hover:text-white"
+            class="mt-2 inline-block text-xs text-white/40 transition hover:text-white"
           >
             Cadastrar primeira →
           </a>
         </div>
       } @else {
-        <div class="divide-y divide-slate-200 dark:divide-white/5">
+        <div class="divide-y divide-white/5">
           @for (game of recentGames; track game.id) {
             <a
               [routerLink]="['/games', game.id]"
-              class="group flex items-center justify-between px-5 py-3.5 transition-colors duration-150 hover:bg-slate-100/80 dark:hover:bg-white/4"
+              class="group flex items-center justify-between px-5 py-3.5 transition-colors duration-150 hover:bg-white/4"
             >
               <div class="flex min-w-0 items-center gap-3">
-                <div class="shrink-0 rounded-lg bg-emerald-500/10 p-1.5 dark:bg-emerald-400/8">
-                  <lucide-icon [img]="MapPinIcon" size="13" class="text-emerald-500 dark:text-emerald-400" />
+                <div class="shrink-0 rounded-lg bg-emerald-400/8 p-1.5">
+                  <lucide-icon [img]="MapPinIcon" size="13" class="text-emerald-400" />
                 </div>
 
                 <div class="min-w-0">
-                  <p class="truncate text-sm font-medium text-slate-800 dark:text-white/80">
+                  <p class="truncate text-sm font-medium text-white/80">
                     {{ game.championship?.name }}
                   </p>
 
-                  <p class="truncate text-xs text-slate-500 dark:text-white/35">
+                  <p class="truncate text-xs text-white/35">
                     {{ game.place }}
                   </p>
                 </div>
@@ -279,13 +263,13 @@
 
               <div class="ml-4 flex shrink-0 items-center gap-4">
                 <div class="text-right">
-                  <p class="text-base font-bold tabular-nums text-slate-900 dark:text-white">
+                  <p class="text-base font-bold tabular-nums text-white">
                     {{ game.homeScore }}
-                    <span class="text-slate-400 dark:text-white/25">×</span>
+                    <span class="text-white/25">×</span>
                     {{ game.awayScore }}
                   </p>
 
-                  <p class="text-xs tabular-nums text-slate-400 dark:text-white/30">
+                  <p class="text-xs tabular-nums text-white/30">
                     {{ game.matchDate | date: 'dd/MM/yy' }}
                   </p>
                 </div>
@@ -293,7 +277,7 @@
                 <lucide-icon
                   [img]="ArrowRightIcon"
                   size="13"
-                  class="text-slate-300 transition-colors group-hover:text-slate-700 dark:text-white/15 dark:group-hover:text-white/50"
+                  class="text-white/15 transition-colors group-hover:text-white/50"
                 />
               </div>
             </a>
@@ -302,19 +286,18 @@
       }
     </div>
 
+    <!-- Denúncias -->
     <div class="glass overflow-hidden rounded-2xl">
-      <div
-        class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/8"
-      >
+      <div class="flex items-center justify-between border-b border-white/8 px-5 py-4">
         <div class="flex items-center gap-2">
-          <lucide-icon [img]="cards[4]?.icon" size="15" class="text-rose-500 dark:text-rose-400" />
+          <lucide-icon [img]="cards[4]?.icon" size="15" class="text-rose-400" />
 
-          <p class="text-sm font-semibold text-slate-800 dark:text-white/80">Denúncias</p>
+          <p class="text-sm font-semibold text-white/80">Denúncias</p>
         </div>
 
         <a
           routerLink="/reports"
-          class="flex items-center gap-1 text-xs text-slate-500 transition hover:text-slate-800 dark:text-white/30 dark:hover:text-white/70"
+          class="flex items-center gap-1 text-xs text-white/30 transition hover:text-white/70"
         >
           Ver todas <lucide-icon [img]="ArrowRightIcon" size="12" />
         </a>
@@ -329,26 +312,26 @@
       } @else if (pendingReports.length === 0) {
         <div class="px-4 py-12 text-center">
           <div
-            class="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 dark:bg-emerald-400/10"
+            class="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-400/10"
           >
-            <lucide-icon [img]="TrendingUpIcon" size="16" class="text-emerald-500 dark:text-emerald-400" />
+            <lucide-icon [img]="TrendingUpIcon" size="16" class="text-emerald-400" />
           </div>
 
-          <p class="text-sm text-slate-500 dark:text-white/40">Nenhuma denúncia pendente.</p>
+          <p class="text-sm text-white/40">Nenhuma denúncia pendente.</p>
         </div>
       } @else {
-        <div class="divide-y divide-slate-200 dark:divide-white/5">
+        <div class="divide-y divide-white/5">
           @for (report of pendingReports; track report.id) {
             <a
               [routerLink]="['/reports', report.id]"
-              class="group flex items-start justify-between gap-3 px-5 py-3.5 transition-colors duration-150 hover:bg-slate-100/80 dark:hover:bg-white/4"
+              class="group flex items-start justify-between gap-3 px-5 py-3.5 transition-colors duration-150 hover:bg-white/4"
             >
               <div class="min-w-0">
-                <p class="truncate font-mono text-sm text-slate-700 dark:text-white/60">
+                <p class="truncate font-mono text-sm text-white/60">
                   {{ report.protocol }}
                 </p>
 
-                <p class="mt-0.5 text-xs tabular-nums text-slate-400 dark:text-white/30">
+                <p class="mt-0.5 text-xs tabular-nums text-white/30">
                   {{ report.date | date: 'dd/MM/yy' }}
                 </p>
               </div>
@@ -363,14 +346,15 @@
     </div>
   </div>
 
+  <!-- Módulos -->
   <div>
-    <p class="mb-3 text-xs uppercase tracking-widest text-slate-400 dark:text-white/25">Módulos</p>
+    <p class="mb-3 text-xs uppercase tracking-widest text-white/25">Módulos</p>
 
     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
       @for (card of cards; track card.path) {
         <a
           [routerLink]="card.path"
-          class="glass group flex flex-col gap-3 rounded-2xl border border-slate-200 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 dark:border-white/5 dark:hover:bg-white/5"
+          class="glass group flex flex-col gap-3 rounded-2xl border border-white/5 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/5"
           [ngClass]="accentClasses(card.accent).border"
         >
           <div class="flex items-center justify-between">
@@ -393,11 +377,11 @@
           </div>
 
           <div>
-            <p class="text-sm font-semibold leading-tight text-slate-800 dark:text-white/80">
+            <p class="text-sm font-semibold leading-tight text-white/80">
               {{ card.label }}
             </p>
 
-            <p class="mt-0.5 hidden text-xs leading-tight text-slate-500 sm:block dark:text-white/30">
+            <p class="mt-0.5 hidden text-xs leading-tight text-white/30 sm:block">
               {{ card.description }}
             </p>
           </div>

@@ -218,10 +218,6 @@ body {
   color: #f59e0b !important;
 }
 
-[data-theme='light'] .theme-pill-icon-active {
-  color: rgba(255, 255, 255, 0.85);
-}
-
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -237,74 +233,94 @@ body {
 
 @layer components {
   .glass {
-    @apply border border-slate-200 bg-white/95 shadow-sm backdrop-blur-xl;
-  }
-
-  html.dark .glass {
     background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  [data-theme='light'] .glass {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(15, 15, 30, 0.08);
+    box-shadow:
+      0 4px 24px rgba(15, 15, 30, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95);
   }
 
   .glass-liquid {
-    @apply border border-slate-200 bg-white/90 shadow-sm backdrop-blur-2xl;
-  }
-
-  html.dark .glass-liquid {
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.06) 0%,
       rgba(255, 255, 255, 0.02) 100%
     );
-    border-color: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.45),
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
       inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+  }
+
+  [data-theme='light'] .glass-liquid {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(245, 245, 252, 0.9) 100%
+    );
+    border-color: rgba(15, 15, 30, 0.08);
+    box-shadow:
+      0 8px 32px rgba(15, 15, 30, 0.07),
+      inset 0 1px 0 rgba(255, 255, 255, 1);
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, #17171f 0%, rgba(23, 23, 31, 0.62) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  html.dark .gradient-text {
     background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .btn-primary {
-    @apply rounded-xl bg-slate-900 px-4 py-2 font-medium text-white transition-all duration-200 hover:bg-slate-700 active:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400/40;
+  [data-theme='light'] .gradient-text {
+    background: linear-gradient(135deg, #17171f 0%, rgba(23, 23, 31, 0.62) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  html.dark .btn-primary {
-    @apply bg-white text-black hover:bg-white/90 active:bg-white/80 focus:ring-white/30;
+  .btn-primary {
+    @apply rounded-xl bg-white px-4 py-2 font-medium text-black transition-all duration-200 hover:bg-white/90 active:bg-white/80 focus:outline-none focus:ring-2 focus:ring-white/30;
+  }
+
+  [data-theme='light'] .btn-primary {
+    @apply bg-slate-900 text-white hover:bg-slate-700 active:bg-slate-800 focus:ring-slate-400/40;
   }
 
   .btn-ghost {
-    @apply rounded-xl px-4 py-2 text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900;
+    @apply rounded-xl px-4 py-2 text-white/50 transition-all duration-200 hover:bg-white/5 hover:text-white;
   }
 
-  html.dark .btn-ghost {
-    @apply text-white/50 hover:bg-white/5 hover:text-white;
+  [data-theme='light'] .btn-ghost {
+    @apply text-slate-600 hover:bg-slate-100 hover:text-slate-900;
   }
 
   .btn-danger {
-    @apply rounded-xl bg-red-500/10 px-4 py-2 font-medium text-red-600 transition-all duration-200 hover:bg-red-500/20 dark:text-red-400;
+    @apply rounded-xl bg-red-500/10 px-4 py-2 font-medium text-red-400 transition-all duration-200 hover:bg-red-500/20;
+  }
+
+  [data-theme='light'] .btn-danger {
+    @apply text-red-600;
   }
 
   .input-field {
-    @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 transition-all duration-200 focus:border-slate-500 focus:ring-1 focus:ring-slate-300 focus:outline-none;
+    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white/90 placeholder-white/20 transition-all duration-200 focus:border-white/30 focus:ring-1 focus:ring-white/20 focus:outline-none;
   }
 
-  html.dark .input-field {
-    @apply border-white/10 bg-white/5 text-white/90 placeholder-white/20 focus:border-white/30 focus:ring-white/20;
+  [data-theme='light'] .input-field {
+    @apply border-slate-300 bg-white text-slate-900 placeholder-slate-400 focus:border-slate-500 focus:ring-slate-300;
   }
 
   .badge {
