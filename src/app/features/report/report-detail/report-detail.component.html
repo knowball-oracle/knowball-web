@@ -194,15 +194,29 @@
             <select
               [(ngModel)]="selectedStatus"
               class="input-field flex-1 bg-[#1c1b19] text-white/80"
+              [disabled]="report.status === 'RESOLVED'"
             >
-              <option value="NEW">Nova</option>
-              <option value="UNDER_REVIEW">Em análise</option>
-              <option value="RESOLVED">Resolvida</option>
+              @if (report.status === 'NEW') {
+                <option value="NEW">Nova</option>
+              }
+
+              @if (report.status === 'NEW' || report.status === 'UNDER_REVIEW') {
+                <option value="UNDER_REVIEW">Em análise</option>
+              }
+
+              @if (
+                report.status === 'NEW' ||
+                report.status === 'UNDER_REVIEW' ||
+                report.status === 'RESOLVED'
+              ) {
+                <option value="RESOLVED">Resolvida</option>
+              }
             </select>
 
             <select
               [(ngModel)]="selectedResult"
               class="input-field flex-1 bg-[#1c1b19] text-white/80"
+              [disabled]="report.status === 'RESOLVED'"
             >
               <option value="">Sem resultado</option>
               <option value="POSITIVE">Positivo</option>
@@ -211,8 +225,10 @@
             </select>
 
             <button
+              type="button"
               (click)="updateStatus()"
-              class="btn-primary text-sm px-5 py-2.5 shrink-0 cursor-pointer"
+              [disabled]="report.status === 'RESOLVED'"
+              class="btn-primary shrink-0 px-5 py-2.5 text-sm cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
             >
               Salvar
             </button>
