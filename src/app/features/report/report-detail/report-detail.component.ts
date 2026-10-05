@@ -93,11 +93,7 @@ export class ReportDetailComponent implements OnInit {
   }
 
   canDelete(): boolean {
-    if (!this.report) return false;
-    if (this.auth.isAdmin()) return true;
-    if (!this.report.user?.id || !this.currentUserId()) return false;
-
-    return this.report.user.id === this.currentUserId() && this.report.status === 'NEW';
+    return !!this.report && this.auth.isAdmin() && this.report.status === 'RESOLVED';
   }
 
   confirmDelete(): void {
