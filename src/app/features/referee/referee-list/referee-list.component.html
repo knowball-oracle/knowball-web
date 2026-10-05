@@ -1,5 +1,4 @@
 <div class="mx-auto max-w-6xl space-y-6 p-4 sm:p-6 md:p-8">
-  <!-- Cabeçalho -->
   <div class="flex items-start justify-between gap-4">
     <div>
       <h1 class="text-xl font-bold text-white sm:text-2xl">Árbitros</h1>
@@ -54,7 +53,6 @@
         }
       </div>
     } @else {
-      <!-- Visão geral dos status -->
       <section>
         <div class="mb-3 flex items-end justify-between gap-4">
           <div>
@@ -73,7 +71,6 @@
         </div>
 
         <div class="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
-          <!-- Todos -->
           <button
             (click)="selectedStatus = null"
             class="group relative h-28 w-40 shrink-0 cursor-pointer snap-start overflow-hidden rounded-2xl bg-linear-to-br from-slate-500 to-slate-800 p-3 text-left transition-all duration-300"
@@ -118,7 +115,6 @@
         </div>
       </section>
 
-      <!-- Busca, ordenação e filtros -->
       <section class="space-y-3">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
           <div class="relative flex-1">
@@ -195,7 +191,6 @@
           </button>
         </div>
       } @else {
-        <!-- Cards dos árbitros -->
         <section>
           <div class="mb-3 flex items-center gap-2">
             <span
