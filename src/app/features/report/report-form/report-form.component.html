@@ -1,13 +1,20 @@
-<div class="mx-auto max-w-5xl p-6 md:p-8">
-  <div class="mb-6">
-    <div class="flex items-center gap-3">
-      <a routerLink="/reports" class="text-sm text-white/30 transition hover:text-white/70">
+<div class="mx-auto w-full max-w-5xl p-4 sm:p-6 md:p-8">
+  <!-- Cabeçalho -->
+  <div class="mb-5 sm:mb-6">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <a
+        routerLink="/reports"
+        class="shrink-0 text-sm text-white/30 transition hover:text-white/70"
+      >
         ← Denúncias
       </a>
-      <span class="text-white/10">|</span>
+
+      <span class="hidden text-white/10 sm:inline">|</span>
+
       <h1 class="text-xl font-bold text-white sm:text-2xl">Nova Denúncia</h1>
     </div>
-    <p class="mt-1.5 text-sm text-white/40">
+
+    <p class="mt-2 max-w-2xl text-sm leading-relaxed text-white/40">
       Relate uma irregularidade na arbitragem de uma partida das categorias de base.
     </p>
   </div>
@@ -21,7 +28,10 @@
   }
 
   @if (error) {
-    <div class="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+    <div
+      class="mb-4 wrap-break-word rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm leading-relaxed text-red-400"
+      role="alert"
+    >
       {{ error }}
     </div>
   }
@@ -30,13 +40,15 @@
     <form
       [formGroup]="form"
       (ngSubmit)="onSubmit()"
-      class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]"
+      class="grid min-w-0 gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_300px]"
     >
-      <div class="space-y-5">
-        <section class="glass rounded-2xl p-5">
-          <div class="mb-4 flex items-center gap-3">
+
+      <div class="min-w-0 space-y-4 sm:space-y-5">
+
+        <section class="glass min-w-0 rounded-2xl p-4 sm:p-5">
+          <div class="mb-4 flex items-start gap-3">
             <div
-              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
+              class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
               [ngClass]="
                 game.valid
                   ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-400'
@@ -49,9 +61,12 @@
                 1
               }
             </div>
-            <div>
+
+            <div class="min-w-0">
               <h2 class="text-sm font-semibold text-white/90">Partida</h2>
-              <p class="text-xs text-white/35">Em qual jogo aconteceu o ocorrido?</p>
+              <p class="mt-0.5 text-xs leading-relaxed text-white/35">
+                Em qual jogo aconteceu o ocorrido?
+              </p>
             </div>
           </div>
 
@@ -61,51 +76,56 @@
               size="15"
               class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/30"
             />
+
             <input
-              type="text"
-              class="input-field pl-12!"
-              placeholder="Buscar por time, campeonato ou local..."
+              type="search"
+              inputmode="search"
+              autocomplete="off"
+              class="input-field min-h-11 pl-12!"
+              placeholder="Buscar time, campeonato ou local..."
               [value]="search"
               (input)="onSearch($event)"
             />
           </div>
 
-          <div class="mb-3 flex flex-wrap items-center gap-2">
-            @for (cat of categories; track cat) {
-              <button
-                type="button"
-                (click)="toggleCategory(cat)"
-                class="flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-medium transition-all duration-200"
-                [ngClass]="
-                  categoryFilter === cat
-                    ? meta(cat).activeChip + ' bg-white/5'
-                    : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
-                "
-              >
-                <span class="h-1.5 w-1.5 rounded-full" [ngClass]="meta(cat).dot"></span>
-                {{ cat }}
-                <span class="opacity-60">({{ countByCategory(cat) }})</span>
-              </button>
-            }
+          <div class="mb-3 -mx-1 overflow-x-auto px-1 pb-1">
+            <div class="flex w-max min-w-full items-center gap-2">
+              @for (cat of categories; track cat) {
+                <button
+                  type="button"
+                  (click)="toggleCategory(cat)"
+                  class="flex min-h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-medium transition-all duration-200"
+                  [ngClass]="
+                    categoryFilter === cat
+                      ? meta(cat).activeChip + ' bg-white/5'
+                      : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
+                  "
+                >
+                  <span class="h-1.5 w-1.5 shrink-0 rounded-full" [ngClass]="meta(cat).dot"></span>
+                  {{ cat }}
+                  <span class="opacity-60">({{ countByCategory(cat) }})</span>
+                </button>
+              }
 
-            @if (search || categoryFilter) {
-              <button
-                type="button"
-                (click)="clearFilters()"
-                class="ml-auto flex cursor-pointer items-center gap-1 text-xs text-white/40 transition hover:text-white/70"
-              >
-                <lucide-icon [img]="XIcon" size="12" />
-                Limpar
-              </button>
-            }
+              @if (search || categoryFilter) {
+                <button
+                  type="button"
+                  (click)="clearFilters()"
+                  class="flex min-h-9 shrink-0 cursor-pointer items-center gap-1 text-xs text-white/40 transition hover:text-white/70"
+                >
+                  <lucide-icon [img]="XIcon" size="12" />
+                  Limpar
+                </button>
+              }
+            </div>
           </div>
 
-          <div class="max-h-88 space-y-2 overflow-y-auto pr-1">
+          <div class="max-h-88 space-y-2 overflow-y-auto pr-0.5 sm:pr-1">
             @for (g of filteredGames; track g.id) {
               <button
                 type="button"
                 (click)="selectGame(g)"
-                class="flex w-full cursor-pointer items-center gap-3 rounded-xl border p-3 text-left transition-colors duration-150"
+                class="flex min-h-22 w-full cursor-pointer items-center gap-2.5 rounded-xl border p-3 text-left transition-colors duration-150 sm:gap-3"
                 [ngClass]="
                   isGameSelected(g)
                     ? 'border-white/40 bg-white/8'
@@ -113,7 +133,7 @@
                 "
               >
                 <div class="min-w-0 flex-1 space-y-1.5">
-                  <div class="flex items-center justify-between gap-2">
+                  <div class="flex min-w-0 items-center justify-between gap-2">
                     <app-team-badge
                       [name]="g.homeTeamName || 'A definir'"
                       [logoUrl]="g.homeTeamLogo"
@@ -124,7 +144,8 @@
                       {{ g.homeScore }}
                     </span>
                   </div>
-                  <div class="flex items-center justify-between gap-2">
+
+                  <div class="flex min-w-0 items-center justify-between gap-2">
                     <app-team-badge
                       [name]="g.awayTeamName || 'A definir'"
                       [logoUrl]="g.awayTeamLogo"
@@ -137,15 +158,26 @@
                   </div>
                 </div>
 
-                <div class="shrink-0 border-l border-white/8 pl-3 text-right">
-                  <p class="max-w-40 truncate text-xs font-medium text-white/70">
+                <div
+                  class="w-21.5 shrink-0 border-l border-white/8 pl-2 text-right sm:w-33 sm:pl-3"
+                >
+                  <p
+                    class="hidden max-w-32 truncate text-xs font-medium text-white/70 sm:block"
+                  >
                     {{ g.championship.name }}
                   </p>
-                  <p class="mt-0.5 text-[11px] tabular-nums text-white/30">
-                    {{ g.matchDate | date: 'dd/MM/yyyy HH:mm' }}
+
+                  <p
+                    class="text-[10px] tabular-nums text-white/35 sm:mt-0.5 sm:text-[11px] sm:text-white/30"
+                  >
+                    {{ g.matchDate | date: 'dd/MM/yy' }}
+                    <span class="hidden sm:inline">
+                      {{ g.matchDate | date: ' HH:mm' }}
+                    </span>
                   </p>
+
                   <span
-                    class="mt-1.5 inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium"
+                    class="mt-1 inline-flex max-w-full truncate rounded-full px-1.5 py-0.5 text-[9px] font-medium sm:mt-1.5 sm:px-2 sm:text-[10px]"
                     [ngClass]="meta(g.category).badge"
                   >
                     {{ g.category }}
@@ -157,8 +189,17 @@
                 }
               </button>
             } @empty {
-              <div class="rounded-xl border border-dashed border-white/10 py-8 text-center">
+              <div class="rounded-xl border border-dashed border-white/10 px-4 py-8 text-center">
                 <p class="text-sm text-white/30">Nenhuma partida encontrada.</p>
+                @if (search || categoryFilter) {
+                  <button
+                    type="button"
+                    (click)="clearFilters()"
+                    class="mt-2 min-h-9 cursor-pointer text-xs text-white/50 transition hover:text-white/80"
+                  >
+                    Limpar filtros
+                  </button>
+                }
               </div>
             }
           </div>
@@ -168,10 +209,10 @@
           }
         </section>
 
-        <section class="glass rounded-2xl p-5">
-          <div class="mb-4 flex items-center gap-3">
+        <section class="glass min-w-0 rounded-2xl p-4 sm:p-5">
+          <div class="mb-4 flex items-start gap-3">
             <div
-              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
+              class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
               [ngClass]="
                 referee.valid
                   ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-400'
@@ -184,15 +225,18 @@
                 2
               }
             </div>
-            <div>
+
+            <div class="min-w-0">
               <h2 class="text-sm font-semibold text-white/90">Árbitro</h2>
-              <p class="text-xs text-white/35">Quem estava escalado nesta partida?</p>
+              <p class="mt-0.5 text-xs leading-relaxed text-white/35">
+                Quem estava escalado nesta partida?
+              </p>
             </div>
           </div>
 
           @if (!game.value) {
-            <div class="rounded-xl border border-dashed border-white/10 py-8 text-center">
-              <p class="text-sm text-white/30">
+            <div class="rounded-xl border border-dashed border-white/10 px-4 py-8 text-center">
+              <p class="text-sm leading-relaxed text-white/30">
                 Selecione uma partida para ver os árbitros escalados.
               </p>
             </div>
@@ -204,12 +248,12 @@
             </div>
           } @else if (referees.length === 0) {
             <div
-              class="rounded-xl border border-yellow-500/20 bg-yellow-500/10 p-3 text-xs text-yellow-400"
+              class="rounded-xl border border-yellow-500/20 bg-yellow-500/10 p-3 text-xs leading-relaxed text-yellow-400"
             >
               Nenhum árbitro vinculado a esta partida.
               <a
                 [routerLink]="['/games', game.value]"
-                class="underline underline-offset-2 hover:text-yellow-300"
+                class="inline underline underline-offset-2 transition hover:text-yellow-300"
               >
                 Abra o detalhe da partida
               </a>
@@ -221,7 +265,7 @@
                 <button
                   type="button"
                   (click)="selectReferee(ref)"
-                  class="flex cursor-pointer items-center gap-3 rounded-xl border p-3 text-left transition-colors duration-150"
+                  class="flex min-h-13 cursor-pointer items-center gap-3 rounded-xl border p-3 text-left transition-colors duration-150"
                   [ngClass]="
                     isRefereeSelected(ref)
                       ? 'border-white/40 bg-white/8'
@@ -233,9 +277,11 @@
                   >
                     {{ initialOf(ref.name) }}
                   </div>
+
                   <span class="min-w-0 flex-1 truncate text-sm font-medium text-white/85">
                     {{ ref.name }}
                   </span>
+
                   @if (isRefereeSelected(ref)) {
                     <lucide-icon [img]="CheckIcon" size="16" class="shrink-0 text-emerald-400" />
                   }
@@ -249,10 +295,10 @@
           }
         </section>
 
-        <section class="glass rounded-2xl p-5">
-          <div class="mb-4 flex items-center gap-3">
+        <section class="glass min-w-0 rounded-2xl p-4 sm:p-5">
+          <div class="mb-4 flex items-start gap-3">
             <div
-              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
+              class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
               [ngClass]="
                 content.valid
                   ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-400'
@@ -265,34 +311,39 @@
                 3
               }
             </div>
-            <div>
+
+            <div class="min-w-0">
               <h2 class="text-sm font-semibold text-white/90">Relato</h2>
-              <p class="text-xs text-white/35">Descreva o ocorrido com o máximo de detalhes.</p>
+              <p class="mt-0.5 text-xs leading-relaxed text-white/35">
+                Descreva o ocorrido com o máximo de detalhes.
+              </p>
             </div>
           </div>
 
-          <div class="mb-3 flex flex-wrap gap-2">
-            @for (snippet of snippets; track snippet) {
-              <button
-                type="button"
-                (click)="appendSnippet(snippet)"
-                class="cursor-pointer rounded-lg border border-white/10 px-2.5 py-1 text-xs text-white/50 transition hover:border-white/20 hover:text-white/80"
-              >
-                + {{ snippet.replace(': ', '') }}
-              </button>
-            }
+          <div class="-mx-1 mb-3 overflow-x-auto px-1 pb-1">
+            <div class="flex w-max min-w-full gap-2">
+              @for (snippet of snippets; track snippet) {
+                <button
+                  type="button"
+                  (click)="appendSnippet(snippet)"
+                  class="min-h-9 shrink-0 cursor-pointer rounded-lg border border-white/10 px-2.5 py-1 text-xs text-white/50 transition hover:border-white/20 hover:text-white/80"
+                >
+                  + {{ snippet.replace(': ', '') }}
+                </button>
+              }
+            </div>
           </div>
 
           <textarea
             formControlName="content"
-            rows="8"
+            rows="7"
             [attr.maxlength]="MAX_LENGTH"
             placeholder="Descreva o ocorrido detalhadamente (mín. 20 caracteres)..."
-            class="input-field resize-none"
+            class="input-field min-h-45 resize-y"
             [class.border-red-500/40]="content.invalid && content.touched"
           ></textarea>
 
-          <div class="mt-2 flex items-center gap-3">
+          <div class="mt-2 flex items-center gap-2.5 sm:gap-3">
             <div class="h-1 flex-1 overflow-hidden rounded-full bg-white/8">
               <div
                 class="h-full rounded-full transition-all duration-300"
@@ -300,8 +351,9 @@
                 [style.width.%]="contentProgress"
               ></div>
             </div>
+
             <span
-              class="shrink-0 text-xs tabular-nums"
+              class="shrink-0 text-[11px] tabular-nums sm:text-xs"
               [ngClass]="contentLength >= MIN_LENGTH ? 'text-emerald-400' : 'text-white/35'"
             >
               {{ contentLength }} / {{ MAX_LENGTH }}
@@ -315,32 +367,41 @@
           }
         </section>
 
-        <div class="flex items-center gap-3">
+        <div class="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <a
+            routerLink="/reports"
+            class="btn-ghost flex min-h-11 w-full items-center justify-center sm:w-auto"
+          >
+            Cancelar
+          </a>
+
           <button
             type="submit"
             [disabled]="saving"
-            class="btn-primary cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+            class="btn-primary min-h-11 w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
           >
             {{ saving ? 'Enviando...' : 'Enviar Denúncia' }}
           </button>
-          <a routerLink="/reports" class="btn-ghost">Cancelar</a>
-          <span class="ml-auto text-xs text-white/30">{{ completedSteps }} de 3 etapas</span>
+
+          <span class="text-center text-xs text-white/30 sm:ml-auto sm:text-right">
+            {{ completedSteps }} de 3 etapas
+          </span>
         </div>
       </div>
 
-      <aside class="space-y-4 self-start lg:sticky lg:top-6">
-        <div class="glass rounded-2xl p-5">
+      <aside class="min-w-0 space-y-4 self-start lg:sticky lg:top-6">
+        <div class="glass rounded-2xl p-4 sm:p-5">
           <h3 class="mb-4 text-xs font-medium uppercase tracking-wider text-white/40">Resumo</h3>
 
           <dl class="space-y-4 text-sm">
             <div>
               <dt class="text-xs text-white/30">Partida</dt>
-              <dd class="mt-1 text-white/80">
+              <dd class="mt-1 min-w-0 text-white/80">
                 @if (selectedGame; as sg) {
-                  <p class="font-medium">
+                  <p class="truncate font-medium">
                     {{ sg.homeTeamName || 'A definir' }} × {{ sg.awayTeamName || 'A definir' }}
                   </p>
-                  <p class="mt-0.5 text-xs text-white/40">
+                  <p class="mt-0.5 truncate text-xs text-white/40">
                     {{ sg.championship.name }} · {{ sg.category }}
                   </p>
                   <p class="text-xs tabular-nums text-white/30">
@@ -354,9 +415,9 @@
 
             <div>
               <dt class="text-xs text-white/30">Árbitro</dt>
-              <dd class="mt-1 text-white/80">
+              <dd class="mt-1 min-w-0 text-white/80">
                 @if (selectedReferee; as sr) {
-                  <span class="font-medium">{{ sr.name }}</span>
+                  <span class="block truncate font-medium">{{ sr.name }}</span>
                 } @else {
                   <span class="text-white/25">Não selecionado</span>
                 }
@@ -376,9 +437,9 @@
           </dl>
         </div>
 
-        <div class="glass rounded-2xl p-5">
-          <div class="mb-3 flex items-center gap-2">
-            <lucide-icon [img]="InfoIcon" size="14" class="text-white/40" />
+        <div class="glass rounded-2xl p-4 sm:p-5">
+          <div class="mb-3 flex items-start gap-2">
+            <lucide-icon [img]="InfoIcon" size="14" class="mt-0.5 shrink-0 text-white/40" />
             <h3 class="text-xs font-medium uppercase tracking-wider text-white/40">
               Dicas para um bom relato
             </h3>
@@ -396,7 +457,7 @@
 
         <div class="glass flex gap-3 rounded-2xl p-4">
           <lucide-icon [img]="LockIcon" size="15" class="mt-0.5 shrink-0 text-white/40" />
-          <p class="text-xs leading-relaxed text-white/40">
+          <p class="min-w-0 text-xs leading-relaxed text-white/40">
             <span class="font-medium text-white/60">Confidencialidade garantida.</span>
             Suas informações são usadas apenas na análise desta denúncia. Você receberá o protocolo
             por e-mail.
