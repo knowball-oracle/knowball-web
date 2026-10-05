@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { LucideAngularModule } from 'lucide-angular';
+import { RouterLink } from '@angular/router';
+import { LucideAngularModule, X } from 'lucide-angular';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Eye, Pencil, Trash2, Plus, Shield, MapPin } from '../../../shared/icons/icons';
@@ -24,10 +24,47 @@ interface GameWithTeams extends Game {
 }
 
 interface ChampionshipGroup {
-  championshipId: number;
+  key: string;
   championshipName: string;
+  year: number | null;
+  categories: string[];
   games: GameWithTeams[];
 }
+
+interface CategoryMeta {
+  badge: string;
+  activeChip: string;
+  dot: string;
+}
+
+const CATEGORY_META: Record<string, CategoryMeta> = {
+  SUB_13: {
+    badge: 'bg-blue-500/10 text-blue-400',
+    activeChip: 'border-blue-400/60 text-blue-400',
+    dot: 'bg-blue-400',
+  },
+  SUB_15: {
+    badge: 'bg-emerald-500/10 text-emerald-400',
+    activeChip: 'border-emerald-400/60 text-emerald-400',
+    dot: 'bg-emerald-400',
+  },
+  SUB_17: {
+    badge: 'bg-amber-500/10 text-amber-400',
+    activeChip: 'border-amber-400/60 text-amber-400',
+    dot: 'bg-amber-400',
+  },
+  SUB_20: {
+    badge: 'bg-rose-500/10 text-rose-400',
+    activeChip: 'border-rose-400/60 text-rose-400',
+    dot: 'bg-rose-400',
+  },
+};
+
+const FALLBACK_META: CategoryMeta = {
+  badge: 'bg-white/8 text-white/50',
+  activeChip: 'border-white/30 text-white/70',
+  dot: 'bg-slate-400',
+};
 
 @Component({
   selector: 'app-game-list',
@@ -44,10 +81,15 @@ interface ChampionshipGroup {
 export class GameListComponent implements OnInit {
   private service = inject(GameService);
   private participationSvc = inject(ParticipationService);
-  private router = inject(Router);
   auth = inject(AuthService);
 
+  games: GameWithTeams[] = [];
+  filteredGames: GameWithTeams[] = [];
   groups: ChampionshipGroup[] = [];
+
+  selectedCategory: string | null = null;
+  readonly categories = ['SUB_13', 'SUB_15', 'SUB_17', 'SUB_20'] as const;
+
   loading = true;
   error = '';
   pendingDeleteId: number | null = null;
@@ -58,6 +100,7 @@ export class GameListComponent implements OnInit {
   readonly PlusIcon = Plus;
   readonly ShieldIcon = Shield;
   readonly MapPinIcon = MapPin;
+  readonly XIcon = X;
 
   ngOnInit(): void {
     this.load();
@@ -76,9 +119,32 @@ export class GameListComponent implements OnInit {
     });
   }
 
+  meta(category: string | null | undefined): CategoryMeta {
+    return (category && CATEGORY_META[category]) || FALLBACK_META;
+  }
+
+  categoryOf(game: Game): string {
+    return String(game.championship?.category ?? '');
+  }
+
+  countByCategory(category: string): number {
+    return this.games.filter((game) => this.categoryOf(game) === category).length;
+  }
+
+  toggleCategory(category: string | null): void {
+    this.selectedCategory = this.selectedCategory === category ? null : category;
+    this.rebuild();
+  }
+
+  clearFilter(): void {
+    this.selectedCategory = null;
+    this.rebuild();
+  }
+
   private enrichWithTeams(games: Game[]): void {
     if (games.length === 0) {
-      this.groups = [];
+      this.games = [];
+      this.rebuild();
       this.loading = false;
       return;
     }
@@ -89,7 +155,7 @@ export class GameListComponent implements OnInit {
 
     forkJoin(requests).subscribe({
       next: (allParticipations) => {
-        const enriched: GameWithTeams[] = games.map((game, index) => {
+        this.games = games.map((game, index) => {
           const participations = allParticipations[index];
           const home = participations.find((participation) => participation.type === 'HOME');
           const away = participations.find((participation) => participation.type === 'AWAY');
@@ -98,16 +164,13 @@ export class GameListComponent implements OnInit {
             ...game,
             homeTeamName: home?.team?.name,
             awayTeamName: away?.team?.name,
-
-            // Normaliza null para undefined.
             homeTeamLogo: home?.team?.logoUrl ?? undefined,
             awayTeamLogo: away?.team?.logoUrl ?? undefined,
-
             ...this.resolveStatus(game.matchDate),
           };
         });
 
-        this.groups = this.groupByChampionship(enriched);
+        this.rebuild();
         this.loading = false;
       },
       error: () => {
@@ -115,6 +178,14 @@ export class GameListComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  private rebuild(): void {
+    this.filteredGames = this.selectedCategory
+      ? this.games.filter((game) => this.categoryOf(game) === this.selectedCategory)
+      : this.games;
+
+    this.groups = this.groupByChampionship(this.filteredGames);
   }
 
   private resolveStatus(matchDate: string): {
@@ -129,50 +200,55 @@ export class GameListComponent implements OnInit {
     const isPast = date.getTime() < now.getTime() && !isToday;
 
     if (isToday) {
-      return {
-        statusLabel: 'Hoje',
-        isToday: true,
-        isPast: false,
-      };
+      return { statusLabel: 'Hoje', isToday: true, isPast: false };
     }
 
     if (isPast) {
-      return {
-        statusLabel: 'Fim de jogo',
-        isToday: false,
-        isPast: true,
-      };
+      return { statusLabel: 'Fim de jogo', isToday: false, isPast: true };
     }
 
-    return {
-      statusLabel: 'Agendado',
-      isToday: false,
-      isPast: false,
-    };
+    return { statusLabel: 'Agendado', isToday: false, isPast: false };
   }
 
   private groupByChampionship(games: GameWithTeams[]): ChampionshipGroup[] {
-    const map = new Map<number, ChampionshipGroup>();
+    const map = new Map<string, ChampionshipGroup>();
 
     for (const game of games) {
-      const championshipId = game.championship.id!;
+      const name = game.championship?.name ?? 'Sem campeonato';
+      const year = game.championship?.year ?? null;
+      const key = `${this.normalize(name)}|${year ?? ''}`;
 
-      if (!map.has(championshipId)) {
-        map.set(championshipId, {
-          championshipId,
-          championshipName: game.championship.name,
+      if (!map.has(key)) {
+        map.set(key, {
+          key,
+          championshipName: name,
+          year,
+          categories: [],
           games: [],
         });
       }
 
-      map.get(championshipId)!.games.push(game);
+      const group = map.get(key)!;
+      group.games.push(game);
+
+      const category = this.categoryOf(game);
+      if (category && !group.categories.includes(category)) {
+        group.categories.push(category);
+      }
     }
 
     for (const group of map.values()) {
       group.games.sort((a, b) => new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime());
+      group.categories.sort();
     }
 
-    return Array.from(map.values());
+    return Array.from(map.values()).sort((a, b) =>
+      a.championshipName.localeCompare(b.championshipName, 'pt-BR'),
+    );
+  }
+
+  private normalize(value: string): string {
+    return value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
   }
 
   confirmDelete(id: number): void {
