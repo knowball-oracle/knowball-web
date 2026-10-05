@@ -1,107 +1,409 @@
-<div class="p-6 md:p-8 max-w-2xl mx-auto">
-  <div class="flex items-center gap-3 mb-6">
-    <a routerLink="/reports" class="text-white/30 hover:text-white/70 transition text-sm"
-      >← Denúncias</a
-    >
-    <span class="text-white/10">|</span>
-    <h1 class="text-xl font-bold text-white">Nova Denúncia</h1>
+<div class="mx-auto max-w-5xl p-6 md:p-8">
+  <div class="mb-6">
+    <div class="flex items-center gap-3">
+      <a routerLink="/reports" class="text-sm text-white/30 transition hover:text-white/70">
+        ← Denúncias
+      </a>
+      <span class="text-white/10">|</span>
+      <h1 class="text-xl font-bold text-white sm:text-2xl">Nova Denúncia</h1>
+    </div>
+    <p class="mt-1.5 text-sm text-white/40">
+      Relate uma irregularidade na arbitragem de uma partida das categorias de base.
+    </p>
   </div>
 
   @if (loading) {
     <div class="space-y-3">
       @for (_ of [1, 2, 3, 4]; track $index) {
-        <div class="skeleton h-12 rounded-xl"></div>
+        <div class="skeleton h-24 rounded-2xl"></div>
       }
     </div>
   }
 
   @if (error) {
-    <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+    <div class="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
       {{ error }}
     </div>
   }
 
   @if (!loading) {
-    <div class="glass rounded-2xl p-6">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
-        <div class="grid grid-cols-2 gap-4">
-          <div formGroupName="game">
-            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-              Partida
-            </label>
-            <select
-              formControlName="id"
-              class="input-field"
-              [class.border-red-500/40]="game.invalid && game.touched"
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]"
+    >
+      <div class="space-y-5">
+        <section class="glass rounded-2xl p-5">
+          <div class="mb-4 flex items-center gap-3">
+            <div
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
+              [ngClass]="
+                game.valid
+                  ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-400'
+                  : 'border-white/15 bg-white/5 text-white/60'
+              "
             >
-              <option [value]="null">Selecione...</option>
-              @for (g of games; track g.id) {
-                <option [value]="g.id">{{ g.place }} — {{ g.matchDate | date: 'dd/MM/yy' }}</option>
+              @if (game.valid) {
+                <lucide-icon [img]="CheckIcon" size="14" />
+              } @else {
+                1
               }
-            </select>
-            @if (game.invalid && game.touched) {
-              <p class="text-xs text-red-400 mt-1">Partida obrigatória.</p>
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-white/90">Partida</h2>
+              <p class="text-xs text-white/35">Em qual jogo aconteceu o ocorrido?</p>
+            </div>
+          </div>
+
+          <div class="relative mb-3">
+            <lucide-icon
+              [img]="SearchIcon"
+              size="15"
+              class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/30"
+            />
+            <input
+              type="text"
+              class="input-field pl-9!"
+              placeholder="Buscar por time, campeonato ou local..."
+              [value]="search"
+              (input)="onSearch($event)"
+            />
+          </div>
+
+          <div class="mb-3 flex flex-wrap items-center gap-2">
+            @for (cat of categories; track cat) {
+              <button
+                type="button"
+                (click)="toggleCategory(cat)"
+                class="flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-medium transition-all duration-200"
+                [ngClass]="
+                  categoryFilter === cat
+                    ? meta(cat).activeChip + ' bg-white/5'
+                    : 'border-white/10 text-white/40 hover:border-white/20 hover:text-white/60'
+                "
+              >
+                <span class="h-1.5 w-1.5 rounded-full" [ngClass]="meta(cat).dot"></span>
+                {{ cat }}
+                <span class="opacity-60">({{ countByCategory(cat) }})</span>
+              </button>
+            }
+
+            @if (search || categoryFilter) {
+              <button
+                type="button"
+                (click)="clearFilters()"
+                class="ml-auto flex cursor-pointer items-center gap-1 text-xs text-white/40 transition hover:text-white/70"
+              >
+                <lucide-icon [img]="XIcon" size="12" />
+                Limpar
+              </button>
             }
           </div>
 
-          <div formGroupName="referee">
-            <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-              Árbitro
-            </label>
-            <select
-              formControlName="id"
-              class="input-field bg-[#1c1b19] text-white/80"
-              [attr.disabled]="!game.value || loadingReferees ? true : null"
+          <div class="max-h-88 space-y-2 overflow-y-auto pr-1">
+            @for (g of filteredGames; track g.id) {
+              <button
+                type="button"
+                (click)="selectGame(g)"
+                class="flex w-full cursor-pointer items-center gap-3 rounded-xl border p-3 text-left transition-colors duration-150"
+                [ngClass]="
+                  isGameSelected(g)
+                    ? 'border-white/40 bg-white/8'
+                    : 'border-white/8 bg-white/3 hover:border-white/15 hover:bg-white/6'
+                "
+              >
+                <div class="min-w-0 flex-1 space-y-1.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <app-team-badge
+                      [name]="g.homeTeamName || 'A definir'"
+                      [logoUrl]="g.homeTeamLogo"
+                      [size]="22"
+                      nameClass="text-sm font-medium text-white/85 truncate"
+                    />
+                    <span class="shrink-0 text-sm font-bold tabular-nums text-white/90">
+                      {{ g.homeScore }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between gap-2">
+                    <app-team-badge
+                      [name]="g.awayTeamName || 'A definir'"
+                      [logoUrl]="g.awayTeamLogo"
+                      [size]="22"
+                      nameClass="text-sm font-medium text-white/85 truncate"
+                    />
+                    <span class="shrink-0 text-sm font-bold tabular-nums text-white/90">
+                      {{ g.awayScore }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="shrink-0 border-l border-white/8 pl-3 text-right">
+                  <p class="max-w-40 truncate text-xs font-medium text-white/70">
+                    {{ g.championship.name }}
+                  </p>
+                  <p class="mt-0.5 text-[11px] tabular-nums text-white/30">
+                    {{ g.matchDate | date: 'dd/MM/yyyy HH:mm' }}
+                  </p>
+                  <span
+                    class="mt-1.5 inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium"
+                    [ngClass]="meta(g.category).badge"
+                  >
+                    {{ g.category }}
+                  </span>
+                </div>
+
+                @if (isGameSelected(g)) {
+                  <lucide-icon [img]="CheckIcon" size="16" class="shrink-0 text-emerald-400" />
+                }
+              </button>
+            } @empty {
+              <div class="rounded-xl border border-dashed border-white/10 py-8 text-center">
+                <p class="text-sm text-white/30">Nenhuma partida encontrada.</p>
+              </div>
+            }
+          </div>
+
+          @if (game.invalid && game.touched) {
+            <p class="mt-2 text-xs text-red-400">Selecione a partida.</p>
+          }
+        </section>
+
+        <section class="glass rounded-2xl p-5">
+          <div class="mb-4 flex items-center gap-3">
+            <div
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
+              [ngClass]="
+                referee.valid
+                  ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-400'
+                  : 'border-white/15 bg-white/5 text-white/60'
+              "
             >
-              <option [value]="null" disabled selected>
-                {{
-                  !game.value
-                    ? 'Selecione uma partida primeiro'
-                    : loadingReferees
-                      ? 'Carregando...'
-                      : 'Selecione um árbitro'
-                }}
-              </option>
-              @for (ref of referees; track ref.id) {
-                <option [value]="ref.id">{{ ref.name }}</option>
+              @if (referee.valid) {
+                <lucide-icon [img]="CheckIcon" size="14" />
+              } @else {
+                2
               }
-            </select>
-            @if (game.value && !loadingReferees && referees.length === 0) {
-              <p class="text-xs text-yellow-400 mt-1">
-                Nenhum árbitro vinculado a esta partida. Adicione via detalhe da partida primeiro.
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-white/90">Árbitro</h2>
+              <p class="text-xs text-white/35">Quem estava escalado nesta partida?</p>
+            </div>
+          </div>
+
+          @if (!game.value) {
+            <div class="rounded-xl border border-dashed border-white/10 py-8 text-center">
+              <p class="text-sm text-white/30">
+                Selecione uma partida para ver os árbitros escalados.
               </p>
+            </div>
+          } @else if (loadingReferees) {
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              @for (_ of [1, 2]; track $index) {
+                <div class="skeleton h-14 rounded-xl"></div>
+              }
+            </div>
+          } @else if (referees.length === 0) {
+            <div
+              class="rounded-xl border border-yellow-500/20 bg-yellow-500/10 p-3 text-xs text-yellow-400"
+            >
+              Nenhum árbitro vinculado a esta partida.
+              <a
+                [routerLink]="['/games', game.value]"
+                class="underline underline-offset-2 hover:text-yellow-300"
+              >
+                Abra o detalhe da partida
+              </a>
+              para adicionar a arbitragem primeiro.
+            </div>
+          } @else {
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              @for (ref of referees; track ref.id) {
+                <button
+                  type="button"
+                  (click)="selectReferee(ref)"
+                  class="flex cursor-pointer items-center gap-3 rounded-xl border p-3 text-left transition-colors duration-150"
+                  [ngClass]="
+                    isRefereeSelected(ref)
+                      ? 'border-white/40 bg-white/8'
+                      : 'border-white/8 bg-white/3 hover:border-white/15 hover:bg-white/6'
+                  "
+                >
+                  <div
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/8 text-sm font-semibold text-white/70"
+                  >
+                    {{ initialOf(ref.name) }}
+                  </div>
+                  <span class="min-w-0 flex-1 truncate text-sm font-medium text-white/85">
+                    {{ ref.name }}
+                  </span>
+                  @if (isRefereeSelected(ref)) {
+                    <lucide-icon [img]="CheckIcon" size="16" class="shrink-0 text-emerald-400" />
+                  }
+                </button>
+              }
+            </div>
+          }
+
+          @if (referee.invalid && referee.touched && game.value && referees.length > 0) {
+            <p class="mt-2 text-xs text-red-400">Selecione o árbitro.</p>
+          }
+        </section>
+
+        <section class="glass rounded-2xl p-5">
+          <div class="mb-4 flex items-center gap-3">
+            <div
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-bold"
+              [ngClass]="
+                content.valid
+                  ? 'border-emerald-400/40 bg-emerald-500/10 text-emerald-400'
+                  : 'border-white/15 bg-white/5 text-white/60'
+              "
+            >
+              @if (content.valid) {
+                <lucide-icon [img]="CheckIcon" size="14" />
+              } @else {
+                3
+              }
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold text-white/90">Relato</h2>
+              <p class="text-xs text-white/35">Descreva o ocorrido com o máximo de detalhes.</p>
+            </div>
+          </div>
+
+          <div class="mb-3 flex flex-wrap gap-2">
+            @for (snippet of snippets; track snippet) {
+              <button
+                type="button"
+                (click)="appendSnippet(snippet)"
+                class="cursor-pointer rounded-lg border border-white/10 px-2.5 py-1 text-xs text-white/50 transition hover:border-white/20 hover:text-white/80"
+              >
+                + {{ snippet.replace(': ', '') }}
+              </button>
             }
           </div>
-        </div>
 
-        <div>
-          <label class="block text-xs font-medium text-white/40 mb-1.5 uppercase tracking-wider">
-            Conteúdo
-          </label>
           <textarea
             formControlName="content"
-            rows="6"
+            rows="8"
+            [attr.maxlength]="MAX_LENGTH"
             placeholder="Descreva o ocorrido detalhadamente (mín. 20 caracteres)..."
             class="input-field resize-none"
             [class.border-red-500/40]="content.invalid && content.touched"
           ></textarea>
-          @if (content.invalid && content.touched) {
-            <p class="text-xs text-red-400 mt-1">Conteúdo obrigatório (mínimo 20 caracteres).</p>
-          }
-        </div>
 
-        <div class="flex gap-3 pt-1">
+          <div class="mt-2 flex items-center gap-3">
+            <div class="h-1 flex-1 overflow-hidden rounded-full bg-white/8">
+              <div
+                class="h-full rounded-full transition-all duration-300"
+                [ngClass]="contentLength >= MIN_LENGTH ? 'bg-emerald-400' : 'bg-amber-400'"
+                [style.width.%]="contentProgress"
+              ></div>
+            </div>
+            <span
+              class="shrink-0 text-xs tabular-nums"
+              [ngClass]="contentLength >= MIN_LENGTH ? 'text-emerald-400' : 'text-white/35'"
+            >
+              {{ contentLength }} / {{ MAX_LENGTH }}
+            </span>
+          </div>
+
+          @if (content.invalid && content.touched) {
+            <p class="mt-1.5 text-xs text-red-400">
+              Relato obrigatório (mínimo {{ MIN_LENGTH }} caracteres).
+            </p>
+          }
+        </section>
+
+        <div class="flex items-center gap-3">
           <button
             type="submit"
             [disabled]="saving"
-            class="btn-primary disabled:opacity-40 cursor-pointer"
+            class="btn-primary cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
           >
             {{ saving ? 'Enviando...' : 'Enviar Denúncia' }}
           </button>
           <a routerLink="/reports" class="btn-ghost">Cancelar</a>
+          <span class="ml-auto text-xs text-white/30">{{ completedSteps }} de 3 etapas</span>
         </div>
-      </form>
-    </div>
+      </div>
+
+      <aside class="space-y-4 self-start lg:sticky lg:top-6">
+        <div class="glass rounded-2xl p-5">
+          <h3 class="mb-4 text-xs font-medium uppercase tracking-wider text-white/40">Resumo</h3>
+
+          <dl class="space-y-4 text-sm">
+            <div>
+              <dt class="text-xs text-white/30">Partida</dt>
+              <dd class="mt-1 text-white/80">
+                @if (selectedGame; as sg) {
+                  <p class="font-medium">
+                    {{ sg.homeTeamName || 'A definir' }} × {{ sg.awayTeamName || 'A definir' }}
+                  </p>
+                  <p class="mt-0.5 text-xs text-white/40">
+                    {{ sg.championship.name }} · {{ sg.category }}
+                  </p>
+                  <p class="text-xs tabular-nums text-white/30">
+                    {{ sg.matchDate | date: 'dd/MM/yyyy HH:mm' }}
+                  </p>
+                } @else {
+                  <span class="text-white/25">Não selecionada</span>
+                }
+              </dd>
+            </div>
+
+            <div>
+              <dt class="text-xs text-white/30">Árbitro</dt>
+              <dd class="mt-1 text-white/80">
+                @if (selectedReferee; as sr) {
+                  <span class="font-medium">{{ sr.name }}</span>
+                } @else {
+                  <span class="text-white/25">Não selecionado</span>
+                }
+              </dd>
+            </div>
+
+            <div>
+              <dt class="text-xs text-white/30">Relato</dt>
+              <dd class="mt-1">
+                @if (contentLength > 0) {
+                  <span class="text-white/80">{{ contentLength }} caracteres</span>
+                } @else {
+                  <span class="text-white/25">Não escrito</span>
+                }
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="glass rounded-2xl p-5">
+          <div class="mb-3 flex items-center gap-2">
+            <lucide-icon [img]="InfoIcon" size="14" class="text-white/40" />
+            <h3 class="text-xs font-medium uppercase tracking-wider text-white/40">
+              Dicas para um bom relato
+            </h3>
+          </div>
+
+          <ul class="space-y-2 text-xs leading-relaxed text-white/50">
+            @for (tip of tips; track tip) {
+              <li class="flex gap-2">
+                <span class="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/25"></span>
+                <span>{{ tip }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="glass flex gap-3 rounded-2xl p-4">
+          <lucide-icon [img]="LockIcon" size="15" class="mt-0.5 shrink-0 text-white/40" />
+          <p class="text-xs leading-relaxed text-white/40">
+            <span class="font-medium text-white/60">Confidencialidade garantida.</span>
+            Suas informações são usadas apenas na análise desta denúncia. Você receberá o protocolo
+            por e-mail.
+          </p>
+        </div>
+      </aside>
+    </form>
   }
 </div>
 
