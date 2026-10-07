@@ -2,12 +2,12 @@
   <div class="mb-6 flex items-center gap-3">
     <a
       routerLink="/reports"
-      class="text-sm! text-slate-600! transition hover:text-slate-950! dark:text-white/45! dark:hover:text-white/80!"
+      class="text-sm! text-slate-700! transition hover:text-slate-950! dark:text-white/45! dark:hover:text-white/80!"
     >
       ← Denúncias
     </a>
 
-    <span class="text-slate-300! dark:text-white/15!">|</span>
+    <span class="text-slate-400! dark:text-white/20!">|</span>
 
     <h1 class="text-xl! font-bold! text-slate-950! dark:text-white!">Detalhes da Denúncia</h1>
   </div>
@@ -276,7 +276,7 @@
               type="button"
               (click)="updateStatus()"
               [disabled]="report.status === 'RESOLVED'"
-              class="btn-primary min-h-11 shrink-0 cursor-pointer px-5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-40"
+              class="min-h-11! shrink-0 cursor-pointer rounded-xl! bg-slate-900! px-5! py-2.5! text-sm! font-semibold! text-white! transition hover:bg-slate-800! disabled:cursor-not-allowed disabled:opacity-40 dark:bg-white/10! dark:text-white! dark:hover:bg-white/15!"
             >
               Salvar
             </button>
