@@ -48,7 +48,7 @@ export class NavbarComponent {
     { path: '/teams', label: 'Times', icon: Users2 },
     { path: '/reports', label: 'Denúncias', icon: FileWarning },
     { path: '/users', label: 'Usuários', icon: Users },
-    { path: '/faq', label: 'FAQ', icon: CircleHelp },
+    { path: '/faq', label: 'Perguntas Frequentes', icon: CircleHelp },
   ];
 
   logout(): void {
