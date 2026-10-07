@@ -2,14 +2,14 @@
   <div class="mb-6 flex items-center gap-3">
     <a
       routerLink="/reports"
-      class="text-sm text-slate-500 transition hover:text-slate-900 dark:text-white/30 dark:hover:text-white/70"
+      class="text-sm! text-slate-600! transition hover:text-slate-950! dark:text-white/45! dark:hover:text-white/80!"
     >
       ← Denúncias
     </a>
 
-    <span class="text-slate-300 dark:text-white/10">|</span>
+    <span class="text-slate-300! dark:text-white/15!">|</span>
 
-    <h1 class="text-xl font-bold text-slate-900 dark:text-white">Detalhes da Denúncia</h1>
+    <h1 class="text-xl! font-bold! text-slate-950! dark:text-white!">Detalhes da Denúncia</h1>
   </div>
 
   @if (loading) {
@@ -22,7 +22,7 @@
 
   @if (error) {
     <div
-      class="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400"
+      class="rounded-xl border border-red-300 bg-red-50 p-3 text-sm! text-red-700! dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400!"
       role="alert"
     >
       {{ error }}
@@ -31,13 +31,14 @@
 
   @if (!loading && report) {
     <div class="space-y-5">
+      <!-- Ticket do protocolo -->
       <section
-        class="relative overflow-hidden rounded-2xl bg-white shadow-xl shadow-slate-200/50 dark:bg-[#15141b] dark:shadow-black/30"
+        class="relative overflow-hidden! rounded-2xl! border-0! bg-[#15141b]! text-white! shadow-2xl!"
       >
         <div
-          class="pointer-events-none absolute inset-0 opacity-[0.04] dark:opacity-[0.045]"
+          class="pointer-events-none absolute inset-0 opacity-[0.045]"
           style="
-            background-image: radial-gradient(rgba(15, 23, 42, 0.8) 0.6px, transparent 0.6px);
+            background-image: radial-gradient(rgba(255, 255, 255, 0.9) 0.6px, transparent 0.6px);
             background-size: 5px 5px;
           "
         ></div>
@@ -45,7 +46,7 @@
         <div
           class="pointer-events-none absolute left-0 top-0 z-10 h-full w-3"
           style="
-            background: radial-gradient(circle at 0 8px, #f8fafc 0 5px, transparent 5.5px) 0 0 /
+            background: radial-gradient(circle at 0 8px, #06060f 0 5px, transparent 5.5px) 0 0 /
               12px 16px repeat-y;
           "
         ></div>
@@ -53,35 +54,29 @@
         <div
           class="pointer-events-none absolute right-0 top-0 z-10 h-full w-3"
           style="
-            background: radial-gradient(circle at 12px 8px, #f8fafc 0 5px, transparent 5.5px) 0 0 /
+            background: radial-gradient(circle at 12px 8px, #06060f 0 5px, transparent 5.5px) 0 0 /
               12px 16px repeat-y;
           "
         ></div>
 
-        <div
-          class="relative z-0 border-b border-dashed border-slate-200 px-7 pb-5 pt-7 dark:border-white/15 sm:px-10"
-        >
+        <div class="relative z-0 border-b! border-dashed! border-white/15! px-7 pb-5 pt-7 sm:px-10">
           <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div class="flex min-w-0 items-start gap-3">
               <div
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/7"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10!"
               >
-                <lucide-icon
-                  [img]="TicketIcon"
-                  size="19"
-                  class="text-slate-600 dark:text-white/60"
-                />
+                <lucide-icon [img]="TicketIcon" size="19" class="text-white/70!" />
               </div>
 
               <div class="min-w-0">
                 <p
-                  class="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-white/35"
+                  class="mb-1 text-[10px]! font-semibold! uppercase tracking-[0.18em] text-white/50!"
                 >
                   Knowball · Protocolo de denúncia
                 </p>
 
                 <p
-                  class="break-all font-mono text-xl font-bold tracking-wide text-slate-900 dark:text-white/95 sm:text-2xl"
+                  class="break-all font-mono text-xl font-bold tracking-wide text-white! sm:text-2xl"
                 >
                   {{ report.protocol }}
                 </p>
@@ -112,31 +107,27 @@
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-8">
             <div class="flex min-w-0 gap-3">
               <div
-                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/6"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10!"
               >
-                <lucide-icon
-                  [img]="MapPinIcon"
-                  size="16"
-                  class="text-slate-600 dark:text-white/45"
-                />
+                <lucide-icon [img]="MapPinIcon" size="16" class="text-white/65!" />
               </div>
 
               <div class="min-w-0">
                 <p
-                  class="mb-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500 dark:text-white/35"
+                  class="mb-1 text-[10px]! font-semibold! uppercase tracking-[0.15em] text-white/50!"
                 >
                   Partida / Local
                 </p>
 
-                <p class="truncate text-sm font-semibold text-slate-800 dark:text-white/85">
+                <p class="truncate text-sm font-semibold text-white/90!">
                   {{ report.game.place }}
                 </p>
 
-                <p class="mt-1 text-xs tabular-nums text-slate-500 dark:text-white/40">
+                <p class="mt-1 text-xs tabular-nums text-white/60!">
                   {{ report.game.matchDate | date: 'dd/MM/yyyy · HH:mm' }}
                 </p>
 
-                <p class="mt-1 truncate text-xs text-slate-400 dark:text-white/25">
+                <p class="mt-1 truncate text-xs text-white/45!">
                   {{ report.game.championship.name }}
                 </p>
               </div>
@@ -144,28 +135,28 @@
 
             <div class="flex min-w-0 gap-3">
               <div
-                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/6"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/10!"
               >
-                <lucide-icon [img]="UserIcon" size="16" class="text-slate-600 dark:text-white/45" />
+                <lucide-icon [img]="UserIcon" size="16" class="text-white/65!" />
               </div>
 
               <div class="min-w-0">
                 <p
-                  class="mb-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500 dark:text-white/35"
+                  class="mb-1 text-[10px]! font-semibold! uppercase tracking-[0.15em] text-white/50!"
                 >
                   Árbitro informado
                 </p>
 
-                <p class="truncate text-sm font-semibold text-slate-800 dark:text-white/85">
+                <p class="truncate text-sm font-semibold text-white/90!">
                   {{ report.referee.name }}
                 </p>
 
-                <p class="mt-1 text-xs tabular-nums text-slate-500 dark:text-white/40">
+                <p class="mt-1 text-xs tabular-nums text-white/60!">
                   Registro: {{ report.date | date: 'dd/MM/yyyy · HH:mm' }}
                 </p>
 
                 @if (report.user?.name) {
-                  <p class="mt-1 truncate text-xs text-slate-400 dark:text-white/25">
+                  <p class="mt-1 truncate text-xs text-white/45!">
                     Denunciante: {{ report.user?.name }}
                   </p>
                 }
@@ -175,17 +166,15 @@
         </div>
 
         <div
-          class="relative z-0 border-t border-dashed border-slate-200 bg-slate-50 px-7 py-4 dark:border-white/15 dark:bg-black/15 sm:px-10"
+          class="relative z-0 border-t! border-dashed! border-white/15! bg-black/15! px-7 py-4 sm:px-10"
         >
           <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p
-                class="text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500 dark:text-white/30"
-              >
+              <p class="text-[10px]! font-semibold! uppercase tracking-[0.15em] text-white/45!">
                 Comprovante digital
               </p>
 
-              <p class="mt-1 text-xs text-slate-600 dark:text-white/45">
+              <p class="mt-1 text-xs text-white/60!">
                 Guarde este protocolo para acompanhar o andamento da denúncia.
               </p>
             </div>
@@ -194,16 +183,14 @@
               <div class="flex h-9 items-stretch gap-px" aria-label="Código de barras do protocolo">
                 @for (bar of barcodeBars(report.protocol); track $index) {
                   <span
-                    class="block bg-slate-700 dark:bg-white/60"
+                    class="block bg-white/70!"
                     [style.width.px]="bar"
                     [style.opacity]="bar === 1 ? 0.45 : bar === 2 ? 0.65 : 0.9"
                   ></span>
                 }
               </div>
 
-              <span
-                class="font-mono text-[10px] tracking-[0.16em] text-slate-500 dark:text-white/40"
-              >
+              <span class="font-mono text-[10px] tracking-[0.16em] text-white/55!">
                 {{ report.protocol }}
               </span>
             </div>
@@ -211,44 +198,48 @@
         </div>
       </section>
 
-      <section class="glass overflow-hidden rounded-2xl">
+      <!-- Relato -->
+      <section
+        class="overflow-hidden! rounded-2xl! border! border-slate-200! bg-white! text-slate-900! shadow-lg! dark:border-white/10! dark:bg-[#15141b]! dark:text-white!"
+      >
         <div
-          class="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/8 sm:px-6"
+          class="flex items-center justify-between border-b! border-slate-200! px-5 py-4 dark:border-white/10! sm:px-6"
         >
           <div>
-            <p class="text-sm font-semibold text-slate-800 dark:text-white/85">
+            <p class="text-sm! font-semibold! text-slate-950! dark:text-white/90!">
               Relato da denúncia
             </p>
 
-            <p class="mt-0.5 text-xs text-slate-500 dark:text-white/35">
+            <p class="mt-0.5 text-xs! text-slate-600! dark:text-white/45!">
               Informações fornecidas pelo denunciante.
             </p>
           </div>
 
           <span
-            class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-white/25"
+            class="text-[10px]! font-semibold! uppercase tracking-wider text-slate-500! dark:text-white/35!"
           >
             Confidencial
           </span>
         </div>
 
         <div class="px-5 py-5 sm:px-6">
-          <p class="whitespace-pre-wrap text-sm leading-7 text-slate-700 dark:text-white/70">
+          <p class="whitespace-pre-wrap text-sm! leading-7! text-slate-700! dark:text-white/75!">
             {{ report.content }}
           </p>
         </div>
       </section>
 
+      <!-- Atualização do andamento -->
       @if (auth.isAdmin()) {
         <section
-          class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/40 dark:border-white/8 dark:bg-[#15141b] dark:shadow-black/20 sm:p-6"
+          class="space-y-4 rounded-2xl! border! border-slate-200! bg-white! p-5! text-slate-900! shadow-lg! dark:border-white/10! dark:bg-[#15141b]! dark:text-white! sm:p-6!"
         >
           <div>
-            <p class="text-sm font-semibold text-slate-900 dark:text-white/85">
+            <p class="text-sm! font-semibold! text-slate-950! dark:text-white/90!">
               Atualizar andamento
             </p>
 
-            <p class="mt-0.5 text-xs text-slate-500 dark:text-white/35">
+            <p class="mt-0.5 text-xs! text-slate-600! dark:text-white/45!">
               Registre a análise ou a resolução desta denúncia.
             </p>
           </div>
@@ -256,7 +247,7 @@
           <div class="flex flex-col gap-3 sm:flex-row">
             <select
               [(ngModel)]="selectedStatus"
-              class="input-field min-h-11 flex-1 border-slate-300 bg-slate-50 text-slate-800 focus:border-slate-400 focus:ring-slate-400 dark:border-white/10 dark:bg-[#1c1b19] dark:text-white/80"
+              class="input-field min-h-11 flex-1 border-slate-300! bg-slate-50! text-slate-900! dark:border-white/10! dark:bg-[#1c1b19]! dark:text-white/85!"
               [disabled]="report.status === 'RESOLVED'"
             >
               @if (report.status === 'NEW') {
@@ -267,18 +258,12 @@
                 <option value="UNDER_REVIEW">Em análise</option>
               }
 
-              @if (
-                report.status === 'NEW' ||
-                report.status === 'UNDER_REVIEW' ||
-                report.status === 'RESOLVED'
-              ) {
-                <option value="RESOLVED">Resolvida</option>
-              }
+              <option value="RESOLVED">Resolvida</option>
             </select>
 
             <select
               [(ngModel)]="selectedResult"
-              class="input-field min-h-11 flex-1 border-slate-300 bg-slate-50 text-slate-800 focus:border-slate-400 focus:ring-slate-400 dark:border-white/10 dark:bg-[#1c1b19] dark:text-white/80"
+              class="input-field min-h-11 flex-1 border-slate-300! bg-slate-50! text-slate-900! dark:border-white/10! dark:bg-[#1c1b19]! dark:text-white/85!"
               [disabled]="report.status === 'RESOLVED'"
             >
               <option value="">Sem resultado</option>
@@ -298,26 +283,29 @@
           </div>
 
           @if (updateSuccess) {
-            <p class="text-xs text-emerald-600 dark:text-emerald-400">
+            <p class="text-xs! text-emerald-700! dark:text-emerald-400!">
               ✓ Status atualizado com sucesso.
             </p>
           }
 
           @if (updateError) {
-            <p class="text-xs text-red-600 dark:text-red-400">
+            <p class="text-xs! text-red-700! dark:text-red-400!">
               {{ updateError }}
             </p>
           }
         </section>
       }
 
+      <!-- Exclusão -->
       @if (canDelete()) {
         <section
-          class="space-y-3 rounded-2xl border border-red-200 bg-white p-5 shadow-lg shadow-slate-200/40 dark:border-red-500/20 dark:bg-[#15141b] dark:shadow-black/20 sm:p-6"
+          class="space-y-3 rounded-2xl! border! border-red-200! bg-white! p-5! text-slate-900! shadow-lg! dark:border-red-500/20! dark:bg-[#15141b]! dark:text-white! sm:p-6!"
         >
-          <p class="text-sm font-semibold text-slate-900 dark:text-white/85">Excluir denúncia</p>
+          <p class="text-sm! font-semibold! text-slate-950! dark:text-white/90!">
+            Excluir denúncia
+          </p>
 
-          <p class="text-xs leading-relaxed text-slate-500 dark:text-white/40">
+          <p class="text-xs! leading-relaxed! text-slate-600! dark:text-white/45!">
             Esta ação remove a denúncia permanentemente e não pode ser desfeita.
           </p>
 
@@ -326,7 +314,7 @@
               type="button"
               (click)="confirmDelete()"
               [disabled]="deleting"
-              class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl bg-red-500/10 px-4 py-2 text-red-600 transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-red-500/15 dark:text-red-400 dark:hover:bg-red-500/20"
+              class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl bg-red-500/10 px-4 py-2 text-red-700! transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-red-500/15 dark:text-red-400! dark:hover:bg-red-500/20"
             >
               <lucide-icon [img]="TrashIcon" size="16"></lucide-icon>
               {{ deleting ? 'Excluindo...' : 'Excluir denúncia' }}
@@ -334,7 +322,7 @@
           </div>
 
           @if (deleteError) {
-            <p class="text-xs text-red-600 dark:text-red-400">
+            <p class="text-xs! text-red-700! dark:text-red-400!">
               {{ deleteError }}
             </p>
           }
