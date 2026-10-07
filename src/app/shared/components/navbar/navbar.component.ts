@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideAngularModule, Moon, Sun } from 'lucide-angular';
+import { LucideAngularModule, Moon, Sun, CircleHelp } from 'lucide-angular';
+
 import {
   LayoutDashboard,
   Trophy,
@@ -47,6 +48,7 @@ export class NavbarComponent {
     { path: '/teams', label: 'Times', icon: Users2 },
     { path: '/reports', label: 'Denúncias', icon: FileWarning },
     { path: '/users', label: 'Usuários', icon: Users },
+    { path: '/faq', label: 'FAQ', icon: CircleHelp },
   ];
 
   logout(): void {

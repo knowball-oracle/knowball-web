@@ -219,6 +219,10 @@ export const routes: Routes = [
         ],
       },
       {
+        path: 'faq',
+        loadComponent: () => import('./features/faq/faq.component').then((m) => m.FaqComponent),
+      },
+      {
         path: 'profile',
         loadComponent: () =>
           import('./shared/components/update-profile/update-profile.component').then(
