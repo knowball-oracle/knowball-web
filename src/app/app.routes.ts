@@ -219,6 +219,12 @@ export const routes: Routes = [
         ],
       },
       {
+        path: 'oracle-apex',
+        canActivate: [AdminGuard],
+        loadComponent: () =>
+          import('./features/oracle-apex/oracle-apex.component').then((c) => c.OracleApexComponent),
+      },
+      {
         path: 'faq',
         loadComponent: () => import('./features/faq/faq.component').then((m) => m.FaqComponent),
       },

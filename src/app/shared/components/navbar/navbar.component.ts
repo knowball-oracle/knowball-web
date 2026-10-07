@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideAngularModule, Moon, Sun, CircleHelp } from 'lucide-angular';
+import { LucideAngularModule, Moon, Sun, CircleHelp, Database } from 'lucide-angular';
 
 import {
   LayoutDashboard,
@@ -48,6 +48,7 @@ export class NavbarComponent {
     { path: '/teams', label: 'Times', icon: Users2 },
     { path: '/reports', label: 'Denúncias', icon: FileWarning },
     { path: '/users', label: 'Usuários', icon: Users },
+    { path: '/oracle-apex', label: 'Oracle APEX', icon: Database },
     { path: '/faq', label: 'Perguntas Frequentes', icon: CircleHelp },
   ];
 
