@@ -245,6 +245,59 @@ body {
     border-right: 1px solid rgba(255, 255, 255, 0.07);
   }
 
+  .navbar-profile {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .navbar-profile .text-white {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .navbar-profile .text-white\/85 {
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .navbar-profile .text-white\/35 {
+    color: rgba(255, 255, 255, 0.48);
+  }
+
+  .navbar-profile .text-white\/30 {
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  .navbar-profile .hover\:text-white\/80:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  [data-theme='light'] .navbar-profile {
+    border-color: rgba(15, 15, 30, 0.08);
+    color: rgba(15, 15, 30, 0.9);
+  }
+
+  [data-theme='light'] .navbar-profile .text-white {
+    color: rgba(15, 15, 30, 0.92);
+  }
+
+  [data-theme='light'] .navbar-profile .text-white\/85 {
+    color: rgba(15, 15, 30, 0.88);
+  }
+
+  [data-theme='light'] .navbar-profile .text-white\/35 {
+    color: rgba(15, 15, 30, 0.56);
+  }
+
+  [data-theme='light'] .navbar-profile .text-white\/30 {
+    color: rgba(15, 15, 30, 0.5);
+  }
+
+  [data-theme='light'] .navbar-profile .hover\:bg-white\/8:hover {
+    background-color: rgba(15, 15, 30, 0.06);
+  }
+
+  [data-theme='light'] .navbar-profile .hover\:text-white\/80:hover {
+    color: rgba(15, 15, 30, 0.92);
+  }
+
   [data-theme='light'] .app-navbar {
     border-right-color: rgba(15, 15, 30, 0.06);
   }
