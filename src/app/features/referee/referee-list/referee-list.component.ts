@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { LucideAngularModule, Search, ShieldCheck, UserRound, X } from 'lucide-angular';
+import { ArrowDown, LucideAngularModule, Search, ShieldCheck, UserRound, X } from 'lucide-angular';
 import { Pencil, Trash2, Plus } from '../../../shared/icons/icons';
 import { RefereeService } from '../services/referee.service';
 import { Referee } from '../../../models/referee.model';
@@ -12,10 +12,8 @@ import { AuthService } from '../../../core/services/auth.service';
 interface StatusMeta {
   label: string;
   description: string;
-  gradient: string;
   badge: string;
   activeChip: string;
-  ring: string;
   dot: string;
   icon: string;
 }
@@ -24,44 +22,37 @@ const STATUS_META: Record<string, StatusMeta> = {
   ACTIVE: {
     label: 'Ativos',
     description: 'Em atividade',
-    gradient: 'bg-linear-to-br from-emerald-500 to-teal-800',
-    badge: 'bg-emerald-500/10 text-emerald-400',
-    activeChip: 'border-emerald-400/60 text-emerald-400',
-    ring: 'ring-emerald-400/80',
-    dot: 'bg-emerald-400',
-    icon: 'text-emerald-400',
+    badge: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+    activeChip:
+      'border-emerald-500/60 text-emerald-700 dark:border-emerald-400/60 dark:text-emerald-400',
+    dot: 'bg-emerald-500 dark:bg-emerald-400',
+    icon: 'text-emerald-700 dark:text-emerald-400',
   },
   INACTIVE: {
     label: 'Inativos',
     description: 'Sem atuação',
-    gradient: 'bg-linear-to-br from-slate-500 to-slate-800',
-    badge: 'bg-white/8 text-white/50',
-    activeChip: 'border-white/30 text-white/70',
-    ring: 'ring-slate-400/80',
-    dot: 'bg-slate-400',
-    icon: 'text-slate-300',
+    badge: 'bg-slate-500/10 text-slate-700 dark:text-slate-300',
+    activeChip: 'border-slate-400/60 text-slate-700 dark:border-white/30 dark:text-white/70',
+    dot: 'bg-slate-500 dark:bg-slate-400',
+    icon: 'text-slate-600 dark:text-slate-300',
   },
   SUSPENDED: {
     label: 'Suspensos',
     description: 'Atenção necessária',
-    gradient: 'bg-linear-to-br from-rose-500 to-red-900',
-    badge: 'bg-red-500/10 text-red-400',
-    activeChip: 'border-red-400/60 text-red-400',
-    ring: 'ring-red-400/80',
-    dot: 'bg-red-400',
-    icon: 'text-red-400',
+    badge: 'bg-red-500/10 text-red-700 dark:text-red-400',
+    activeChip: 'border-red-500/60 text-red-700 dark:border-red-400/60 dark:text-red-400',
+    dot: 'bg-red-500 dark:bg-red-400',
+    icon: 'text-red-700 dark:text-red-400',
   },
 };
 
 const FALLBACK_STATUS: StatusMeta = {
   label: 'Outros',
   description: 'Status não informado',
-  gradient: 'bg-linear-to-br from-slate-500 to-slate-800',
-  badge: 'bg-white/8 text-white/50',
-  activeChip: 'border-white/30 text-white/70',
-  ring: 'ring-slate-400/80',
+  badge: 'bg-slate-500/10 text-slate-700 dark:text-slate-300',
+  activeChip: 'border-slate-400/60 text-slate-700 dark:border-white/30 dark:text-white/70',
   dot: 'bg-slate-400',
-  icon: 'text-slate-300',
+  icon: 'text-slate-600 dark:text-slate-300',
 };
 
 @Component({
@@ -72,6 +63,7 @@ const FALLBACK_STATUS: StatusMeta = {
 })
 export class RefereeListComponent implements OnInit {
   private service = inject(RefereeService);
+  private document = inject(DOCUMENT);
   auth = inject(AuthService);
 
   items: Referee[] = [];
@@ -80,9 +72,9 @@ export class RefereeListComponent implements OnInit {
   pendingDeleteId: number | null = null;
 
   search = '';
-  sortBy: 'recent' | 'name' = 'name';
   selectedStatus: string | null = null;
 
+  readonly ArrowDownIcon = ArrowDown;
   readonly PencilIcon = Pencil;
   readonly TrashIcon = Trash2;
   readonly PlusIcon = Plus;
@@ -113,6 +105,14 @@ export class RefereeListComponent implements OnInit {
     });
   }
 
+  scrollToList(): void {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    this.document
+      .getElementById('arbitros-lista')
+      ?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  }
+
   meta(status: string | null | undefined): StatusMeta {
     return (status && STATUS_META[status]) || FALLBACK_STATUS;
   }
@@ -121,7 +121,7 @@ export class RefereeListComponent implements OnInit {
     return this.items.filter((item) => item.status === status).length;
   }
 
-  toggleStatus(status: string | null): void {
+  toggleStatus(status: string): void {
     this.selectedStatus = this.selectedStatus === status ? null : status;
   }
 
@@ -137,19 +137,13 @@ export class RefereeListComponent implements OnInit {
   get filteredItems(): Referee[] {
     const term = this.normalize(this.search);
 
-    const filtered = this.items.filter((item) => {
-      const matchesStatus = !this.selectedStatus || item.status === this.selectedStatus;
-      const matchesSearch = !term || this.normalize(item.name).includes(term);
-      return matchesStatus && matchesSearch;
-    });
-
-    return [...filtered].sort((a, b) => {
-      if (this.sortBy === 'name') {
-        return a.name.localeCompare(b.name, 'pt-BR');
-      }
-
-      return this.dateValue(b.birthDate) - this.dateValue(a.birthDate);
-    });
+    return this.items
+      .filter((item) => {
+        const matchesStatus = !this.selectedStatus || item.status === this.selectedStatus;
+        const matchesSearch = !term || this.normalize(item.name).includes(term);
+        return matchesStatus && matchesSearch;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
   }
 
   initials(name: string): string {
@@ -204,11 +198,5 @@ export class RefereeListComponent implements OnInit {
 
   private normalize(value: string | null | undefined): string {
     return (value ?? '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
-  }
-
-  private dateValue(value: string | Date | null | undefined): number {
-    if (!value) return 0;
-    const timestamp = new Date(value).getTime();
-    return Number.isNaN(timestamp) ? 0 : timestamp;
   }
 }
