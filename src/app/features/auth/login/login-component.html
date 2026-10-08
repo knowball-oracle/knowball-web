@@ -2,14 +2,6 @@
   class="relative flex min-h-dvh items-center justify-center overflow-hidden bg-[#06060f] px-4 py-8 sm:px-6 lg:px-8"
 >
   <div
-    class="pointer-events-none absolute -left-40 -top-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl"
-  ></div>
-
-  <div
-    class="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-violet-500/10 blur-3xl"
-  ></div>
-
-  <div
     class="pointer-events-none absolute inset-0 opacity-[0.035]"
     style="
       background-image: radial-gradient(rgba(255, 255, 255, 0.9) 0.6px, transparent 0.6px);
@@ -17,42 +9,40 @@
     "
   ></div>
 
+  <div
+    class="pointer-events-none absolute inset-0 bg-radial-[at_50%_0%] from-white/[0.035] via-transparent to-black/30"
+  ></div>
+
   <main
-    class="relative grid w-full max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-[#101019]/90 shadow-2xl shadow-black/50 backdrop-blur-2xl lg:grid-cols-[1fr_430px]"
+    class="relative grid w-full max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-[#101019]/90 shadow-2xl shadow-black/60 backdrop-blur-2xl lg:grid-cols-[1fr_430px]"
   >
     <section
-      class="relative hidden min-h-162.5 overflow-hidden border-r border-white/10 bg-linear-to-br from-[#111827] via-[#11131e] to-[#190f18] p-10 lg:flex lg:flex-col lg:justify-between"
+      class="relative hidden min-h-162.5 overflow-hidden border-r border-white/10 bg-linear-to-br from-[#15151d] via-[#101019] to-[#0b0b11] p-10 lg:flex lg:flex-col lg:justify-between"
     >
       <div
-        class="pointer-events-none absolute -right-32 top-20 h-72 w-72 rounded-full bg-red-500/15 blur-3xl"
+        class="pointer-events-none absolute -right-28 top-16 h-72 w-72 rounded-full bg-white/2.5 blur-3xl"
       ></div>
 
       <div
-        class="pointer-events-none absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl"
+        class="pointer-events-none absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-white/2 blur-3xl"
       ></div>
 
       <div class="relative">
         <div class="flex items-center gap-3">
           <img src="/assets/logo.svg" alt="Knowball" class="h-10 w-auto" />
-
-          <span class="h-5 w-px bg-white/15"></span>
-
-          <span class="text-xs font-medium uppercase tracking-[0.16em] text-white/40">
-            Integridade no futebol
-          </span>
         </div>
 
         <div class="mt-28 max-w-md">
-          <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300/80">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/40">
             Uma base mais transparente
           </p>
 
           <h1 class="mt-4 text-4xl font-bold leading-tight tracking-tight text-white xl:text-5xl">
             Informação que protege
-            <span class="text-cyan-300">o jogo.</span>
+            <span class="block text-white/65">o jogo.</span>
           </h1>
 
-          <p class="mt-5 text-sm leading-7 text-white/55">
+          <p class="mt-5 text-sm leading-7 text-white/50">
             O Knowball conecta relatos, partidas e análises para fortalecer a integridade das
             categorias de base do futebol brasileiro.
           </p>
@@ -60,24 +50,24 @@
       </div>
 
       <div class="relative grid grid-cols-3 gap-3">
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-xl">
           <p class="text-xl font-bold text-white">01</p>
           <p class="mt-1 text-xs leading-relaxed text-white/40">Relatos centralizados</p>
         </div>
 
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-xl">
           <p class="text-xl font-bold text-white">24h</p>
           <p class="mt-1 text-xs leading-relaxed text-white/40">Acompanhamento contínuo</p>
         </div>
 
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-xl">
           <p class="text-xl font-bold text-white">100%</p>
           <p class="mt-1 text-xs leading-relaxed text-white/40">Confidencialidade</p>
         </div>
       </div>
     </section>
 
-    <section class="p-6 sm:p-10 lg:p-12">
+    <section class="bg-[#111119]/85 p-6 backdrop-blur-2xl sm:p-10 lg:p-12">
       <div class="mx-auto max-w-sm">
         <div class="mb-8 flex items-center justify-center lg:hidden">
           <img src="/assets/logo.svg" alt="Knowball" class="h-11 w-auto" />
@@ -85,11 +75,8 @@
 
         <div class="mb-8">
           <div
-            class="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-300"
-          >
-            <lucide-icon [img]="ShieldIcon" size="13" />
-            Acesso seguro
-          </div>
+            class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/4 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/55"
+          ></div>
 
           <h2 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
             Entre na sua conta
@@ -102,10 +89,10 @@
 
         @if (error) {
           <div
-            class="mb-5 flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-300"
+            class="mb-5 flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/75"
             role="alert"
           >
-            <span class="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-red-400"></span>
+            <span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-white/70"></span>
             <span>{{ error }}</span>
           </div>
         }
@@ -119,20 +106,18 @@
               Seu e-mail
             </label>
 
-            <div class="relative">
-              <input
-                id="email"
-                formControlName="email"
-                type="email"
-                autocomplete="email"
-                placeholder="seu@email.com"
-                class="input-field min-h-12 pl-4 pr-4"
-                [class.border-red-500/50]="email.invalid && email.touched"
-              />
-            </div>
+            <input
+              id="email"
+              formControlName="email"
+              type="email"
+              autocomplete="email"
+              placeholder="seu@email.com"
+              class="input-field min-h-12 px-4"
+              [class.border-white/30]="email.invalid && email.touched"
+            />
 
             @if (email.invalid && email.touched) {
-              <p class="mt-1.5 text-xs text-red-400">
+              <p class="mt-1.5 text-xs text-white/55">
                 {{ email.hasError('required') ? 'E-mail é obrigatório.' : 'E-mail inválido.' }}
               </p>
             }
@@ -157,8 +142,8 @@
                 [type]="showPassword ? 'text' : 'password'"
                 autocomplete="current-password"
                 placeholder="Digite sua senha"
-                class="input-field min-h-12 pl-4 pr-12"
-                [class.border-red-500/50]="password.invalid && password.touched"
+                class="input-field min-h-12 px-4 pr-12"
+                [class.border-white/30]="password.invalid && password.touched"
               />
 
               <button
@@ -172,7 +157,7 @@
             </div>
 
             @if (password.invalid && password.touched) {
-              <p class="mt-1.5 text-xs text-red-400">
+              <p class="mt-1.5 text-xs text-white/55">
                 Senha é obrigatória e deve ter pelo menos 6 caracteres.
               </p>
             }
@@ -181,7 +166,7 @@
           <button
             type="submit"
             [disabled]="loading"
-            class="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-slate-950 transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
+            class="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-[#101019] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {{ loading ? 'Entrando...' : 'Entrar na minha conta' }}
 
@@ -204,9 +189,11 @@
 
         <div class="my-7 flex items-center gap-3">
           <div class="h-px flex-1 bg-white/10"></div>
+
           <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/25">
             ou
           </span>
+
           <div class="h-px flex-1 bg-white/10"></div>
         </div>
 
@@ -214,7 +201,7 @@
           type="button"
           (click)="loginWithGoogle()"
           [disabled]="googleLoading"
-          class="flex min-h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-medium text-white/80 transition-all duration-200 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+          class="flex min-h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/4 px-4 text-sm font-medium text-white/80 transition-all duration-200 hover:bg-white/8 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <svg
             width="18"
