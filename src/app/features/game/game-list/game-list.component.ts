@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { LucideAngularModule, X } from 'lucide-angular';
+import { ArrowDown, LucideAngularModule, X } from 'lucide-angular';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Eye, Pencil, Trash2, Plus, Shield, MapPin } from '../../../shared/icons/icons';
@@ -81,6 +81,7 @@ const FALLBACK_META: CategoryMeta = {
 export class GameListComponent implements OnInit {
   private service = inject(GameService);
   private participationSvc = inject(ParticipationService);
+  private document = inject(DOCUMENT);
   auth = inject(AuthService);
 
   games: GameWithTeams[] = [];
@@ -101,6 +102,7 @@ export class GameListComponent implements OnInit {
   readonly ShieldIcon = Shield;
   readonly MapPinIcon = MapPin;
   readonly XIcon = X;
+  readonly ArrowDownIcon = ArrowDown;
 
   ngOnInit(): void {
     this.load();
@@ -269,6 +271,15 @@ export class GameListComponent implements OnInit {
         this.error = 'Erro ao excluir partida.';
         this.pendingDeleteId = null;
       },
+    });
+  }
+
+  scrollToList(): void {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    this.document.getElementById('partidas-lista')?.scrollIntoView({
+      behavior: reduceMotion ? 'auto' : 'smooth',
+      block: 'start',
     });
   }
 }
