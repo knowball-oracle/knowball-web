@@ -1,152 +1,253 @@
-<div class="p-6 md:p-8 max-w-5xl mx-auto">
-  <div class="flex items-center justify-between mb-6">
-    <div>
-      <h1 class="text-xl font-bold text-white sm:text-2xl">Times</h1>
-      <p class="mt-0.5 text-sm text-white/40">Times participantes dos campeonatos.</p>
-    </div>
-    @if (auth.isAdmin()) {
-      <a routerLink="/teams/new" class="btn-primary text-sm flex items-center gap-1.5">
-        <lucide-icon [img]="PlusIcon" size="15" /> Novo
-      </a>
-    }
-  </div>
+<div class="mx-auto w-full max-w-6xl p-4 sm:p-6 md:p-8">
+  <!-- Hero -->
+  <section
+    class="relative isolate flex min-h-[72svh] flex-col justify-between overflow-hidden rounded-3xl bg-slate-950 p-5 sm:min-h-[78svh] sm:p-8"
+  >
+    <img
+      src="assets/teams.jpg"
+      alt="Jogadores das categorias de base disputando uma partida de futebol"
+      fetchpriority="high"
+      class="absolute inset-0 -z-20 h-full w-full object-cover"
+    />
 
-  @if (!loading && !error && items.length > 0) {
-    <div class="flex items-center gap-3 mb-4">
-      <div class="relative">
-        <select
-          [(ngModel)]="selectedState"
-          class="appearance-none bg-white/5 border border-white/10 text-white/70 text-xs font-medium rounded-lg pl-3 pr-8 py-1.5 focus:outline-none focus:border-white/25 focus:bg-white/8 transition-all duration-200 cursor-pointer"
+    <div class="absolute inset-0 -z-10 bg-linear-to-t from-black/90 via-black/45 to-black/55"></div>
+
+    <div class="flex items-start justify-between gap-3">
+      <span
+        class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-medium text-white/85 backdrop-blur-xl"
+      >
+        <lucide-icon [img]="ShieldIcon" size="13" />
+        Futebol de base · Times em campo
+      </span>
+
+      @if (auth.isAdmin()) {
+        <a
+          routerLink="/teams/new"
+          class="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-4 text-xs font-semibold text-white backdrop-blur-xl transition hover:bg-white/20"
         >
-          <option value="">Todos os estados</option>
-          @for (uf of states; track uf) {
-            <option [value]="uf">{{ uf }}</option>
-          }
-        </select>
+          <lucide-icon [img]="PlusIcon" size="14" />
+          Novo
+        </a>
+      }
+    </div>
 
-        <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-          <svg
-            class="w-3 h-3 text-white/30"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2.5"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-2xl">
+        <h1
+          class="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl"
+        >
+          Os times que formam
+          <span class="block font-light italic text-white/70"> o futuro do futebol. </span>
+        </h1>
+
+        <p class="mt-5 max-w-xl text-sm leading-7 text-white/70 sm:text-base">
+          Conheça os clubes e projetos que participam dos campeonatos monitorados pelo Knowball e
+          ajudam a construir uma base mais transparente, segura e competitiva.
+        </p>
+
+        <button
+          type="button"
+          (click)="scrollToList()"
+          class="mt-7 inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-slate-950 transition hover:bg-white/90"
+        >
+          Ver times
+          <lucide-icon [img]="ArrowDownIcon" size="16" />
+        </button>
       </div>
 
-      @if (selectedState) {
-        <span class="text-xs text-white/30">
-          {{ filteredItems.length }}
-          {{ filteredItems.length === 1 ? 'time' : 'times' }} em
-          <span class="text-white/50 font-medium">{{ selectedState }}</span>
-        </span>
-        <button
-          (click)="selectedState = ''"
-          class="text-xs text-white/30 hover:text-white/60 transition cursor-pointer"
-        >
-          Limpar
-        </button>
-      }
-    </div>
-  }
+      <aside
+        class="w-full rounded-2xl border border-white/15 bg-white/10 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl sm:max-w-xs"
+      >
+        <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55">
+          Panorama dos times
+        </p>
 
-  @if (loading) {
-    <div class="space-y-2">
-      @for (_ of [1, 2, 3, 4]; track $index) {
-        <div class="skeleton h-14 rounded-xl"></div>
-      }
-    </div>
-  }
+        <p class="mt-2 flex items-baseline gap-2 text-white">
+          <span class="text-4xl font-bold tabular-nums">
+            {{ loading ? '–' : items.length }}
+          </span>
 
-  @if (error) {
-    <div class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-      {{ error }}
-    </div>
-  }
+          <span class="text-sm text-white/65"> times cadastrados </span>
+        </p>
 
-  @if (!loading && !error) {
-    @if (items.length === 0) {
-      <div class="glass rounded-2xl py-16 text-center">
-        <p class="text-white/30 text-sm">Nenhum time cadastrado.</p>
-        @if (auth.isAdmin()) {
-          <a
-            routerLink="/teams/new"
-            class="inline-block mt-3 text-sm text-white/50 hover:text-white transition"
-          >
-            Cadastrar o primeiro →
-          </a>
+        <div class="mt-4 border-t border-white/10 pt-4">
+          <p class="text-xs leading-relaxed text-white/60">
+            Clubes e equipes organizados por estado para facilitar o acompanhamento das competições
+            de base.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="times-lista" class="scroll-mt-6 pt-10 sm:pt-14">
+    <div class="mb-6">
+      <h2 class="text-xl font-bold text-slate-950 sm:text-2xl dark:text-white">Times</h2>
+
+      <p class="mt-1 text-sm text-slate-600 dark:text-white/45">
+        Times participantes dos campeonatos monitorados.
+      </p>
+    </div>
+
+    @if (loading) {
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        @for (_ of [1, 2, 3, 4, 5, 6]; track $index) {
+          <div class="skeleton h-36 rounded-2xl"></div>
         }
       </div>
-    } @else if (filteredItems.length === 0) {
-      <div class="glass rounded-2xl py-12 text-center">
-        <p class="text-white/30 text-sm">Nenhum time para esta UF.</p>
-        <button
-          (click)="selectedState = ''"
-          class="inline-block mt-3 text-sm text-white/50 hover:text-white transition cursor-pointer"
-        >
-          Limpar filtro →
-        </button>
-      </div>
-    } @else {
-      <div class="glass rounded-2xl overflow-x-auto">
-        <table class="w-full text-sm text-left">
-          <thead class="border-b border-white/8">
-            <tr class="text-white/30 uppercase text-xs tracking-wider">
-              <th class="px-5 py-3">Nome</th>
-              <th class="px-5 py-3">Cidade</th>
-              <th class="px-5 py-3">UF</th>
-              @if (auth.isAdmin()) {
-                <th class="px-5 py-3 text-right">Ações</th>
-              }
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-white/5">
-            @for (item of filteredItems; track item.id) {
-              <tr class="hover:bg-white/4 transition-colors duration-150">
-                <td class="px-5 py-3.5">
-                  <app-team-badge
-                    [name]="item.name"
-                    [logoUrl]="item.logoUrl"
-                    [size]="30"
-                    nameClass="text-sm font-medium text-white/80"
-                  />
-                </td>
-                <td class="px-5 py-3.5 text-white/50">
-                  {{ item.city }}
-                </td>
-                <td class="px-5 py-3.5">
-                  <span class="badge uppercase" [ngClass]="stateBadgeClass(item.state)">
-                    {{ item.state }}
-                  </span>
-                </td>
-                @if (auth.isAdmin()) {
-                  <td class="px-5 py-3.5">
-                    <div class="flex items-center justify-end gap-1">
-                      <a
-                        [routerLink]="['/teams', item.id, 'edit']"
-                        class="p-2 rounded-lg text-white/30 hover:text-blue-400 hover:bg-blue-500/10 transition-all duration-200"
-                      >
-                        <lucide-icon [img]="PencilIcon" size="14" />
-                      </a>
-                      <button
-                        (click)="confirmDelete(item.id!)"
-                        class="p-2 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
-                      >
-                        <lucide-icon [img]="TrashIcon" size="14" />
-                      </button>
-                    </div>
-                  </td>
-                }
-              </tr>
-            }
-          </tbody>
-        </table>
+    }
+
+    @if (error) {
+      <div
+        class="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400"
+        role="alert"
+      >
+        {{ error }}
       </div>
     }
-  }
+
+    @if (!loading && !error) {
+      @if (items.length === 0) {
+        <div
+          class="rounded-2xl border border-white/70 bg-white/55 py-16 text-center shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+        >
+          <p class="text-sm text-slate-500 dark:text-white/40">Nenhum time cadastrado.</p>
+
+          @if (auth.isAdmin()) {
+            <a
+              routerLink="/teams/new"
+              class="mt-3 inline-block text-sm text-slate-700 transition hover:text-slate-950 dark:text-white/55 dark:hover:text-white"
+            >
+              Cadastrar o primeiro →
+            </a>
+          }
+        </div>
+      } @else {
+        <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div class="relative">
+            <select
+              [(ngModel)]="selectedState"
+              class="min-h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white/60 px-3 pr-10 text-sm font-medium text-slate-700 shadow-sm outline-none backdrop-blur-xl transition focus:border-slate-400 sm:w-auto dark:border-white/10 dark:bg-white/4 dark:text-white/70 dark:focus:border-white/25"
+            >
+              <option value="">Todos os estados</option>
+
+              @for (uf of states; track uf) {
+                <option [value]="uf">{{ uf }}</option>
+              }
+            </select>
+
+            <lucide-icon
+              [img]="ChevronDownIcon"
+              size="14"
+              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/30"
+            />
+          </div>
+
+          @if (selectedState) {
+            <span class="text-xs text-slate-500 dark:text-white/35">
+              {{ filteredItems.length }}
+              {{ filteredItems.length === 1 ? 'time' : 'times' }} em
+              <span class="font-semibold text-slate-700 dark:text-white/60">
+                {{ selectedState }}
+              </span>
+            </span>
+
+            <button
+              type="button"
+              (click)="selectedState = ''"
+              class="cursor-pointer text-xs text-slate-500 transition hover:text-slate-950 dark:text-white/40 dark:hover:text-white/70"
+            >
+              Limpar
+            </button>
+          }
+        </div>
+
+        @if (filteredItems.length === 0) {
+          <div
+            class="rounded-2xl border border-white/70 bg-white/55 py-12 text-center shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+          >
+            <p class="text-sm text-slate-500 dark:text-white/40">Nenhum time para esta UF.</p>
+
+            <button
+              type="button"
+              (click)="selectedState = ''"
+              class="mt-3 cursor-pointer text-sm text-slate-700 transition hover:text-slate-950 dark:text-white/55 dark:hover:text-white"
+            >
+              Limpar filtro →
+            </button>
+          </div>
+        } @else {
+          <div
+            class="overflow-x-auto rounded-2xl border border-white/70 bg-white/55 shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+          >
+            <table class="w-full min-w-155 text-left text-sm">
+              <thead class="border-b border-slate-200 dark:border-white/10">
+                <tr class="text-xs uppercase tracking-wider text-slate-500 dark:text-white/35">
+                  <th class="px-5 py-3">Nome</th>
+                  <th class="px-5 py-3">Cidade</th>
+                  <th class="px-5 py-3">UF</th>
+
+                  @if (auth.isAdmin()) {
+                    <th class="px-5 py-3 text-right">Ações</th>
+                  }
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-slate-200 dark:divide-white/5">
+                @for (item of filteredItems; track item.id) {
+                  <tr
+                    class="transition-colors duration-150 hover:bg-slate-900/3 dark:hover:bg-white/4"
+                  >
+                    <td class="px-5 py-3.5">
+                      <app-team-badge
+                        [name]="item.name"
+                        [logoUrl]="item.logoUrl"
+                        [size]="30"
+                        nameClass="text-sm font-medium text-slate-800 dark:text-white/80"
+                      />
+                    </td>
+
+                    <td class="px-5 py-3.5 text-slate-600 dark:text-white/50">
+                      {{ item.city }}
+                    </td>
+
+                    <td class="px-5 py-3.5">
+                      <span class="badge uppercase" [ngClass]="stateBadgeClass(item.state)">
+                        {{ item.state }}
+                      </span>
+                    </td>
+
+                    @if (auth.isAdmin()) {
+                      <td class="px-5 py-3.5">
+                        <div class="flex items-center justify-end gap-1">
+                          <a
+                            [routerLink]="['/teams', item.id, 'edit']"
+                            class="rounded-lg p-2 text-slate-400 transition-all duration-200 hover:bg-blue-500/10 hover:text-blue-600 dark:text-white/30 dark:hover:text-blue-400"
+                            aria-label="Editar time"
+                          >
+                            <lucide-icon [img]="PencilIcon" size="14" />
+                          </a>
+
+                          <button
+                            type="button"
+                            (click)="confirmDelete(item.id!)"
+                            class="cursor-pointer rounded-lg p-2 text-slate-400 transition-all duration-200 hover:bg-red-500/10 hover:text-red-600 dark:text-white/30 dark:hover:text-red-400"
+                            aria-label="Excluir time"
+                          >
+                            <lucide-icon [img]="TrashIcon" size="14" />
+                          </button>
+                        </div>
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    }
+  </section>
 </div>
 
 <app-confirm-dialog
