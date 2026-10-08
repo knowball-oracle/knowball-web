@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { LucideAngularModule, Eye, EyeOff, LockKeyhole, ShieldCheck } from 'lucide-angular';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule],
   templateUrl: './login-component.html',
 })
 export class LoginComponent {
@@ -18,6 +19,12 @@ export class LoginComponent {
   loading = false;
   googleLoading = false;
   error = '';
+  showPassword = false;
+
+  readonly EyeIcon = Eye;
+  readonly EyeOffIcon = EyeOff;
+  readonly LockIcon = LockKeyhole;
+  readonly ShieldIcon = ShieldCheck;
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -27,8 +34,13 @@ export class LoginComponent {
   get email() {
     return this.form.get('email')!;
   }
+
   get password() {
     return this.form.get('password')!;
+  }
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit(): void {

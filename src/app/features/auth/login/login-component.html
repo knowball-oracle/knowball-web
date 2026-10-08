@@ -1,123 +1,266 @@
 <div
-  class="min-h-dvh flex items-center justify-center p-4"
-  style="
-    background:
-      radial-gradient(ellipse at 60% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 60%), #06060f;
-  "
+  class="relative flex min-h-dvh items-center justify-center overflow-hidden bg-[#06060f] px-4 py-8 sm:px-6 lg:px-8"
 >
-  <div class="glass-liquid rounded-3xl p-10 w-full max-w-md">
-    <div class="flex justify-center mb-8">
-      <img src="/assets/logo.svg" alt="KnowBall" class="h-12 w-auto logo-adaptive" />
-    </div>
+  <div
+    class="pointer-events-none absolute -left-40 -top-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl"
+  ></div>
 
-    <h2 class="text-lg font-semibold text-white text-center mb-1">Entre na sua conta</h2>
-    <p class="text-sm text-white/40 text-center mb-8">
-      Acesse denúncias, campeonatos e relatórios do Knowball.
-    </p>
+  <div
+    class="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-violet-500/10 blur-3xl"
+  ></div>
 
-    @if (error) {
-      <div class="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-        {{ error }}
-      </div>
-    }
+  <div
+    class="pointer-events-none absolute inset-0 opacity-[0.035]"
+    style="
+      background-image: radial-gradient(rgba(255, 255, 255, 0.9) 0.6px, transparent 0.6px);
+      background-size: 6px 6px;
+    "
+  ></div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-      <div>
-        <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
-          Seu e-mail
-        </label>
-        <input
-          formControlName="email"
-          type="email"
-          placeholder="seu@email.com"
-          class="input-field"
-          [class.border-red-500/40]="form.get('email')!.invalid && form.get('email')!.touched"
-        />
-        @if (form.get('email')!.invalid && form.get('email')!.touched) {
-          <p class="text-xs text-red-400 mt-1">
-            {{
-              form.get('email')!.hasError('required') ? 'E-mail é obrigatório.' : 'E-mail inválido.'
-            }}
-          </p>
-        }
-      </div>
-
-      <div>
-        <label class="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">
-          Sua senha
-        </label>
-        <input
-          formControlName="password"
-          type="password"
-          placeholder="Digite sua senha"
-          class="input-field"
-          [class.border-red-500/40]="form.get('password')!.invalid && form.get('password')!.touched"
-        />
-        @if (form.get('password')!.invalid && form.get('password')!.touched) {
-          <p class="text-xs text-red-400 mt-1">Senha é obrigatória.</p>
-        }
-      </div>
-
-      <button
-        type="submit"
-        [disabled]="loading"
-        class="w-full btn-primary mt-2 py-2.5 text-sm font-semibold disabled:opacity-40 cursor-pointer flex items-center justify-center gap-2"
-      >
-        {{ loading ? 'Entrando...' : 'Entrar na minha conta' }}
-        @if (!loading) {
-          <span aria-hidden="true">→</span>
-        }
-      </button>
-    </form>
-
-    <p class="text-center text-sm text-white/30 mt-6">
-      Ainda não tem conta?
-      <a routerLink="/auth/register" class="text-white/70 hover:text-white transition font-medium">
-        Criar conta
-      </a>
-    </p>
-
-    <div class="flex items-center gap-3 my-6">
-      <div class="flex-1 h-px bg-white/10"></div>
-      <span class="text-[11px] font-medium text-white/25 uppercase tracking-wider">ou</span>
-      <div class="flex-1 h-px bg-white/10"></div>
-    </div>
-
-    <button
-      type="button"
-      (click)="loginWithGoogle()"
-      [disabled]="googleLoading"
-      class="w-full flex items-center justify-center gap-3 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white/85 text-sm font-medium transition-all duration-200 disabled:opacity-40 cursor-pointer"
+  <main
+    class="relative grid w-full max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-[#101019]/90 shadow-2xl shadow-black/50 backdrop-blur-2xl lg:grid-cols-[1fr_430px]"
+  >
+    <section
+      class="relative hidden min-h-162.5 overflow-hidden border-r border-white/10 bg-linear-to-br from-[#111827] via-[#11131e] to-[#190f18] p-10 lg:flex lg:flex-col lg:justify-between"
     >
-      <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-        <path
-          fill="#FFC107"
-          d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
-          s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
-          s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-        />
-        <path
-          fill="#FF3D00"
-          d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039
-          l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-        />
-        <path
-          fill="#4CAF50"
-          d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
-          c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-        />
-        <path
-          fill="#1976D2"
-          d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-          c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24
-          C44,22.659,43.862,21.35,43.611,20.083z"
-        />
-      </svg>
-      {{ googleLoading ? 'Redirecionando...' : 'Continuar com Google' }}
-    </button>
+      <div
+        class="pointer-events-none absolute -right-32 top-20 h-72 w-72 rounded-full bg-red-500/15 blur-3xl"
+      ></div>
 
-    <p class="text-center text-xs text-white/25 mt-6 leading-relaxed">
-      Ao entrar, você poderá acompanhar denúncias, campeonatos e relatórios do Knowball.
-    </p>
-  </div>
+      <div
+        class="pointer-events-none absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl"
+      ></div>
+
+      <div class="relative">
+        <div class="flex items-center gap-3">
+          <img src="/assets/logo.svg" alt="Knowball" class="h-10 w-auto" />
+
+          <span class="h-5 w-px bg-white/15"></span>
+
+          <span class="text-xs font-medium uppercase tracking-[0.16em] text-white/40">
+            Integridade no futebol
+          </span>
+        </div>
+
+        <div class="mt-28 max-w-md">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300/80">
+            Uma base mais transparente
+          </p>
+
+          <h1 class="mt-4 text-4xl font-bold leading-tight tracking-tight text-white xl:text-5xl">
+            Informação que protege
+            <span class="text-cyan-300">o jogo.</span>
+          </h1>
+
+          <p class="mt-5 text-sm leading-7 text-white/55">
+            O Knowball conecta relatos, partidas e análises para fortalecer a integridade das
+            categorias de base do futebol brasileiro.
+          </p>
+        </div>
+      </div>
+
+      <div class="relative grid grid-cols-3 gap-3">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <p class="text-xl font-bold text-white">01</p>
+          <p class="mt-1 text-xs leading-relaxed text-white/40">Relatos centralizados</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <p class="text-xl font-bold text-white">24h</p>
+          <p class="mt-1 text-xs leading-relaxed text-white/40">Acompanhamento contínuo</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <p class="text-xl font-bold text-white">100%</p>
+          <p class="mt-1 text-xs leading-relaxed text-white/40">Confidencialidade</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-6 sm:p-10 lg:p-12">
+      <div class="mx-auto max-w-sm">
+        <div class="mb-8 flex items-center justify-center lg:hidden">
+          <img src="/assets/logo.svg" alt="Knowball" class="h-11 w-auto" />
+        </div>
+
+        <div class="mb-8">
+          <div
+            class="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-300"
+          >
+            <lucide-icon [img]="ShieldIcon" size="13" />
+            Acesso seguro
+          </div>
+
+          <h2 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            Entre na sua conta
+          </h2>
+
+          <p class="mt-2 text-sm leading-relaxed text-white/45">
+            Acesse denúncias, campeonatos e relatórios do Knowball.
+          </p>
+        </div>
+
+        @if (error) {
+          <div
+            class="mb-5 flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-300"
+            role="alert"
+          >
+            <span class="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-red-400"></span>
+            <span>{{ error }}</span>
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+          <div>
+            <label
+              for="email"
+              class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
+            >
+              Seu e-mail
+            </label>
+
+            <div class="relative">
+              <input
+                id="email"
+                formControlName="email"
+                type="email"
+                autocomplete="email"
+                placeholder="seu@email.com"
+                class="input-field min-h-12 pl-4 pr-4"
+                [class.border-red-500/50]="email.invalid && email.touched"
+              />
+            </div>
+
+            @if (email.invalid && email.touched) {
+              <p class="mt-1.5 text-xs text-red-400">
+                {{ email.hasError('required') ? 'E-mail é obrigatório.' : 'E-mail inválido.' }}
+              </p>
+            }
+          </div>
+
+          <div>
+            <div class="mb-2 flex items-center justify-between">
+              <label
+                for="password"
+                class="block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
+              >
+                Sua senha
+              </label>
+
+              <span class="text-[11px] text-white/25"> Mínimo de 6 caracteres </span>
+            </div>
+
+            <div class="relative">
+              <input
+                id="password"
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                autocomplete="current-password"
+                placeholder="Digite sua senha"
+                class="input-field min-h-12 pl-4 pr-12"
+                [class.border-red-500/50]="password.invalid && password.touched"
+              />
+
+              <button
+                type="button"
+                (click)="togglePassword()"
+                class="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-white/30 transition hover:bg-white/8 hover:text-white/70"
+                [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+              >
+                <lucide-icon [img]="showPassword ? EyeOffIcon : EyeIcon" size="17" />
+              </button>
+            </div>
+
+            @if (password.invalid && password.touched) {
+              <p class="mt-1.5 text-xs text-red-400">
+                Senha é obrigatória e deve ter pelo menos 6 caracteres.
+              </p>
+            }
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="loading"
+            class="flex min-h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-slate-950 transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            {{ loading ? 'Entrando...' : 'Entrar na minha conta' }}
+
+            @if (!loading) {
+              <span aria-hidden="true">→</span>
+            }
+          </button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-white/35">
+          Ainda não tem conta?
+
+          <a
+            routerLink="/auth/register"
+            class="font-semibold text-white/75 transition hover:text-white"
+          >
+            Criar conta
+          </a>
+        </p>
+
+        <div class="my-7 flex items-center gap-3">
+          <div class="h-px flex-1 bg-white/10"></div>
+          <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/25">
+            ou
+          </span>
+          <div class="h-px flex-1 bg-white/10"></div>
+        </div>
+
+        <button
+          type="button"
+          (click)="loginWithGoogle()"
+          [disabled]="googleLoading"
+          class="flex min-h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 text-sm font-medium text-white/80 transition-all duration-200 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 48 48"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              fill="#FFC107"
+              d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
+              s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
+              s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+            />
+            <path
+              fill="#FF3D00"
+              d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039
+              l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+            />
+            <path
+              fill="#4CAF50"
+              d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
+              c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+            />
+            <path
+              fill="#1976D2"
+              d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
+              c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24
+              C44,22.659,43.862,21.35,43.611,20.083z"
+            />
+          </svg>
+
+          {{ googleLoading ? 'Redirecionando...' : 'Continuar com Google' }}
+        </button>
+
+        <div
+          class="mt-7 flex items-start gap-2.5 rounded-xl border border-white/8 bg-white/2.5 p-3.5"
+        >
+          <lucide-icon [img]="LockIcon" size="15" class="mt-0.5 shrink-0 text-white/35" />
+
+          <p class="text-xs leading-relaxed text-white/35">
+            Seus dados são tratados com confidencialidade. Ao entrar, você poderá acompanhar
+            denúncias, campeonatos e relatórios do Knowball.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
