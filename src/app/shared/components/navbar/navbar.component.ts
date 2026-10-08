@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideAngularModule, Moon, Sun, CircleHelp, Database } from 'lucide-angular';
+import { LucideAngularModule, CircleHelp } from 'lucide-angular';
 
 import {
   LayoutDashboard,
@@ -16,7 +16,6 @@ import {
   X,
 } from '../../../shared/icons/icons';
 import { AuthService } from '../../../core/services/auth.service';
-import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -25,7 +24,6 @@ import { ThemeService } from '../../../core/services/theme.service';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
-  themeService = inject(ThemeService);
   private router = inject(Router);
   auth = inject(AuthService);
 
@@ -37,8 +35,6 @@ export class NavbarComponent {
   readonly MenuIcon = Menu;
   readonly CloseIcon = X;
   readonly LogOutIcon = LogOut;
-  readonly SunIcon = Sun;
-  readonly MoonIcon = Moon;
 
   links = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -48,8 +44,7 @@ export class NavbarComponent {
     { path: '/teams', label: 'Times', icon: Users2 },
     { path: '/reports', label: 'Denúncias', icon: FileWarning },
     { path: '/users', label: 'Usuários', icon: Users },
-    { path: '/oracle-apex', label: 'Oracle APEX', icon: Database },
-    { path: '/faq', label: 'Perguntas Frequentes', icon: CircleHelp },
+    { path: '/faq', label: 'FAQ', icon: CircleHelp },
   ];
 
   logout(): void {
@@ -63,7 +58,7 @@ export class NavbarComponent {
       this.user()
         ?.name?.split(' ')
         .slice(0, 2)
-        .map((n: any) => n[0])
+        .map((n: string) => n[0])
         .join('')
         .toUpperCase() ?? '?'
     );

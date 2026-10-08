@@ -16,14 +16,12 @@
   [class.-translate-x-full]="!mobileOpen"
   [class.translate-x-0]="mobileOpen"
 >
-  <!-- Logo -->
   <div class="border-b border-white/10 py-3 pl-12 pr-3 md:pl-3">
     <a routerLink="/dashboard" (click)="mobileOpen = false">
       <img src="/assets/logo.svg" alt="Knowball" class="logo-adaptive mt-2 h-8 w-auto" />
     </a>
   </div>
 
-  <!-- Navegação -->
   <nav class="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
     @for (link of links; track link.path) {
       @if (link.path !== '/users' || auth.isAdmin()) {
@@ -41,7 +39,6 @@
     }
   </nav>
 
-  <!-- Perfil, logout e alternância de tema -->
   <div class="navbar-profile border-t border-white/8 px-3 pb-3 pt-2">
     <div class="flex items-center gap-2 py-1.5">
       <a
@@ -50,7 +47,6 @@
         class="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-2 py-1.5 transition-all duration-200 hover:bg-white/5"
         aria-label="Abrir perfil"
       >
-        <!-- Avatar -->
         <div
           class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border"
           [class.bg-orange-500/20]="!photo()"
@@ -66,7 +62,6 @@
           }
         </div>
 
-        <!-- Nome e perfil -->
         <div class="min-w-0 flex-1">
           <p class="truncate text-sm font-medium leading-tight text-white/80">
             {{ user()?.name || 'Usuário' }}
@@ -80,7 +75,6 @@
         </div>
       </a>
 
-      <!-- Sair -->
       <button
         type="button"
         (click)="logout()"
@@ -89,36 +83,6 @@
         class="shrink-0 cursor-pointer rounded-lg p-1.5 text-white/25 transition-all duration-200 hover:bg-red-500/10 hover:text-red-400"
       >
         <lucide-icon [img]="LogOutIcon" size="16" />
-      </button>
-    </div>
-
-    <!-- Separador -->
-    <div class="mx-2 mb-2 h-px bg-white/5"></div>
-
-    <!-- Alternador de tema -->
-    <div class="flex justify-center py-1">
-      <button
-        type="button"
-        (click)="themeService.toggle()"
-        [title]="themeService.isDark() ? 'Mudar para tema claro' : 'Mudar para tema escuro'"
-        [attr.aria-label]="
-          themeService.isDark() ? 'Mudar para tema claro' : 'Mudar para tema escuro'
-        "
-        class="navbar-theme-toggle theme-pill"
-        [class.theme-pill-light]="!themeService.isDark()"
-      >
-        <span class="theme-pill-icon" [class.theme-pill-icon-active]="!themeService.isDark()">
-          <lucide-icon [img]="SunIcon" size="12" />
-        </span>
-
-        <span
-          class="theme-pill-thumb"
-          [class.theme-pill-thumb-right]="!themeService.isDark()"
-        ></span>
-
-        <span class="theme-pill-icon" [class.theme-pill-icon-active]="themeService.isDark()">
-          <lucide-icon [img]="MoonIcon" size="12" />
-        </span>
       </button>
     </div>
   </div>
