@@ -8,8 +8,9 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
+import { Eye, EyeOff, LucideAngularModule } from 'lucide-angular';
+import { AuthService } from '../../../core/services/auth.service';
 import { LoginResponse } from '../../../models/login-response.model';
 
 function passwordsMatchValidator(): ValidatorFn {
@@ -36,7 +37,7 @@ type Step = 1 | 2 | 3 | 4;
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule],
   templateUrl: './register-component.html',
 })
 export class RegisterComponent {
@@ -48,6 +49,19 @@ export class RegisterComponent {
   sendingCode = false;
   error = '';
   codeError = '';
+
+  showPassword = false;
+  showConfirmPassword = false;
+
+  readonly EyeIcon = Eye;
+  readonly EyeOffIcon = EyeOff;
+
+  readonly steps = [
+    { id: 1, label: 'Nome' },
+    { id: 2, label: 'E-mail' },
+    { id: 3, label: 'Senha' },
+    { id: 4, label: 'Verificação' },
+  ] as const;
 
   currentStep = signal<Step>(1);
 
@@ -99,6 +113,14 @@ export class RegisterComponent {
     if (step < this.currentStep()) {
       this.currentStep.set(step as Step);
     }
+  }
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   nextStep(): void {
