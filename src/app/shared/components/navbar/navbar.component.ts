@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { ChartNoAxesCombined, CircleHelp, LucideAngularModule } from 'lucide-angular';
+import {
+  ChartNoAxesCombined,
+  CircleHelp,
+  LucideAngularModule,
+  LucideIconData,
+} from 'lucide-angular';
 
 import {
   FileWarning,
@@ -20,7 +25,7 @@ import { AuthService } from '../../../core/services/auth.service';
 interface NavLink {
   path: string;
   label: string;
-  icon: unknown;
+  icon: LucideIconData;
   adminOnly?: boolean;
 }
 
