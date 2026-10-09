@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+
+import { environment } from '../../../environments/environment';
 import { LoginRequest } from '../../models/login-request.model';
 import { LoginResponse } from '../../models/login-response.model';
 import { RegisterRequest } from '../../models/register-request.model';
@@ -10,7 +11,7 @@ export interface SessionUser {
   id?: number;
   email: string;
   name: string;
-  role: string;
+  role: string | string[];
   photo?: string;
 }
 
@@ -19,58 +20,28 @@ export class AuthService {
   private readonly TOKEN_KEY = 'token';
   private readonly USER_KEY = 'user';
   private readonly PHOTO_KEY = 'user_photo';
-  private url = `${environment.apiUrl}/auth`;
 
-  private _user = signal<SessionUser | null>(this._loadUser());
-  private _photo = signal<string | null>(this._loadPhoto());
+  private readonly url = `${environment.apiUrl}/auth`;
+
+  private readonly _user = signal<SessionUser | null>(this.loadUser());
+  private readonly _photo = signal<string | null>(this.loadPhoto());
 
   readonly user = this._user.asReadonly();
   readonly photo = this._photo.asReadonly();
 
-  constructor(private http: HttpClient) {}
-
-  private _isValidBase64Image(value: string): boolean {
-    const prefixPattern = /^data:image\/(jpeg|png|webp|gif);base64,/;
-    if (!prefixPattern.test(value)) return false;
-    const payloadStart = value.indexOf(',') + 1;
-    const payload = value.slice(payloadStart);
-    if (payload.includes('data:')) return false;
-    return true;
-  }
-
-  private _loadUser(): SessionUser | null {
-    if (typeof window === 'undefined') return null;
-    const u = localStorage.getItem(this.USER_KEY);
-    return u ? JSON.parse(u) : null;
-  }
-
-  private _loadPhoto(): string | null {
-    if (typeof window === 'undefined') return null;
-    const email = JSON.parse(localStorage.getItem(this.USER_KEY) ?? 'null')?.email ?? 'anonymous';
-    const stored = localStorage.getItem(`${this.PHOTO_KEY}_${email}`);
-    if (stored && !this._isValidBase64Image(stored)) {
-      localStorage.removeItem(`${this.PHOTO_KEY}_${email}`);
-      return null;
-    }
-    return stored;
-  }
-
-  private photoKey(): string {
-    const email = this._user()?.email ?? 'anonymous';
-    return `${this.PHOTO_KEY}_${email}`;
-  }
+  constructor(private readonly http: HttpClient) {}
 
   login(request: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.url}/login`, request).pipe(
-      tap((res) =>
-        this.saveSession(res.token, {
-          id: res.id,
-          email: res.email,
-          name: res.name,
-          role: res.role,
-          photo: res.profilePicture ?? undefined,
-        }),
-      ),
+      tap((response) => {
+        this.saveSession(response.token, {
+          id: response.id,
+          email: response.email,
+          name: response.name,
+          role: response.role,
+          photo: response.profilePicture ?? undefined,
+        });
+      }),
     );
   }
 
@@ -81,42 +52,48 @@ export class AuthService {
   saveSession(token: string, user: SessionUser): void {
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+
     this._user.set(user);
 
-    if (user.photo) {
-      if (this._isValidBase64Image(user.photo)) {
-        localStorage.setItem(`${this.PHOTO_KEY}_${user.email}`, user.photo);
-        this._photo.set(user.photo);
-      } else {
-        const savedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
-        this._photo.set(savedPhoto);
-      }
-    } else {
-      const savedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${user.email}`) ?? null;
-      this._photo.set(savedPhoto);
+    const photoKey = `${this.PHOTO_KEY}_${user.email}`;
+
+    if (user.photo && this.isValidBase64Image(user.photo)) {
+      localStorage.setItem(photoKey, user.photo);
+      this._photo.set(user.photo);
+      return;
     }
+
+    const savedPhoto = localStorage.getItem(photoKey);
+    this._photo.set(savedPhoto);
   }
 
   savePhoto(base64: string): void {
-    if (!this._isValidBase64Image(base64)) {
-      console.warn('[AuthService] savePhoto: Base64 inválido, ignorado.');
+    if (!this.isValidBase64Image(base64)) {
+      console.warn('[AuthService] Foto em Base64 inválida. Alteração ignorada.');
       return;
     }
+
     localStorage.setItem(this.photoKey(), base64);
     this._photo.set(base64);
   }
 
   clearPhoto(): void {
-    const email = this._user()?.email ?? 'anonymous';
-    localStorage.removeItem(`${this.PHOTO_KEY}_${email}`);
-    this._photo.set(null);
+    const user = this._user();
 
-    const current = this._user();
-    if (current) {
-      const updated = { ...current, photo: undefined };
-      localStorage.setItem(this.USER_KEY, JSON.stringify(updated));
-      this._user.set(updated);
+    if (!user) {
+      return;
     }
+
+    localStorage.removeItem(`${this.PHOTO_KEY}_${user.email}`);
+
+    const updatedUser: SessionUser = {
+      ...user,
+      photo: undefined,
+    };
+
+    localStorage.setItem(this.USER_KEY, JSON.stringify(updatedUser));
+    this._user.set(updatedUser);
+    this._photo.set(null);
   }
 
   getToken(): string | null {
@@ -133,14 +110,24 @@ export class AuthService {
 
   isAdmin(): boolean {
     const role = this._user()?.role;
-    if (!role) return false;
-    if (Array.isArray(role)) return role.includes('ROLE_ADMIN');
-    return role === 'ROLE_ADMIN';
+
+    if (!role) {
+      return false;
+    }
+
+    const roles = Array.isArray(role) ? role : [role];
+
+    return roles.some((currentRole) => {
+      const normalizedRole = String(currentRole).trim().toUpperCase();
+
+      return normalizedRole === 'ADMIN' || normalizedRole === 'ROLE_ADMIN';
+    });
   }
 
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
+
     this._user.set(null);
     this._photo.set(null);
   }
@@ -154,6 +141,63 @@ export class AuthService {
   }
 
   confirmVerificationCode(email: string, code: string): Observable<void> {
-    return this.http.post<void>(`${this.url}/verification/confirm`, { email, code });
+    return this.http.post<void>(`${this.url}/verification/confirm`, {
+      email,
+      code,
+    });
+  }
+
+  private loadUser(): SessionUser | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    const storedUser = localStorage.getItem(this.USER_KEY);
+
+    if (!storedUser) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedUser) as SessionUser;
+    } catch {
+      localStorage.removeItem(this.USER_KEY);
+      return null;
+    }
+  }
+
+  private loadPhoto(): string | null {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    const user = this.loadUser();
+    const email = user?.email ?? 'anonymous';
+    const storedPhoto = localStorage.getItem(`${this.PHOTO_KEY}_${email}`);
+
+    if (storedPhoto && !this.isValidBase64Image(storedPhoto)) {
+      localStorage.removeItem(`${this.PHOTO_KEY}_${email}`);
+      return null;
+    }
+
+    return storedPhoto;
+  }
+
+  private photoKey(): string {
+    const email = this._user()?.email ?? 'anonymous';
+
+    return `${this.PHOTO_KEY}_${email}`;
+  }
+
+  private isValidBase64Image(value: string): boolean {
+    const imagePrefix = /^data:image\/(jpeg|png|webp|gif);base64,/;
+
+    if (!imagePrefix.test(value)) {
+      return false;
+    }
+
+    const payload = value.slice(value.indexOf(',') + 1);
+
+    return !payload.includes('data:');
   }
 }

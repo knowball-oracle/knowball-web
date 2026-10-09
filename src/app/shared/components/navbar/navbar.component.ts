@@ -72,8 +72,7 @@ export class NavbarComponent {
   ];
 
   readonly visibleLinks = computed(() => {
-    const currentUser = this.user();
-    const isAdmin = currentUser?.role === 'ADMIN';
+    const isAdmin = this.auth.isAdmin();
 
     return this.links.filter((link) => !link.adminOnly || isAdmin);
   });
