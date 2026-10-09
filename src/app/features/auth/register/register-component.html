@@ -1,8 +1,8 @@
 <div
-  class="relative flex min-h-dvh items-center justify-center overflow-hidden bg-[#06060f] px-4 py-6 sm:px-6 sm:py-10"
+  class="relative flex min-h-dvh items-center justify-center overflow-y-auto bg-[#0A0A0A] px-4 py-6 sm:px-6 sm:py-10"
 >
   <div
-    class="pointer-events-none absolute inset-0 opacity-[0.035]"
+    class="pointer-events-none fixed inset-0 opacity-[0.035]"
     style="
       background-image: radial-gradient(rgba(255, 255, 255, 0.9) 0.6px, transparent 0.6px);
       background-size: 6px 6px;
@@ -10,10 +10,10 @@
   ></div>
 
   <div
-    class="pointer-events-none absolute inset-0 bg-radial-[at_50%_0%] from-white/[0.035] via-transparent to-black/30"
+    class="pointer-events-none fixed inset-0 bg-radial-[at_50%_0%] from-white/[0.035] via-transparent to-black/30"
   ></div>
 
-  <main class="relative w-full max-w-lg">
+  <main class="relative my-auto w-full max-w-lg py-4">
     <header class="mb-6 text-center sm:mb-8">
       <div class="mb-5 flex justify-center">
         <img src="/assets/logo.svg" alt="Knowball" class="h-10 w-auto sm:h-12" />
@@ -40,8 +40,8 @@
               <button
                 type="button"
                 (click)="goToStep(step.id)"
-                [disabled]="step.id >= currentStep()"
-                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-all duration-200 disabled:cursor-default sm:h-9 sm:w-9"
+                [disabled]="step.id >= currentStep() || loading || sendingCode"
+                class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-all duration-200 disabled:cursor-default disabled:opacity-100 sm:h-9 sm:w-9"
                 [ngClass]="
                   currentStep() >= step.id
                     ? 'bg-white text-[#101019]'
@@ -63,7 +63,7 @@
 
             @if (!last) {
               <div
-                class="mx-2 mt-4 h-px flex-1 transition-colors duration-300 sm:mt-4.5 sm:mx-3"
+                class="mx-2 mt-4 h-px flex-1 transition-colors duration-300 sm:mx-3 sm:mt-4.5"
                 [ngClass]="currentStep() > step.id ? 'bg-white/40' : 'bg-white/10'"
               ></div>
             }
@@ -88,171 +88,301 @@
           role="alert"
         >
           <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/70"></span>
-          <span class="min-w-0 wrap-break-word">{{ error }}</span>
+          <span class="min-w-0 wrap-break-words">{{ error }}</span>
         </div>
       }
 
       <form [formGroup]="form" (ngSubmit)="nextStep()">
         @if (currentStep() === 1) {
-          <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">
-            Etapa 1
-          </p>
+          <div>
+            <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">
+              Etapa 1
+            </p>
 
-          <h2 class="mb-1 text-lg font-semibold text-white sm:text-xl">Como podemos te chamar?</h2>
+            <h2 class="mb-1 text-lg font-semibold text-white sm:text-xl">
+              Como podemos te chamar?
+            </h2>
 
-          <p class="mb-6 text-sm leading-relaxed text-white/45">
-            Use o nome pelo qual sua equipe te conhece.
-          </p>
+            <p class="mb-6 text-sm leading-relaxed text-white/45">
+              Use o nome pelo qual sua equipe te conhece.
+            </p>
 
-          <label
-            for="name"
-            class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
-          >
-            Seu nome
-          </label>
+            <label
+              for="name"
+              class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
+            >
+              Seu nome
+            </label>
 
-          <input
-            id="name"
-            formControlName="name"
-            type="text"
-            autocomplete="name"
-            placeholder="Ex.: Gabriel Rossi"
-            class="input-field min-h-12 px-4"
-            [class.border-white/30]="name.invalid && name.touched"
-            autofocus
-          />
+            <input
+              id="name"
+              formControlName="name"
+              type="text"
+              autocomplete="name"
+              placeholder="Ex.: Gabriel Rossi"
+              class="input-field min-h-12 px-4"
+              [class.border-white/30]="name.invalid && name.touched"
+              autofocus
+            />
 
-          @if (name.invalid && name.touched) {
-            <p class="mt-1.5 text-xs text-white/55">Nome obrigatório.</p>
-          }
+            @if (name.invalid && name.touched) {
+              <p class="mt-1.5 text-xs text-white/55">
+                Nome obrigatório e deve conter pelo menos 2 caracteres.
+              </p>
+            }
+          </div>
         }
 
         @if (currentStep() === 2) {
-          <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">
-            Etapa 2
-          </p>
-
-          <h2 class="mb-1 text-lg font-semibold text-white sm:text-xl">Qual é o seu e-mail?</h2>
-
-          <p class="mb-6 text-sm leading-relaxed text-white/45">
-            Enviaremos um código de verificação para confirmar que ele é seu.
-          </p>
-
-          <label
-            for="email"
-            class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
-          >
-            Seu e-mail
-          </label>
-
-          <input
-            id="email"
-            formControlName="email"
-            type="email"
-            autocomplete="email"
-            inputmode="email"
-            placeholder="seu@email.com"
-            class="input-field min-h-12 px-4"
-            [class.border-white/30]="email.invalid && email.touched"
-            autofocus
-          />
-
-          @if (email.invalid && email.touched) {
-            <p class="mt-1.5 text-xs text-white/55">
-              {{ email.hasError('required') ? 'E-mail obrigatório.' : 'E-mail inválido.' }}
+          <div>
+            <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">
+              Etapa 2
             </p>
-          }
+
+            <h2 class="mb-1 text-lg font-semibold text-white sm:text-xl">Qual é o seu e-mail?</h2>
+
+            <p class="mb-6 text-sm leading-relaxed text-white/45">
+              Enviaremos um código de verificação para confirmar que ele é seu.
+            </p>
+
+            <label
+              for="email"
+              class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
+            >
+              Seu e-mail
+            </label>
+
+            <input
+              id="email"
+              formControlName="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              placeholder="seu@email.com"
+              class="input-field min-h-12 px-4"
+              [class.border-white/30]="email.invalid && email.touched"
+              autofocus
+            />
+
+            @if (email.invalid && email.touched) {
+              <p class="mt-1.5 text-xs text-white/55">
+                {{ email.hasError('required') ? 'E-mail obrigatório.' : 'E-mail inválido.' }}
+              </p>
+            }
+          </div>
         }
 
         @if (currentStep() === 3) {
-          <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">
-            Etapa 3
-          </p>
+          <div>
+            <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">
+              Etapa 3
+            </p>
 
-          <h2 class="mb-1 text-lg font-semibold text-white sm:text-xl">Crie uma senha segura</h2>
+            <h2 class="mb-1 text-lg font-semibold text-white sm:text-xl">Crie uma senha segura</h2>
 
-          <p class="mb-6 text-sm leading-relaxed text-white/45">Use no mínimo 6 caracteres.</p>
+            <p class="mb-6 text-sm leading-relaxed text-white/45">Use no mínimo 6 caracteres.</p>
 
-          <div class="space-y-5">
-            <div>
-              <label
-                for="password"
-                class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
-              >
-                Sua senha
-              </label>
-
-              <div class="relative">
-                <input
-                  id="password"
-                  formControlName="password"
-                  [type]="showPassword ? 'text' : 'password'"
-                  autocomplete="new-password"
-                  placeholder="••••••••"
-                  class="input-field min-h-12 px-4 pr-12"
-                  [class.border-white/30]="password.invalid && password.touched"
-                  autofocus
-                />
-
-                <button
-                  type="button"
-                  (click)="togglePassword()"
-                  class="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-white/30 transition hover:bg-white/8 hover:text-white/70"
-                  [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+            <div class="space-y-5">
+              <div>
+                <label
+                  for="password"
+                  class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
                 >
-                  <lucide-icon [img]="showPassword ? EyeOffIcon : EyeIcon" size="17" />
-                </button>
+                  Sua senha
+                </label>
+
+                <div class="relative">
+                  <input
+                    id="password"
+                    formControlName="password"
+                    [type]="showPassword ? 'text' : 'password'"
+                    autocomplete="new-password"
+                    placeholder="••••••••"
+                    class="input-field min-h-12 px-4 pr-12"
+                    [class.border-white/30]="password.invalid && password.touched"
+                    autofocus
+                  />
+
+                  <button
+                    type="button"
+                    (click)="togglePassword()"
+                    class="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-white/30 transition hover:bg-white/8 hover:text-white/70"
+                    [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'"
+                  >
+                    <lucide-icon [img]="showPassword ? EyeOffIcon : EyeIcon" size="17" />
+                  </button>
+                </div>
+
+                @if (password.invalid && password.touched) {
+                  <p class="mt-1.5 text-xs text-white/55">Senha deve ter no mínimo 6 caracteres.</p>
+                }
               </div>
 
-              @if (password.invalid && password.touched) {
-                <p class="mt-1.5 text-xs text-white/55">Senha deve ter no mínimo 6 caracteres.</p>
-              }
+              <div>
+                <label
+                  for="confirmPassword"
+                  class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
+                >
+                  Repetir senha
+                </label>
+
+                <div class="relative">
+                  <input
+                    id="confirmPassword"
+                    formControlName="confirmPassword"
+                    [type]="showConfirmPassword ? 'text' : 'password'"
+                    autocomplete="new-password"
+                    placeholder="••••••••"
+                    class="input-field min-h-12 px-4 pr-12"
+                    [class.border-white/30]="confirmPassword.invalid && confirmPassword.touched"
+                  />
+
+                  <button
+                    type="button"
+                    (click)="toggleConfirmPassword()"
+                    class="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-white/30 transition hover:bg-white/8 hover:text-white/70"
+                    [attr.aria-label]="
+                      showConfirmPassword
+                        ? 'Ocultar confirmação de senha'
+                        : 'Mostrar confirmação de senha'
+                    "
+                  >
+                    <lucide-icon [img]="showConfirmPassword ? EyeOffIcon : EyeIcon" size="17" />
+                  </button>
+                </div>
+
+                @if (confirmPassword.touched && confirmPassword.hasError('required')) {
+                  <p class="mt-1.5 text-xs text-white/55">Repita a senha para confirmar.</p>
+                }
+
+                @if (confirmPassword.touched && confirmPassword.hasError('mismatch')) {
+                  <p class="mt-1.5 text-xs text-white/55">As senhas não coincidem.</p>
+                }
+              </div>
             </div>
+          </div>
+        }
 
-            <div>
-              <label
-                for="confirmPassword"
-                class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
+        @if (currentStep() === 4) {
+          <div>
+            <p class="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white/40">
+              Etapa 4
+            </p>
+
+            <h2 class="mb-1 text-lg font-semibold text-white sm:text-xl">Confirme seu e-mail</h2>
+
+            <p class="mb-6 text-sm leading-relaxed text-white/45">
+              Enviamos um código de 6 dígitos para
+              <span class="font-medium text-white/75">{{ email.value }}</span
+              >.
+            </p>
+
+            @if (codeError) {
+              <div
+                class="mb-5 flex items-start gap-3 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/75"
+                role="alert"
               >
-                Repetir senha
-              </label>
+                <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/70"></span>
+                <span class="min-w-0 wrap-break-words">{{ codeError }}</span>
+              </div>
+            }
 
-              <div class="relative">
-                <input
-                  id="confirmPassword"
-                  formControlName="confirmPassword"
-                  [type]="showConfirmPassword ? 'text' : 'password'"
-                  autocomplete="new-password"
-                  placeholder="••••••••"
-                  class="input-field min-h-12 px-4 pr-12"
-                  [class.border-white/30]="confirmPassword.invalid && confirmPassword.touched"
-                />
+            @if (sendingCode) {
+              <div
+                class="mb-5 flex items-center gap-3 rounded-xl border border-white/10 bg-white/2.5 p-3 text-sm text-white/55"
+              >
+                <span class="h-3 w-3 animate-pulse rounded-full bg-white/50"></span>
+                Enviando código de verificação...
+              </div>
+            }
 
+            <label
+              for="code"
+              class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45"
+            >
+              Código de verificação
+            </label>
+
+            <input
+              id="code"
+              formControlName="code"
+              type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              placeholder="000000"
+              class="input-field min-h-14 px-4 text-center font-mono text-xl font-semibold tracking-[0.42em]"
+              [class.border-white/30]="code.invalid && code.touched"
+              autofocus
+            />
+
+            @if (code.invalid && code.touched) {
+              <p class="mt-1.5 text-xs text-white/55">
+                Digite o código de 6 dígitos enviado ao seu e-mail.
+              </p>
+            }
+
+            <div class="mt-5 flex items-center justify-between gap-3">
+              <p class="text-xs text-white/35">Não recebeu o código?</p>
+
+              @if (resendCooldown() > 0) {
+                <span class="text-xs text-white/40"> Reenviar em {{ resendCooldown() }}s </span>
+              } @else {
                 <button
                   type="button"
-                  (click)="toggleConfirmPassword()"
-                  class="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-white/30 transition hover:bg-white/8 hover:text-white/70"
-                  [attr.aria-label]="
-                    showConfirmPassword
-                      ? 'Ocultar confirmação de senha'
-                      : 'Mostrar confirmação de senha'
-                  "
+                  (click)="resendCode()"
+                  [disabled]="sendingCode || loading"
+                  class="cursor-pointer text-xs font-medium text-white/70 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  <lucide-icon [img]="showConfirmPassword ? EyeOffIcon : EyeIcon" size="17" />
+                  Reenviar código
                 </button>
-              </div>
-
-              @if (confirmPassword.touched && confirmPassword.hasError('required')) {
-                <p class="mt-1.5 text-xs text-white/55">Repita a senha para confirmar.</p>
-              }
-
-              @if (confirmPassword.touched && confirmPassword.hasError('mismatch')) {
-                <p class="mt-1.5 text-xs text-white/55">As senhas não coincidem.</p>
               }
             </div>
           </div>
         }
+
+        <div
+          class="mt-8 flex items-center gap-3 border-t border-white/8 pt-5"
+          [class.justify-end]="currentStep() === 1"
+          [class.justify-between]="currentStep() > 1"
+        >
+          @if (currentStep() > 1) {
+            <button
+              type="button"
+              (click)="previousStep()"
+              [disabled]="loading || sendingCode"
+              class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-xl border border-white/10 bg-white/4 px-4 text-sm font-medium text-white/65 transition hover:bg-white/8 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+            >
+              Voltar
+            </button>
+          }
+
+          <button
+            type="submit"
+            [disabled]="loading || sendingCode"
+            class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-[#101019] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            @if (loading) {
+              Criando conta...
+            } @else if (sendingCode) {
+              Enviando código...
+            } @else if (currentStep() === 4) {
+              Criar conta
+            } @else {
+              Continuar
+              <span aria-hidden="true">→</span>
+            }
+          </button>
+        </div>
       </form>
     </section>
+
+    <p class="mt-6 text-center text-sm text-white/35">
+      Já possui uma conta?
+
+      <a routerLink="/auth/login" class="font-semibold text-white/75 transition hover:text-white">
+        Entrar
+      </a>
+    </p>
   </main>
 </div>
