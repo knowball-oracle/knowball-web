@@ -1,21 +1,28 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideAngularModule, CircleHelp } from 'lucide-angular';
+import { ChartNoAxesCombined, CircleHelp, LucideAngularModule } from 'lucide-angular';
 
 import {
-  LayoutDashboard,
-  Trophy,
-  Swords,
-  ShieldCheck,
-  Users2,
   FileWarning,
-  Users,
+  LayoutDashboard,
   LogOut,
   Menu,
+  ShieldCheck,
+  Swords,
+  Trophy,
+  Users,
+  Users2,
   X,
 } from '../../../shared/icons/icons';
 import { AuthService } from '../../../core/services/auth.service';
+
+interface NavLink {
+  path: string;
+  label: string;
+  icon: unknown;
+  adminOnly?: boolean;
+}
 
 @Component({
   selector: 'app-navbar',
@@ -24,11 +31,11 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
-  private router = inject(Router);
-  auth = inject(AuthService);
+  private readonly router = inject(Router);
+  readonly auth = inject(AuthService);
 
-  user = this.auth.user;
-  photo = this.auth.photo;
+  readonly user = this.auth.user;
+  readonly photo = this.auth.photo;
 
   mobileOpen = false;
 
@@ -36,16 +43,35 @@ export class NavbarComponent {
   readonly CloseIcon = X;
   readonly LogOutIcon = LogOut;
 
-  links = [
+  readonly links: NavLink[] = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/championships', label: 'Campeonatos', icon: Trophy },
     { path: '/games', label: 'Partidas', icon: Swords },
     { path: '/referees', label: 'Árbitros', icon: ShieldCheck },
     { path: '/teams', label: 'Times', icon: Users2 },
     { path: '/reports', label: 'Denúncias', icon: FileWarning },
-    { path: '/users', label: 'Usuários', icon: Users },
     { path: '/faq', label: 'FAQ', icon: CircleHelp },
+
+    {
+      path: '/oracle-apex',
+      label: 'Oracle APEX',
+      icon: ChartNoAxesCombined,
+      adminOnly: true,
+    },
+    {
+      path: '/users',
+      label: 'Usuários',
+      icon: Users,
+      adminOnly: true,
+    },
   ];
+
+  readonly visibleLinks = computed(() => {
+    const currentUser = this.user();
+    const isAdmin = currentUser?.role === 'ADMIN';
+
+    return this.links.filter((link) => !link.adminOnly || isAdmin);
+  });
 
   logout(): void {
     this.auth.logout();
@@ -58,7 +84,7 @@ export class NavbarComponent {
       this.user()
         ?.name?.split(' ')
         .slice(0, 2)
-        .map((n: string) => n[0])
+        .map((name: string) => name[0])
         .join('')
         .toUpperCase() ?? '?'
     );
