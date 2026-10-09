@@ -23,19 +23,17 @@
   </div>
 
   <nav class="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
-    @for (link of links; track link.path) {
-      @if (link.path !== '/users' || auth.isAdmin()) {
-        <a
-          [routerLink]="link.path"
-          routerLinkActive="bg-white/10 text-white"
-          [routerLinkActiveOptions]="{ exact: link.path === '/dashboard' }"
-          class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white transition-all duration-200 hover:bg-white/5 hover:text-white"
-          (click)="mobileOpen = false"
-        >
-          <lucide-icon [img]="link.icon" size="17" />
-          <span>{{ link.label }}</span>
-        </a>
-      }
+    @for (link of visibleLinks(); track link.path) {
+      <a
+        [routerLink]="link.path"
+        routerLinkActive="bg-white/10 text-white"
+        [routerLinkActiveOptions]="{ exact: link.path === '/dashboard' }"
+        class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white transition-all duration-200 hover:bg-white/5 hover:text-white"
+        (click)="mobileOpen = false"
+      >
+        <lucide-icon [img]="link.icon" size="17" />
+        <span>{{ link.label }}</span>
+      </a>
     }
   </nav>
 
