@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-auth-callback',
   standalone: true,
   template: `
-    <div class="min-h-dvh flex items-center justify-center" style="background:#06060f;">
+    <div class="min-h-dvh flex items-center justify-center" style="background:#0A0A0A;">
       <p class="text-white/50 text-sm">Finalizando login...</p>
     </div>
   `,
