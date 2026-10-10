@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   Activity,
@@ -72,28 +72,28 @@ export class OracleApexComponent {
       value: '49',
       description: 'Registros centralizados para análise.',
       icon: FileWarning,
-      accent: 'text-blue-600 dark:text-blue-400',
+      accent: 'text-blue-400',
     },
     {
       label: 'Casos resolvidos',
       value: '31',
       description: 'Análises concluídas pela equipe.',
       icon: CheckCircle2,
-      accent: 'text-emerald-600 dark:text-emerald-400',
+      accent: 'text-emerald-400',
     },
     {
       label: 'Em análise',
       value: '12',
       description: 'Casos acompanhados em tempo real.',
       icon: Activity,
-      accent: 'text-amber-600 dark:text-amber-400',
+      accent: 'text-amber-400',
     },
     {
       label: 'Árbitros monitorados',
       value: '38',
       description: 'Profissionais vinculados às partidas.',
       icon: Users,
-      accent: 'text-violet-600 dark:text-violet-400',
+      accent: 'text-violet-400',
     },
   ];
 
@@ -110,19 +110,19 @@ export class OracleApexComponent {
       label: 'Resolvidas',
       value: 31,
       percentage: 63,
-      color: 'bg-emerald-500',
+      color: 'bg-emerald-400',
     },
     {
       label: 'Em análise',
       value: 12,
       percentage: 25,
-      color: 'bg-amber-500',
+      color: 'bg-amber-400',
     },
     {
       label: 'Novas',
       value: 6,
       percentage: 12,
-      color: 'bg-blue-500',
+      color: 'bg-blue-400',
     },
   ];
 

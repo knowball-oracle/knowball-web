@@ -1,7 +1,6 @@
 <div class="mx-auto w-full max-w-6xl p-4 sm:p-6 md:p-8">
-
   <section
-    class="relative isolate flex min-h-[72svh] flex-col justify-between overflow-hidden rounded-3xl bg-slate-950 p-5 sm:min-h-[78svh] sm:p-8"
+    class="relative isolate flex min-h-[72svh] flex-col justify-between overflow-hidden rounded-3xl bg-[#0A0A0A] p-5 sm:min-h-[78svh] sm:p-8"
   >
     <img
       src="assets/report.jpg"
@@ -13,12 +12,6 @@
     <div class="absolute inset-0 -z-10 bg-linear-to-t from-black/90 via-black/50 to-black/60"></div>
 
     <div class="flex items-start justify-between gap-3">
-      <span
-        class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-medium text-white/85 backdrop-blur-xl"
-      >
-        <span class="h-1.5 w-1.5 rounded-full bg-red-400"></span>
-        Knowball · Transparência e integridade
-      </span>
 
       @if (!auth.isAdmin()) {
         <a
@@ -48,7 +41,7 @@
         <button
           type="button"
           (click)="scrollToList()"
-          class="mt-7 inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-slate-950 transition hover:bg-white/90"
+          class="mt-7 inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#0A0A0A] transition hover:bg-white/90"
         >
           Ver denúncias
           <lucide-icon [img]="ArrowDownIcon" size="16" />
@@ -67,7 +60,7 @@
             {{ loading ? '–' : allItems.length }}
           </span>
 
-          <span class="text-sm text-white/65"> denúncias registradas </span>
+          <span class="text-sm text-white/65">denúncias registradas</span>
         </p>
 
         <ul class="mt-4 space-y-2 border-t border-white/10 pt-4">
@@ -110,11 +103,9 @@
 
   <section id="denuncias-lista" class="scroll-mt-6 pt-10 sm:pt-14">
     <div class="mb-6">
-      <h2 class="text-xl font-bold text-slate-950 sm:text-2xl dark:text-white">Denúncias</h2>
+      <h2 class="text-xl font-bold text-white sm:text-2xl">Denúncias</h2>
 
-      <p class="mt-1 text-sm text-slate-600 dark:text-white/45">
-        Denúncias abertas e analisadas pela plataforma.
-      </p>
+      <p class="mt-1 text-sm text-white/45">Denúncias abertas e analisadas pela plataforma.</p>
     </div>
 
     @if (loading) {
@@ -127,7 +118,7 @@
 
     @if (error) {
       <div
-        class="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400"
+        class="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400"
         role="alert"
       >
         {{ error }}
@@ -137,14 +128,14 @@
     @if (!loading && !error) {
       @if (items.length === 0) {
         <div
-          class="rounded-2xl border border-white/70 bg-white/55 py-16 text-center shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+          class="rounded-2xl border border-white/10 bg-white/4 py-16 text-center shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl"
         >
-          <p class="text-sm text-slate-500 dark:text-white/40">Nenhuma denúncia cadastrada.</p>
+          <p class="text-sm text-white/40">Nenhuma denúncia cadastrada.</p>
 
           @if (!auth.isAdmin()) {
             <a
               routerLink="/reports/new"
-              class="mt-3 inline-block text-sm text-slate-700 transition hover:text-slate-950 dark:text-white/55 dark:hover:text-white"
+              class="mt-3 inline-block text-sm text-white/55 transition hover:text-white"
             >
               Registrar a primeira →
             </a>
@@ -160,20 +151,20 @@
             <lucide-icon
               [img]="SearchIcon"
               size="15"
-              class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/30"
+              class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30"
             />
 
             <input
               formControlName="protocol"
               type="text"
               placeholder="Filtrar por protocolo..."
-              class="input-field min-h-11 pl-11!"
+              class="input-field min-h-11 pl-12"
             />
           </div>
 
           <select
             formControlName="status"
-            class="input-field min-h-11 w-full bg-white/60 text-slate-800 dark:bg-white/4 dark:text-white/80 sm:w-52"
+            class="input-field min-h-11 w-full bg-white/4 text-white/80 sm:w-52"
           >
             <option value="">Status (Todos)</option>
             <option value="NEW">NOVA</option>
@@ -184,16 +175,14 @@
 
         @if (items.length === 0) {
           <div
-            class="rounded-2xl border border-white/70 bg-white/55 py-12 text-center shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+            class="rounded-2xl border border-white/10 bg-white/4 py-12 text-center shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl"
           >
-            <p class="text-sm text-slate-500 dark:text-white/40">
-              Nenhuma denúncia encontrada com esses filtros.
-            </p>
+            <p class="text-sm text-white/40">Nenhuma denúncia encontrada com esses filtros.</p>
 
             <button
               type="button"
               (click)="filters.reset()"
-              class="mt-3 cursor-pointer text-sm text-slate-700 transition hover:text-slate-950 dark:text-white/55 dark:hover:text-white"
+              class="mt-3 cursor-pointer text-sm text-white/55 transition hover:text-white"
             >
               Limpar filtros →
             </button>
@@ -203,23 +192,19 @@
             @for (item of items; track item.id) {
               <a
                 [routerLink]="['/reports', item.id]"
-                class="group relative overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-5 shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/75 dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0 dark:hover:bg-white/[0.07]"
+                class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/4 p-5 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.07]"
               >
                 <div
-                  class="pointer-events-none absolute inset-x-5 top-0 h-px bg-linear-to-r from-transparent via-white to-transparent dark:via-white/25"
+                  class="pointer-events-none absolute inset-x-5 top-0 h-px bg-linear-to-r from-transparent via-white/25 to-transparent"
                 ></div>
 
                 <div class="flex items-start justify-between gap-3">
                   <div>
-                    <p
-                      class="text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-400 dark:text-white/35"
-                    >
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/35">
                       Protocolo
                     </p>
 
-                    <p
-                      class="mt-1 font-mono text-sm font-bold tracking-wide text-slate-900 dark:text-white/90"
-                    >
+                    <p class="mt-1 font-mono text-sm font-bold tracking-wide text-white/90">
                       {{ item.protocol }}
                     </p>
                   </div>
@@ -231,39 +216,25 @@
 
                 <div class="mt-5 grid grid-cols-2 gap-4">
                   <div>
-                    <p
-                      class="text-[10px] uppercase tracking-wider text-slate-400 dark:text-white/30"
-                    >
-                      Denúncia
-                    </p>
+                    <p class="text-[10px] uppercase tracking-wider text-white/30">Denúncia</p>
 
-                    <p class="mt-1 text-xs tabular-nums text-slate-600 dark:text-white/60">
+                    <p class="mt-1 text-xs tabular-nums text-white/60">
                       {{ item.date | date: 'dd/MM/yyyy HH:mm' }}
                     </p>
                   </div>
 
                   <div>
-                    <p
-                      class="text-[10px] uppercase tracking-wider text-slate-400 dark:text-white/30"
-                    >
-                      Partida
-                    </p>
+                    <p class="text-[10px] uppercase tracking-wider text-white/30">Partida</p>
 
-                    <p class="mt-1 text-xs tabular-nums text-slate-600 dark:text-white/60">
+                    <p class="mt-1 text-xs tabular-nums text-white/60">
                       {{ item.game.matchDate | date: 'dd/MM/yyyy' }}
                     </p>
                   </div>
                 </div>
 
-                <div
-                  class="mt-5 flex items-center justify-between border-t border-slate-200 pt-4 dark:border-white/8"
-                >
+                <div class="mt-5 flex items-center justify-between border-t border-white/8 pt-4">
                   <div>
-                    <p
-                      class="text-[10px] uppercase tracking-wider text-slate-400 dark:text-white/30"
-                    >
-                      Resultado
-                    </p>
+                    <p class="text-[10px] uppercase tracking-wider text-white/30">Resultado</p>
 
                     @if (item.analysisResult) {
                       <span
@@ -273,14 +244,12 @@
                         {{ resultLabel(item.analysisResult) }}
                       </span>
                     } @else {
-                      <span class="mt-1 block text-xs text-slate-400 dark:text-white/25">
-                        Ainda não definido
-                      </span>
+                      <span class="mt-1 block text-xs text-white/25"> Ainda não definido </span>
                     }
                   </div>
 
                   <span
-                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900/5 text-slate-500 transition group-hover:bg-slate-900/10 group-hover:text-slate-900 dark:bg-white/8 dark:text-white/50 dark:group-hover:bg-white/12 dark:group-hover:text-white"
+                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/8 text-white/50 transition group-hover:bg-white/12 group-hover:text-white"
                   >
                     <lucide-icon [img]="EyeIcon" size="16" />
                   </span>
@@ -291,16 +260,14 @@
 
           @if (auth.isAdmin()) {
             <div class="mt-10">
-              <h2 class="mb-3 px-1 text-sm font-semibold text-slate-700 dark:text-white/50">
-                Gerenciar denúncias
-              </h2>
+              <h2 class="mb-3 px-1 text-sm font-semibold text-white/50">Gerenciar denúncias</h2>
 
               <div
-                class="overflow-x-auto rounded-2xl border border-white/70 bg-white/55 shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+                class="overflow-x-auto rounded-2xl border border-white/10 bg-white/4 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl"
               >
                 <table class="w-full min-w-205 text-left text-sm">
-                  <thead class="border-b border-slate-200 dark:border-white/8">
-                    <tr class="text-xs uppercase tracking-wider text-slate-500 dark:text-white/30">
+                  <thead class="border-b border-white/8">
+                    <tr class="text-xs uppercase tracking-wider text-white/30">
                       <th class="px-5 py-3">Protocolo</th>
                       <th class="px-5 py-3">Data da denúncia</th>
                       <th class="px-5 py-3">Data da partida</th>
@@ -310,20 +277,18 @@
                     </tr>
                   </thead>
 
-                  <tbody class="divide-y divide-slate-200 dark:divide-white/5">
+                  <tbody class="divide-y divide-white/5">
                     @for (item of items; track item.id) {
-                      <tr
-                        class="transition-colors duration-150 hover:bg-slate-900/3 dark:hover:bg-white/4"
-                      >
-                        <td class="px-5 py-3.5 font-mono text-xs text-slate-800 dark:text-white/70">
+                      <tr class="transition-colors duration-150 hover:bg-white/4">
+                        <td class="px-5 py-3.5 font-mono text-xs text-white/70">
                           {{ item.protocol }}
                         </td>
 
-                        <td class="px-5 py-3.5 tabular-nums text-slate-600 dark:text-white/50">
+                        <td class="px-5 py-3.5 tabular-nums text-white/50">
                           {{ item.date | date: 'dd/MM/yyyy HH:mm' }}
                         </td>
 
-                        <td class="px-5 py-3.5 tabular-nums text-slate-600 dark:text-white/50">
+                        <td class="px-5 py-3.5 tabular-nums text-white/50">
                           {{ item.game.matchDate | date: 'dd/MM/yyyy' }}
                         </td>
 
@@ -339,7 +304,7 @@
                               {{ resultLabel(item.analysisResult) }}
                             </span>
                           } @else {
-                            <span class="text-xs text-slate-400 dark:text-white/20">—</span>
+                            <span class="text-xs text-white/20">—</span>
                           }
                         </td>
 
@@ -347,7 +312,7 @@
                           <div class="flex items-center justify-end">
                             <a
                               [routerLink]="['/reports', item.id]"
-                              class="rounded-lg p-2 text-slate-400 transition-all duration-200 hover:bg-slate-900/5 hover:text-slate-900 dark:text-white/30 dark:hover:bg-white/8 dark:hover:text-white/80"
+                              class="rounded-lg p-2 text-white/30 transition-all duration-200 hover:bg-white/8 hover:text-white/80"
                               aria-label="Visualizar denúncia"
                             >
                               <lucide-icon [img]="EyeIcon" size="14" />

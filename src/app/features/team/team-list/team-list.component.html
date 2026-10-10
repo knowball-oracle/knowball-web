@@ -1,7 +1,6 @@
 <div class="mx-auto w-full max-w-6xl p-4 sm:p-6 md:p-8">
-  <!-- Hero -->
   <section
-    class="relative isolate flex min-h-[72svh] flex-col justify-between overflow-hidden rounded-3xl bg-slate-950 p-5 sm:min-h-[78svh] sm:p-8"
+    class="relative isolate flex min-h-[72svh] flex-col justify-between overflow-hidden rounded-3xl bg-[#0A0A0A] p-5 sm:min-h-[78svh] sm:p-8"
   >
     <img
       src="assets/teams.jpg"
@@ -13,13 +12,6 @@
     <div class="absolute inset-0 -z-10 bg-linear-to-t from-black/90 via-black/45 to-black/55"></div>
 
     <div class="flex items-start justify-between gap-3">
-      <span
-        class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[11px] font-medium text-white/85 backdrop-blur-xl"
-      >
-        <lucide-icon [img]="ShieldIcon" size="13" />
-        Futebol de base · Times em campo
-      </span>
-
       @if (auth.isAdmin()) {
         <a
           routerLink="/teams/new"
@@ -37,7 +29,7 @@
           class="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl"
         >
           Os times que formam
-          <span class="block font-light italic text-white/70"> o futuro do futebol. </span>
+          <span class="block font-light italic text-white/70">o futuro do futebol.</span>
         </h1>
 
         <p class="mt-5 max-w-xl text-sm leading-7 text-white/70 sm:text-base">
@@ -48,7 +40,7 @@
         <button
           type="button"
           (click)="scrollToList()"
-          class="mt-7 inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-slate-950 transition hover:bg-white/90"
+          class="mt-7 inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#0A0A0A] transition hover:bg-white/90"
         >
           Ver times
           <lucide-icon [img]="ArrowDownIcon" size="16" />
@@ -67,7 +59,7 @@
             {{ loading ? '–' : items.length }}
           </span>
 
-          <span class="text-sm text-white/65"> times cadastrados </span>
+          <span class="text-sm text-white/65">times cadastrados</span>
         </p>
 
         <div class="mt-4 border-t border-white/10 pt-4">
@@ -82,11 +74,9 @@
 
   <section id="times-lista" class="scroll-mt-6 pt-10 sm:pt-14">
     <div class="mb-6">
-      <h2 class="text-xl font-bold text-slate-950 sm:text-2xl dark:text-white">Times</h2>
+      <h2 class="text-xl font-bold text-white sm:text-2xl">Times</h2>
 
-      <p class="mt-1 text-sm text-slate-600 dark:text-white/45">
-        Times participantes dos campeonatos monitorados.
-      </p>
+      <p class="mt-1 text-sm text-white/45">Times participantes dos campeonatos monitorados.</p>
     </div>
 
     @if (loading) {
@@ -99,7 +89,7 @@
 
     @if (error) {
       <div
-        class="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400"
+        class="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400"
         role="alert"
       >
         {{ error }}
@@ -109,14 +99,14 @@
     @if (!loading && !error) {
       @if (items.length === 0) {
         <div
-          class="rounded-2xl border border-white/70 bg-white/55 py-16 text-center shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+          class="rounded-2xl border border-white/10 bg-white/4 py-16 text-center shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl"
         >
-          <p class="text-sm text-slate-500 dark:text-white/40">Nenhum time cadastrado.</p>
+          <p class="text-sm text-white/40">Nenhum time cadastrado.</p>
 
           @if (auth.isAdmin()) {
             <a
               routerLink="/teams/new"
-              class="mt-3 inline-block text-sm text-slate-700 transition hover:text-slate-950 dark:text-white/55 dark:hover:text-white"
+              class="mt-3 inline-block text-sm text-white/55 transition hover:text-white"
             >
               Cadastrar o primeiro →
             </a>
@@ -127,7 +117,7 @@
           <div class="relative">
             <select
               [(ngModel)]="selectedState"
-              class="min-h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white/60 px-3 pr-10 text-sm font-medium text-slate-700 shadow-sm outline-none backdrop-blur-xl transition focus:border-slate-400 sm:w-auto dark:border-white/10 dark:bg-white/4 dark:text-white/70 dark:focus:border-white/25"
+              class="min-h-11 w-full appearance-none rounded-xl border border-white/10 bg-white/4 px-3 pr-10 text-sm font-medium text-white/70 outline-none backdrop-blur-xl transition focus:border-white/25 sm:w-auto"
             >
               <option value="">Todos os estados</option>
 
@@ -139,15 +129,15 @@
             <lucide-icon
               [img]="ChevronDownIcon"
               size="14"
-              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-white/30"
+              class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/30"
             />
           </div>
 
           @if (selectedState) {
-            <span class="text-xs text-slate-500 dark:text-white/35">
+            <span class="text-xs text-white/35">
               {{ filteredItems.length }}
               {{ filteredItems.length === 1 ? 'time' : 'times' }} em
-              <span class="font-semibold text-slate-700 dark:text-white/60">
+              <span class="font-semibold text-white/60">
                 {{ selectedState }}
               </span>
             </span>
@@ -155,7 +145,7 @@
             <button
               type="button"
               (click)="selectedState = ''"
-              class="cursor-pointer text-xs text-slate-500 transition hover:text-slate-950 dark:text-white/40 dark:hover:text-white/70"
+              class="cursor-pointer text-xs text-white/40 transition hover:text-white/70"
             >
               Limpar
             </button>
@@ -164,25 +154,25 @@
 
         @if (filteredItems.length === 0) {
           <div
-            class="rounded-2xl border border-white/70 bg-white/55 py-12 text-center shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+            class="rounded-2xl border border-white/10 bg-white/4 py-12 text-center shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl"
           >
-            <p class="text-sm text-slate-500 dark:text-white/40">Nenhum time para esta UF.</p>
+            <p class="text-sm text-white/40">Nenhum time para esta UF.</p>
 
             <button
               type="button"
               (click)="selectedState = ''"
-              class="mt-3 cursor-pointer text-sm text-slate-700 transition hover:text-slate-950 dark:text-white/55 dark:hover:text-white"
+              class="mt-3 cursor-pointer text-sm text-white/55 transition hover:text-white"
             >
               Limpar filtro →
             </button>
           </div>
         } @else {
           <div
-            class="overflow-x-auto rounded-2xl border border-white/70 bg-white/55 shadow-[0_8px_32px_rgba(31,41,55,0.08)] ring-1 ring-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-white/4 dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] dark:ring-0"
+            class="overflow-x-auto rounded-2xl border border-white/10 bg-white/4 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl"
           >
             <table class="w-full min-w-155 text-left text-sm">
-              <thead class="border-b border-slate-200 dark:border-white/10">
-                <tr class="text-xs uppercase tracking-wider text-slate-500 dark:text-white/35">
+              <thead class="border-b border-white/10">
+                <tr class="text-xs uppercase tracking-wider text-white/35">
                   <th class="px-5 py-3">Nome</th>
                   <th class="px-5 py-3">Cidade</th>
                   <th class="px-5 py-3">UF</th>
@@ -193,21 +183,19 @@
                 </tr>
               </thead>
 
-              <tbody class="divide-y divide-slate-200 dark:divide-white/5">
+              <tbody class="divide-y divide-white/5">
                 @for (item of filteredItems; track item.id) {
-                  <tr
-                    class="transition-colors duration-150 hover:bg-slate-900/3 dark:hover:bg-white/4"
-                  >
+                  <tr class="transition-colors duration-150 hover:bg-white/4">
                     <td class="px-5 py-3.5">
                       <app-team-badge
                         [name]="item.name"
                         [logoUrl]="item.logoUrl"
                         [size]="30"
-                        nameClass="text-sm font-medium text-slate-800 dark:text-white/80"
+                        nameClass="text-sm font-medium text-white/80"
                       />
                     </td>
 
-                    <td class="px-5 py-3.5 text-slate-600 dark:text-white/50">
+                    <td class="px-5 py-3.5 text-white/50">
                       {{ item.city }}
                     </td>
 
@@ -222,7 +210,7 @@
                         <div class="flex items-center justify-end gap-1">
                           <a
                             [routerLink]="['/teams', item.id, 'edit']"
-                            class="rounded-lg p-2 text-slate-400 transition-all duration-200 hover:bg-blue-500/10 hover:text-blue-600 dark:text-white/30 dark:hover:text-blue-400"
+                            class="rounded-lg p-2 text-white/30 transition-all duration-200 hover:bg-blue-500/10 hover:text-blue-400"
                             aria-label="Editar time"
                           >
                             <lucide-icon [img]="PencilIcon" size="14" />
@@ -231,7 +219,7 @@
                           <button
                             type="button"
                             (click)="confirmDelete(item.id!)"
-                            class="cursor-pointer rounded-lg p-2 text-slate-400 transition-all duration-200 hover:bg-red-500/10 hover:text-red-600 dark:text-white/30 dark:hover:text-red-400"
+                            class="cursor-pointer rounded-lg p-2 text-white/30 transition-all duration-200 hover:bg-red-500/10 hover:text-red-400"
                             aria-label="Excluir time"
                           >
                             <lucide-icon [img]="TrashIcon" size="14" />

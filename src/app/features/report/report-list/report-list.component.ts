@@ -1,12 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { LucideAngularModule, ArrowDown, Search } from 'lucide-angular';
+import { ArrowDown, LucideAngularModule, Search } from 'lucide-angular';
+
 import { Eye, Plus } from '../../../shared/icons/icons';
 import { ReportService } from '../services/report.service';
 import { Report } from '../../../models/report.model';
 import { AuthService } from '../../../core/services/auth.service';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-report-list',
@@ -15,10 +16,11 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './report-list.component.html',
 })
 export class ReportListComponent implements OnInit {
-  private service = inject(ReportService);
-  private document = inject(DOCUMENT);
-  auth = inject(AuthService);
-  private fb = inject(FormBuilder);
+  private readonly service = inject(ReportService);
+  private readonly document = inject(DOCUMENT);
+  private readonly fb = inject(FormBuilder);
+
+  readonly auth = inject(AuthService);
 
   items: Report[] = [];
   allItems: Report[] = [];
@@ -30,7 +32,7 @@ export class ReportListComponent implements OnInit {
   readonly PlusIcon = Plus;
   readonly SearchIcon = Search;
 
-  filters = this.fb.group({
+  readonly filters = this.fb.group({
     protocol: [''],
     status: [''],
   });
@@ -60,15 +62,15 @@ export class ReportListComponent implements OnInit {
 
   applyFilters(): void {
     const { protocol, status } = this.filters.getRawValue();
+    const normalizedProtocol = this.normalize(protocol);
 
     this.items = this.allItems.filter((item) => {
-      const matchProtocol =
-        !protocol ||
-        (item.protocol && item.protocol.toLowerCase().includes(protocol.toLowerCase()));
+      const matchesProtocol =
+        !normalizedProtocol || this.normalize(item.protocol).includes(normalizedProtocol);
 
-      const matchStatus = !status || item.status === status;
+      const matchesStatus = !status || item.status === status;
 
-      return matchProtocol && matchStatus;
+      return matchesProtocol && matchesStatus;
     });
   }
 
@@ -86,46 +88,50 @@ export class ReportListComponent implements OnInit {
   }
 
   statusLabel(status: string): string {
-    const map: Record<string, string> = {
+    const labels: Record<string, string> = {
       NEW: 'Nova',
       UNDER_REVIEW: 'Em análise',
       RESOLVED: 'Resolvida',
     };
 
-    return map[status] ?? status;
+    return labels[status] ?? status;
   }
 
   statusStyle(status: string): string {
-    const map: Record<string, string> = {
-      NEW: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
-      UNDER_REVIEW: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
-      RESOLVED: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+    const styles: Record<string, string> = {
+      NEW: 'border border-blue-500/20 bg-blue-500/15 text-blue-300',
+      UNDER_REVIEW: 'border border-amber-500/20 bg-amber-500/15 text-amber-300',
+      RESOLVED: 'border border-emerald-500/20 bg-emerald-500/15 text-emerald-300',
     };
 
-    return map[status] ?? 'bg-slate-500/10 text-slate-600 dark:text-white/40';
+    return styles[status] ?? 'border border-white/10 bg-white/5 text-white/65';
   }
 
   resultLabel(result: string): string {
-    const map: Record<string, string> = {
+    const labels: Record<string, string> = {
       POSITIVE: 'Positivo',
       NEUTRAL: 'Neutro',
       NEGATIVE: 'Negativo',
     };
 
-    return map[result] ?? result;
+    return labels[result] ?? result;
   }
 
   resultStyle(result: string): string {
-    const map: Record<string, string> = {
-      POSITIVE: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-      NEUTRAL: 'bg-slate-500/10 text-slate-600 dark:text-white/40',
-      NEGATIVE: 'bg-red-500/10 text-red-700 dark:text-red-400',
+    const styles: Record<string, string> = {
+      POSITIVE: 'border border-emerald-500/20 bg-emerald-500/15 text-emerald-300',
+      NEUTRAL: 'border border-white/10 bg-white/5 text-white/65',
+      NEGATIVE: 'border border-red-500/20 bg-red-500/15 text-red-300',
     };
 
-    return map[result] ?? '';
+    return styles[result] ?? 'border border-white/10 bg-white/5 text-white/65';
   }
 
   countByStatus(status: string): number {
     return this.allItems.filter((item) => item.status === status).length;
+  }
+
+  private normalize(value: string | null | undefined): string {
+    return (value ?? '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
   }
 }

@@ -1,13 +1,19 @@
-import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { LucideAngularModule, ArrowDown, Shield, ChevronDown } from 'lucide-angular';
-import { Pencil, Trash2, Plus } from '../../../shared/icons/icons';
+import {
+  ArrowDown,
+  ChevronDown,
+  LucideAngularModule,
+  Shield,
+} from 'lucide-angular';
+
+import { Pencil, Plus, Trash2 } from '../../../shared/icons/icons';
 import { TeamService } from '../services/team.service';
 import { Team } from '../../../models/team.model';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '../../../core/services/auth.service';
-import { FormsModule } from '@angular/forms';
 import { TeamBadgeComponent } from '../../../shared/components/team-badge/team-badge.component';
 
 @Component({
@@ -24,14 +30,17 @@ import { TeamBadgeComponent } from '../../../shared/components/team-badge/team-b
   templateUrl: './team-list.component.html',
 })
 export class TeamListComponent implements OnInit {
-  private service = inject(TeamService);
-  private document = inject(DOCUMENT);
-  auth = inject(AuthService);
+  private readonly service = inject(TeamService);
+  private readonly document = inject(DOCUMENT);
+
+  readonly auth = inject(AuthService);
 
   items: Team[] = [];
   loading = true;
   error = '';
   pendingDeleteId: number | null = null;
+
+  selectedState = '';
 
   readonly ArrowDownIcon = ArrowDown;
   readonly ChevronDownIcon = ChevronDown;
@@ -40,18 +49,16 @@ export class TeamListComponent implements OnInit {
   readonly PlusIcon = Plus;
   readonly ShieldIcon = Shield;
 
-  selectedState = '';
-
   get states(): string[] {
-    const set = new Set<string>();
+    const states = new Set<string>();
 
     for (const team of this.items) {
       if (team.state) {
-        set.add(team.state.toUpperCase());
+        states.add(team.state.toUpperCase());
       }
     }
 
-    return Array.from(set).sort();
+    return Array.from(states).sort((a, b) => a.localeCompare(b, 'pt-BR'));
   }
 
   get filteredItems(): Team[] {
@@ -61,43 +68,60 @@ export class TeamListComponent implements OnInit {
 
     const uf = this.selectedState.toUpperCase();
 
-    return this.items.filter((team) => team.state && team.state.toUpperCase() === uf);
+    return this.items.filter(
+      (team) => team.state && team.state.toUpperCase() === uf,
+    );
   }
 
   stateBadgeClass(uf: string | null | undefined): string {
-    switch (uf) {
+    switch (uf?.toUpperCase()) {
       case 'SP':
-        return 'bg-blue-500/10 text-blue-700 dark:text-blue-400';
+        return 'border border-blue-500/20 bg-blue-500/15 text-blue-300';
+
       case 'RJ':
-        return 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400';
+        return 'border border-emerald-500/20 bg-emerald-500/15 text-emerald-300';
+
       case 'MG':
-        return 'bg-amber-500/10 text-amber-700 dark:text-amber-400';
+        return 'border border-amber-500/20 bg-amber-500/15 text-amber-300';
+
       case 'RS':
-        return 'bg-rose-500/10 text-rose-700 dark:text-rose-400';
+        return 'border border-rose-500/20 bg-rose-500/15 text-rose-300';
+
       case 'PR':
-        return 'bg-purple-500/10 text-purple-700 dark:text-purple-400';
+        return 'border border-purple-500/20 bg-purple-500/15 text-purple-300';
+
       case 'BA':
-        return 'bg-red-500/10 text-red-700 dark:text-red-400';
+        return 'border border-red-500/20 bg-red-500/15 text-red-300';
+
       case 'CE':
-        return 'bg-cyan-500/10 text-cyan-700 dark:text-cyan-400';
+        return 'border border-cyan-500/20 bg-cyan-500/15 text-cyan-300';
+
       case 'PE':
-        return 'bg-lime-500/10 text-lime-700 dark:text-lime-400';
+        return 'border border-lime-500/20 bg-lime-500/15 text-lime-300';
+
       case 'SC':
-        return 'bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-400';
+        return 'border border-fuchsia-500/20 bg-fuchsia-500/15 text-fuchsia-300';
+
       case 'GO':
-        return 'bg-orange-500/10 text-orange-700 dark:text-orange-400';
+        return 'border border-orange-500/20 bg-orange-500/15 text-orange-300';
+
       case 'DF':
-        return 'bg-sky-500/10 text-sky-700 dark:text-sky-400';
+        return 'border border-sky-500/20 bg-sky-500/15 text-sky-300';
+
       case 'AM':
-        return 'bg-teal-500/10 text-teal-700 dark:text-teal-400';
+        return 'border border-teal-500/20 bg-teal-500/15 text-teal-300';
+
       case 'ES':
-        return 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400';
+        return 'border border-indigo-500/20 bg-indigo-500/15 text-indigo-300';
+
       case 'RN':
-        return 'bg-pink-500/10 text-pink-700 dark:text-pink-400';
+        return 'border border-pink-500/20 bg-pink-500/15 text-pink-300';
+
       case 'MT':
-        return 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400';
+        return 'border border-yellow-500/20 bg-yellow-500/15 text-yellow-300';
+
       default:
-        return 'bg-slate-500/10 text-slate-600 dark:text-white/50';
+        return 'border border-white/10 bg-white/5 text-white/65';
     }
   }
 

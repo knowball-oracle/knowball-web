@@ -1,18 +1,22 @@
 <div class="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-8 md:px-8 md:py-10">
   <section
-    class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white px-6 py-8 shadow-xl shadow-slate-200/40 sm:px-10 sm:py-12 dark:border-white/10 dark:bg-[#0A0A0A] dark:shadow-black/20"
+    class="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0A0A0A] px-6 py-8 shadow-xl shadow-black/20 sm:px-10 sm:py-12"
   >
     <div class="relative grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_210px]">
       <div>
+        <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">
+          Oracle APEX · Inteligência operacional
+        </p>
+
         <h1
-          class="mt-5 max-w-3xl text-3xl font-bold leading-tight tracking-tight text-slate-950 sm:text-4xl lg:text-5xl dark:text-white"
+          class="mt-5 max-w-3xl text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl"
         >
           Dados que protegem a
-          <span class="text-red-600 dark:text-red-400">integridade</span>
+          <span class="text-red-400">integridade</span>
           do futebol de base.
         </h1>
 
-        <p class="mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base dark:text-white/55">
+        <p class="mt-5 max-w-2xl text-sm leading-7 text-white/55 sm:text-base">
           O Knowball transforma relatos de irregularidades em dados estruturados, rastreáveis e
           acionáveis. Com Oracle APEX, a gestão ganha uma camada visual para acompanhar riscos,
           identificar padrões e tomar decisões com evidências.
@@ -21,34 +25,31 @@
         <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
           <a
             routerLink="/reports"
-            class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white/10 dark:hover:bg-white/15"
+            class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/15"
           >
             Explorar denúncias
             <lucide-icon [img]="ArrowRightIcon" size="16" />
           </a>
 
-          <span class="text-xs text-slate-500 dark:text-white/40">
-            Painel demonstrativo · dados ilustrativos
-          </span>
+          <span class="text-xs text-white/40"> Painel demonstrativo · dados ilustrativos </span>
         </div>
       </div>
 
       <aside
-        class="mx-auto w-full max-w-52.5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center dark:border-white/10 dark:bg-white/2.5"
+        class="mx-auto w-full max-w-52.5 rounded-2xl border border-white/10 bg-white/2.5 p-4 text-center"
       >
         <div
-          class="flex aspect-square w-full items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-white dark:border-white/20 dark:bg-white/[0.035]"
+          class="flex aspect-square w-full items-center justify-center rounded-xl border-2 border-dashed border-white/20 bg-white/[0.035]"
         >
-          <div class="flex flex-col items-center gap-2 text-slate-400 dark:text-white/35">
+          <div class="flex flex-col items-center gap-2 text-white/35">
             <lucide-icon [img]="QrCodeIcon" size="42" strokeWidth="1.5" />
-
-            <span class="text-[10px] font-semibold uppercase tracking-[0.14em]"> QR CODE </span>
+            <span class="text-[10px] font-semibold uppercase tracking-[0.14em]">QR code</span>
           </div>
         </div>
 
-        <p class="mt-3 text-xs font-medium text-slate-700 dark:text-white/70">Acesse o Knowball</p>
+        <p class="mt-3 text-xs font-medium text-white/70">Acesse o Knowball</p>
 
-        <p class="mt-1 text-[11px] leading-relaxed text-slate-500 dark:text-white/40">
+        <p class="mt-1 text-[11px] leading-relaxed text-white/40">
           Escaneie para conhecer a plataforma.
         </p>
       </aside>
@@ -58,27 +59,23 @@
   <section class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
     @for (metric of metrics; track metric.label) {
       <article
-        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/40 dark:border-white/10 dark:bg-[#0A0A0A] dark:shadow-black/20"
+        class="rounded-2xl border border-white/10 bg-[#0A0A0A] p-5 shadow-lg shadow-black/20"
       >
         <div class="flex items-start justify-between gap-3">
           <div>
-            <p class="text-xs font-medium text-slate-500 dark:text-white/40">
-              {{ metric.label }}
-            </p>
+            <p class="text-xs font-medium text-white/40">{{ metric.label }}</p>
 
-            <p class="mt-2 text-3xl font-bold tabular-nums text-slate-950 dark:text-white">
+            <p class="mt-2 text-3xl font-bold tabular-nums text-white">
               {{ metric.value }}
             </p>
           </div>
 
-          <div
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/8"
-          >
+          <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/8">
             <lucide-icon [img]="metric.icon" size="19" [class]="metric.accent" />
           </div>
         </div>
 
-        <p class="mt-3 text-xs leading-relaxed text-slate-500 dark:text-white/40">
+        <p class="mt-3 text-xs leading-relaxed text-white/40">
           {{ metric.description }}
         </p>
       </article>
@@ -87,34 +84,31 @@
 
   <section class="mt-8">
     <div class="mb-4">
-      <p class="text-sm font-semibold text-slate-950 dark:text-white">Visão analítica</p>
+      <p class="text-sm font-semibold text-white">Visão analítica</p>
 
-      <p class="mt-1 text-xs text-slate-500 dark:text-white/40">
+      <p class="mt-1 text-xs text-white/40">
         Exemplo de como o Oracle APEX pode consolidar dados do Knowball em painéis de decisão.
       </p>
     </div>
 
     <div class="grid gap-5 lg:grid-cols-2">
       <article
-        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/40 dark:border-white/10 dark:bg-[#0A0A0A] dark:shadow-black/20 sm:p-6"
+        class="rounded-2xl border border-white/10 bg-[#0A0A0A] p-5 shadow-lg shadow-black/20 sm:p-6"
       >
         <div class="flex items-start justify-between gap-4">
           <div>
             <div class="flex items-center gap-2">
-              <lucide-icon [img]="UsersIcon" size="16" class="text-red-600 dark:text-red-400" />
-
-              <h2 class="text-sm font-semibold text-slate-950 dark:text-white">
-                Árbitros mais denunciados
-              </h2>
+              <lucide-icon [img]="UsersIcon" size="16" class="text-red-400" />
+              <h2 class="text-sm font-semibold text-white">Árbitros mais denunciados</h2>
             </div>
 
-            <p class="mt-1 text-xs text-slate-500 dark:text-white/40">
+            <p class="mt-1 text-xs text-white/40">
               Ranking baseado no número de denúncias vinculadas.
             </p>
           </div>
 
           <span
-            class="rounded-full bg-red-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-red-700 dark:bg-red-400/10 dark:text-red-300"
+            class="rounded-full border border-red-500/20 bg-red-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-red-300"
           >
             Top 5
           </span>
@@ -123,66 +117,57 @@
         <div class="mt-6 space-y-4">
           @for (referee of refereeRanking; track referee.name; let index = $index) {
             <div class="grid grid-cols-[22px_minmax(0,1fr)_30px] items-center gap-3">
-              <span class="text-xs font-semibold tabular-nums text-slate-400 dark:text-white/35">
+              <span class="text-xs font-semibold tabular-nums text-white/35">
                 0{{ index + 1 }}
               </span>
 
               <div class="min-w-0">
                 <div class="mb-1.5 flex items-center justify-between gap-3">
-                  <span class="truncate text-sm font-medium text-slate-800 dark:text-white/85">
+                  <span class="truncate text-sm font-medium text-white/85">
                     {{ referee.name }}
                   </span>
 
-                  <span class="shrink-0 text-xs tabular-nums text-slate-500 dark:text-white/45">
+                  <span class="shrink-0 text-xs tabular-nums text-white/45">
                     {{ referee.reports }}
                   </span>
                 </div>
 
-                <div class="h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-white/8">
+                <div class="h-1.5 overflow-hidden rounded-full bg-white/8">
                   <div
-                    class="h-full rounded-full bg-red-600 dark:bg-red-400"
+                    class="h-full rounded-full bg-red-400"
                     [style.width.%]="referee.percentage"
                   ></div>
                 </div>
               </div>
 
-              <span class="text-right text-[10px] text-slate-400 dark:text-white/35"> casos </span>
+              <span class="text-right text-[10px] text-white/35">casos</span>
             </div>
           }
         </div>
       </article>
 
       <article
-        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/40 dark:border-white/10 dark:bg-[#0A0A0A] dark:shadow-black/20 sm:p-6"
+        class="rounded-2xl border border-white/10 bg-[#0A0A0A] p-5 shadow-lg shadow-black/20 sm:p-6"
       >
         <div class="flex items-start justify-between gap-4">
           <div>
             <div class="flex items-center gap-2">
-              <lucide-icon
-                [img]="ClipboardCheckIcon"
-                size="16"
-                class="text-emerald-700 dark:text-emerald-300"
-              />
-
-              <h2 class="text-sm font-semibold text-slate-950 dark:text-white">
-                Andamento das análises
-              </h2>
+              <lucide-icon [img]="ClipboardCheckIcon" size="16" class="text-emerald-300" />
+              <h2 class="text-sm font-semibold text-white">Andamento das análises</h2>
             </div>
 
-            <p class="mt-1 text-xs text-slate-500 dark:text-white/40">
-              Distribuição das denúncias por etapa do fluxo.
-            </p>
+            <p class="mt-1 text-xs text-white/40">Distribuição das denúncias por etapa do fluxo.</p>
           </div>
 
           <span
-            class="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-300"
+            class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-300"
           >
             2026
           </span>
         </div>
 
         <div class="mt-7">
-          <div class="flex h-4 overflow-hidden rounded-full bg-slate-100 dark:bg-white/8">
+          <div class="flex h-4 overflow-hidden rounded-full bg-white/8">
             @for (status of statusData; track status.label) {
               <div
                 [class]="status.color"
@@ -198,19 +183,17 @@
                 <div class="flex items-center gap-2">
                   <span class="h-2.5 w-2.5 rounded-full" [class]="status.color"></span>
 
-                  <span class="text-sm text-slate-700 dark:text-white/70">
+                  <span class="text-sm text-white/70">
                     {{ status.label }}
                   </span>
                 </div>
 
                 <div class="flex items-center gap-2">
-                  <span class="text-sm font-semibold tabular-nums text-slate-950 dark:text-white">
+                  <span class="text-sm font-semibold tabular-nums text-white">
                     {{ status.value }}
                   </span>
 
-                  <span class="text-xs text-slate-500 dark:text-white/40">
-                    {{ status.percentage }}%
-                  </span>
+                  <span class="text-xs text-white/40"> {{ status.percentage }}% </span>
                 </div>
               </div>
             }
@@ -222,15 +205,14 @@
 
   <section class="mt-8 grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
     <article
-      class="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/40 dark:border-white/10 dark:bg-[#0A0A0A] dark:shadow-black/20 sm:p-6"
+      class="rounded-2xl border border-white/10 bg-[#0A0A0A] p-5 shadow-lg shadow-black/20 sm:p-6"
     >
       <div class="flex items-center gap-2">
-        <lucide-icon [img]="ShieldCheckIcon" size="16" class="text-red-600 dark:text-red-400" />
-
-        <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Do relato à decisão</h2>
+        <lucide-icon [img]="ShieldCheckIcon" size="16" class="text-red-400" />
+        <h2 class="text-sm font-semibold text-white">Do relato à decisão</h2>
       </div>
 
-      <p class="mt-1 text-xs text-slate-500 dark:text-white/40">
+      <p class="mt-1 text-xs text-white/40">
         Um fluxo rastreável para transformar ocorrências em inteligência operacional.
       </p>
 
@@ -238,29 +220,25 @@
         @for (step of flowSteps; track step.number; let last = $last) {
           <div class="relative flex gap-4">
             @if (!last) {
-              <div
-                class="absolute left-4.25 top-10 h-[calc(100%+8px)] w-px bg-slate-200 dark:bg-white/10"
-              ></div>
+              <div class="absolute left-4.25 top-10 h-[calc(100%+8px)] w-px bg-white/10"></div>
             }
 
             <div
-              class="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-700 dark:bg-red-400/10 dark:text-red-300"
+              class="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10 text-red-300"
             >
               <lucide-icon [img]="step.icon" size="16" />
             </div>
 
             <div class="pb-1">
-              <p
-                class="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 dark:text-white/35"
-              >
+              <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/35">
                 Etapa {{ step.number }}
               </p>
 
-              <h3 class="mt-1 text-sm font-semibold text-slate-900 dark:text-white/90">
+              <h3 class="mt-1 text-sm font-semibold text-white/90">
                 {{ step.title }}
               </h3>
 
-              <p class="mt-1 text-xs leading-relaxed text-slate-600 dark:text-white/50">
+              <p class="mt-1 text-xs leading-relaxed text-white/50">
                 {{ step.description }}
               </p>
             </div>
@@ -270,50 +248,37 @@
     </article>
 
     <article
-      class="rounded-2xl border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/40 dark:border-white/10 dark:bg-[#0A0A0A] dark:shadow-black/20 sm:p-6"
+      class="rounded-2xl border border-white/10 bg-[#0A0A0A] p-5 shadow-lg shadow-black/20 sm:p-6"
     >
       <div class="flex items-center gap-2">
-        <lucide-icon [img]="EyeIcon" size="16" class="text-red-600 dark:text-red-400" />
-
-        <h2 class="text-sm font-semibold text-slate-950 dark:text-white">Plataforma em operação</h2>
+        <lucide-icon [img]="EyeIcon" size="16" class="text-red-400" />
+        <h2 class="text-sm font-semibold text-white">Plataforma em operação</h2>
       </div>
 
-      <p class="mt-1 text-xs text-slate-500 dark:text-white/40">
+      <p class="mt-1 text-xs text-white/40">
         Espaços reservados para imagens do fluxo e do painel Oracle APEX.
       </p>
 
       <div class="mt-5 space-y-3">
         <div
-          class="flex aspect-16/8 items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 dark:border-white/15 dark:bg-white/2.5"
+          class="flex aspect-16/8 items-center justify-center rounded-xl border-2 border-dashed border-white/15 bg-white/2.5"
         >
           <div class="text-center">
-            <lucide-icon
-              [img]="SmartphoneIcon"
-              size="26"
-              class="mx-auto text-slate-400 dark:text-white/35"
-            />
+            <lucide-icon [img]="SmartphoneIcon" size="26" class="mx-auto text-white/35" />
 
-            <p
-              class="mt-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400 dark:text-white/35"
-            >
+            <p class="mt-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35">
               Placeholder · Tela de denúncia
             </p>
           </div>
         </div>
 
         <div
-          class="flex aspect-16/8 items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 dark:border-white/15 dark:bg-white/2.5"
+          class="flex aspect-16/8 items-center justify-center rounded-xl border-2 border-dashed border-white/15 bg-white/2.5"
         >
           <div class="text-center">
-            <lucide-icon
-              [img]="BarChartIcon"
-              size="26"
-              class="mx-auto text-slate-400 dark:text-white/35"
-            />
+            <lucide-icon [img]="BarChartIcon" size="26" class="mx-auto text-white/35" />
 
-            <p
-              class="mt-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400 dark:text-white/35"
-            >
+            <p class="mt-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35">
               Placeholder · Dashboard Oracle APEX
             </p>
           </div>
@@ -323,19 +288,19 @@
   </section>
 
   <section
-    class="mt-8 rounded-3xl border border-slate-200 bg-white px-6 py-8 text-center shadow-xl shadow-slate-200/40 sm:px-10 sm:py-10 dark:border-white/10 dark:bg-[#0A0A0A] dark:shadow-black/20"
+    class="mt-8 rounded-3xl border border-white/10 bg-[#0A0A0A] px-6 py-8 text-center shadow-xl shadow-black/20 sm:px-10 sm:py-10"
   >
     <div
-      class="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-red-50 text-red-700 dark:bg-red-400/10 dark:text-red-300"
+      class="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/10 text-red-300"
     >
       <lucide-icon [img]="TrendingUpIcon" size="21" />
     </div>
 
-    <h2 class="mt-4 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl dark:text-white">
+    <h2 class="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl">
       Integridade se constrói com evidências.
     </h2>
 
-    <p class="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600 dark:text-white/55">
+    <p class="mx-auto mt-3 max-w-2xl text-sm leading-7 text-white/55">
       Knowball e Oracle APEX conectam o registro de ocorrências à visão analítica necessária para
       fortalecer a transparência e a governança no futebol de base.
     </p>

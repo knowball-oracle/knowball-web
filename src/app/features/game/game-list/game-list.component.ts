@@ -39,31 +39,31 @@ interface CategoryMeta {
 
 const CATEGORY_META: Record<string, CategoryMeta> = {
   SUB_13: {
-    badge: 'bg-blue-500/10 text-blue-400',
-    activeChip: 'border-blue-400/60 text-blue-400',
+    badge: 'border border-blue-500/20 bg-blue-500/15 text-blue-300',
+    activeChip: 'border-blue-400/60 text-blue-300',
     dot: 'bg-blue-400',
   },
   SUB_15: {
-    badge: 'bg-emerald-500/10 text-emerald-400',
-    activeChip: 'border-emerald-400/60 text-emerald-400',
+    badge: 'border border-emerald-500/20 bg-emerald-500/15 text-emerald-300',
+    activeChip: 'border-emerald-400/60 text-emerald-300',
     dot: 'bg-emerald-400',
   },
   SUB_17: {
-    badge: 'bg-amber-500/10 text-amber-400',
-    activeChip: 'border-amber-400/60 text-amber-400',
+    badge: 'border border-amber-500/20 bg-amber-500/15 text-amber-300',
+    activeChip: 'border-amber-400/60 text-amber-300',
     dot: 'bg-amber-400',
   },
   SUB_20: {
-    badge: 'bg-rose-500/10 text-rose-400',
-    activeChip: 'border-rose-400/60 text-rose-400',
+    badge: 'border border-rose-500/20 bg-rose-500/15 text-rose-300',
+    activeChip: 'border-rose-400/60 text-rose-300',
     dot: 'bg-rose-400',
   },
 };
 
 const FALLBACK_META: CategoryMeta = {
-  badge: 'bg-white/8 text-white/50',
+  badge: 'border border-white/10 bg-white/5 text-white/65',
   activeChip: 'border-white/30 text-white/70',
-  dot: 'bg-slate-400',
+  dot: 'bg-white/40',
 };
 
 @Component({

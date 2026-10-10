@@ -21,40 +21,39 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
   SUB_13: {
     title: 'Sub-13',
     subtitle: 'Base inicial',
-    badge: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
-    activeChip: 'border-blue-500/60 text-blue-700 dark:border-blue-400/60 dark:text-blue-400',
-    dot: 'bg-blue-500 dark:bg-blue-400',
+    badge: 'bg-blue-500/10 text-blue-700',
+    activeChip: 'border-blue-500/60 text-blue-700',
+    dot: 'bg-blue-500',
   },
   SUB_15: {
     title: 'Sub-15',
     subtitle: 'Formação',
-    badge: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-    activeChip:
-      'border-emerald-500/60 text-emerald-700 dark:border-emerald-400/60 dark:text-emerald-400',
-    dot: 'bg-emerald-500 dark:bg-emerald-400',
+    badge: 'bg-emerald-500/10 text-emerald-700',
+    activeChip: 'border-emerald-500/60 text-emerald-700',
+    dot: 'bg-emerald-500',
   },
   SUB_17: {
     title: 'Sub-17',
     subtitle: 'Transição',
-    badge: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
-    activeChip: 'border-amber-500/60 text-amber-700 dark:border-amber-400/60 dark:text-amber-400',
-    dot: 'bg-amber-500 dark:bg-amber-400',
+    badge: 'bg-amber-500/10 text-amber-700',
+    activeChip: 'border-amber-500/60 text-amber-700',
+    dot: 'bg-amber-500',
   },
   SUB_20: {
     title: 'Sub-20',
     subtitle: 'Profissionalização',
-    badge: 'bg-rose-500/10 text-rose-700 dark:text-rose-400',
-    activeChip: 'border-rose-500/60 text-rose-700 dark:border-rose-400/60 dark:text-rose-400',
-    dot: 'bg-rose-500 dark:bg-rose-400',
+    badge: 'bg-rose-500/10 text-rose-700',
+    activeChip: 'border-rose-500/60 text-rose-700',
+    dot: 'bg-rose-500',
   },
 };
 
 const FALLBACK_META: CategoryMeta = {
   title: 'Outras',
   subtitle: 'Sem categoria definida',
-  badge: 'bg-slate-500/10 text-slate-700 dark:text-slate-300',
-  activeChip: 'border-slate-400/60 text-slate-700 dark:border-white/30 dark:text-white/70',
-  dot: 'bg-slate-400',
+  badge: 'border border-white/10 bg-white/5 text-white/65',
+  activeChip: 'border-white/30 text-white/70',
+  dot: 'bg-white/40',
 };
 
 @Component({
@@ -152,12 +151,18 @@ export class ChampionshipListComponent implements OnInit {
   }
 
   delete(): void {
-    if (!this.pendingDeleteId) return;
+    if (!this.pendingDeleteId) {
+      return;
+    }
 
     this.service.delete(this.pendingDeleteId).subscribe({
       next: () => {
         this.pendingDeleteId = null;
         this.load();
+      },
+      error: () => {
+        this.pendingDeleteId = null;
+        this.error = 'Não foi possível excluir o campeonato. Tente novamente.';
       },
     });
   }
