@@ -16,6 +16,10 @@
   box-sizing: border-box;
 }
 
+html {
+  color-scheme: dark;
+}
+
 html,
 body {
   min-height: 100%;
@@ -24,7 +28,8 @@ body {
 
 body {
   min-height: 100dvh;
-  background-color: #0A0A0A;
+  overflow-x: hidden;
+  background-color: #0a0a0a;
   color: rgba(255, 255, 255, 0.9);
   -webkit-font-smoothing: antialiased;
 }
@@ -42,10 +47,14 @@ body {
   background: rgba(255, 255, 255, 0.12);
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 @layer components {
   .glass {
-    background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.04);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -54,12 +63,12 @@ body {
   }
 
   .glass-liquid {
+    border: 1px solid rgba(255, 255, 255, 0.09);
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.06) 0%,
       rgba(255, 255, 255, 0.02) 100%
     );
-    border: 1px solid rgba(255, 255, 255, 0.09);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.45),
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -71,8 +80,12 @@ body {
   .gradient-text {
     background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .input-field {
+    @apply w-full min-w-0 max-w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white/90 placeholder-white/20 transition-all duration-200 outline-none focus:border-white/30 focus:ring-1 focus:ring-white/20;
   }
 
   .btn-primary {
@@ -85,10 +98,6 @@ body {
 
   .btn-danger {
     @apply rounded-xl bg-red-500/10 px-4 py-2 font-medium text-red-400 transition-all duration-200 hover:bg-red-500/20;
-  }
-
-  .input-field {
-    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white/90 placeholder-white/20 transition-all duration-200 focus:border-white/30 focus:ring-1 focus:ring-white/20 focus:outline-none;
   }
 
   .badge {
@@ -124,16 +133,13 @@ body {
   }
 }
 
-.skeleton {
-  border-radius: 0.5rem;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.04) 25%,
-    rgba(255, 255, 255, 0.09) 50%,
-    rgba(255, 255, 255, 0.04) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.6s ease-in-out infinite;
+input[type='date'],
+input[type='datetime-local'] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  color-scheme: dark;
 }
 
 select,
@@ -151,6 +157,18 @@ select option:checked {
 select:focus {
   border-color: rgba(255, 255, 255, 0.3);
   outline: none;
+}
+
+.skeleton {
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
 }
 
 @keyframes shimmer {
