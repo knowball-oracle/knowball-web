@@ -84,8 +84,8 @@
           }
         </div>
 
-        <div class="grid gap-6 sm:grid-cols-2">
-          <div>
+        <div class="grid min-w-0 gap-6 sm:grid-cols-2">
+          <div class="min-w-0">
             <label
               for="referee-birth-date"
               class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-white/55"
@@ -97,14 +97,12 @@
               id="referee-birth-date"
               formControlName="birthDate"
               type="date"
-              class="input-field min-h-12 w-full px-4"
+              class="input-field block min-h-12 w-full min-w-0 max-w-full px-3 text-sm sm:px-4"
               [class.border-red-500/50]="birthDate.invalid && birthDate.touched"
               [attr.aria-invalid]="birthDate.invalid && birthDate.touched"
             />
 
-            <p class="mt-2 text-xs text-white/35">
-              Utilize o formato brasileiro exibido pelo seu navegador.
-            </p>
+            <p class="mt-2 text-xs text-white/35">Selecione a data de nascimento.</p>
 
             @if (birthDate.invalid && birthDate.touched) {
               <p class="mt-2 text-xs text-red-300" role="alert">
@@ -113,7 +111,7 @@
             }
           </div>
 
-          <div>
+          <div class="min-w-0">
             <label
               for="referee-status"
               class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-white/55"
@@ -124,7 +122,7 @@
             <select
               id="referee-status"
               formControlName="status"
-              class="input-field min-h-12 bg-[#171717] px-4 text-white"
+              class="input-field min-h-12 w-full min-w-0 bg-[#171717] px-4 text-white"
               [class.border-red-500/50]="status.invalid && status.touched"
               [attr.aria-invalid]="status.invalid && status.touched"
             >

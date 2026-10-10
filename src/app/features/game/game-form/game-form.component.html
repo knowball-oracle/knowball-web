@@ -72,8 +72,8 @@
           }
         </div>
 
-        <div class="grid gap-6 sm:grid-cols-2">
-          <div>
+        <div class="grid min-w-0 gap-6 md:grid-cols-2">
+          <div class="min-w-0">
             <label
               for="game-date"
               class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-white/55"
@@ -85,7 +85,7 @@
               id="game-date"
               formControlName="matchDate"
               type="datetime-local"
-              class="input-field min-h-12 w-full px-4"
+              class="input-field block min-h-12 w-full min-w-0 max-w-full px-3 text-sm sm:px-4"
               [class.border-red-500/50]="matchDate.invalid && matchDate.touched"
               [attr.aria-invalid]="matchDate.invalid && matchDate.touched"
             />
@@ -99,7 +99,7 @@
             }
           </div>
 
-          <div>
+          <div class="min-w-0">
             <label
               for="game-place"
               class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-white/55"
