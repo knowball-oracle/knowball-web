@@ -47,6 +47,13 @@ export class ReportDetailComponent implements OnInit {
   selectedStatus = '';
   selectedResult = '';
 
+  get canSave(): boolean {
+    if (!this.report || this.report.status === 'RESOLVED') return false;
+    if (this.selectedStatus === this.report.status) return false;
+    if (this.selectedStatus === 'RESOLVED') return !!this.selectedResult;
+    return true;
+  }
+
   currentUserId = signal<number | null>(null);
 
   ngOnInit(): void {
@@ -71,14 +78,29 @@ export class ReportDetailComponent implements OnInit {
     });
   }
 
+  onStatusChange(status: string): void {
+    this.selectedStatus = status;
+
+    if (status !== 'RESOLVED') {
+      this.selectedResult = '';
+    }
+  }
+
   updateStatus(): void {
     this.updateError = '';
     this.updateSuccess = false;
 
+    const isResolving = this.selectedStatus === 'RESOLVED';
+
+    if (isResolving && !this.selectedResult) {
+      this.updateError = 'Selecione o resultado da análise para resolver a denúncia.';
+      return;
+    }
+
     this.service
       .updateStatus(Number(this.id), {
         status: this.selectedStatus as ReportStatusType,
-        analysisResult: (this.selectedResult as AnalysisResultType) || null,
+        analysisResult: isResolving ? (this.selectedResult as AnalysisResultType) : null,
       })
       .subscribe({
         next: () => {
@@ -86,8 +108,9 @@ export class ReportDetailComponent implements OnInit {
           this.load();
           setTimeout(() => (this.updateSuccess = false), 3000);
         },
-        error: () => {
-          this.updateError = 'Erro ao atualizar status.';
+        error: (err) => {
+          this.updateError =
+            typeof err.error === 'string' && err.error ? err.error : 'Erro ao atualizar status.';
         },
       });
   }
