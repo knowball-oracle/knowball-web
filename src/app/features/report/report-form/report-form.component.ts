@@ -86,11 +86,7 @@ export class ReportFormComponent implements OnInit {
   readonly MAX_LENGTH = 2000;
   readonly categories = ['SUB_13', 'SUB_15', 'SUB_17', 'SUB_20'] as const;
 
-  readonly snippets = [
-    'Minuto do lance: ',
-    'O que aconteceu: ',
-    'Decisão do árbitro: ',
-  ];
+  readonly snippets = ['Minuto do lance: ', 'O que aconteceu: ', 'Decisão do árbitro: '];
 
   readonly tips = [
     'Informe o minuto aproximado e o lance que motivou a denúncia.',
@@ -238,13 +234,7 @@ export class ReportFormComponent implements OnInit {
               awayTeamLogo: away?.team?.logoUrl ?? undefined,
               category,
               searchText: this.normalize(
-                [
-                  home?.team?.name,
-                  away?.team?.name,
-                  game.championship?.name,
-                  game.place,
-                  category,
-                ]
+                [home?.team?.name, away?.team?.name, game.championship?.name, game.place, category]
                   .filter(Boolean)
                   .join(' '),
               ),
@@ -316,9 +306,36 @@ export class ReportFormComponent implements OnInit {
     this.referee.markAsTouched();
   }
 
+  hasSnippet(snippet: string): boolean {
+    const label = this.normalize(snippet).replace(/:$/, '');
+    const current = String(this.content.value ?? '');
+
+    return current
+      .split(/\r?\n/)
+      .some((line) => this.normalize(line).replace(/:$/, '').startsWith(label));
+  }
+
+  canAppendSnippet(snippet: string): boolean {
+    if (this.saving || this.hasSnippet(snippet)) {
+      return false;
+    }
+
+    const current = String(this.content.value ?? '').trimEnd();
+    const next = current ? `${current}\n${snippet}` : snippet;
+
+    return next.length <= this.MAX_LENGTH;
+  }
+
   appendSnippet(snippet: string): void {
-    const current = (this.content.value ?? '').trimEnd();
-    this.content.setValue(current ? `${current}\n${snippet}` : snippet);
+    if (!this.canAppendSnippet(snippet)) {
+      return;
+    }
+
+    const current = String(this.content.value ?? '').trimEnd();
+    const next = current ? `${current}\n${snippet}` : snippet;
+
+    this.content.setValue(next);
+    this.content.markAsDirty();
     this.content.markAsTouched();
   }
 

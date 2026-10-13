@@ -1,5 +1,4 @@
 <div class="mx-auto w-full max-w-5xl p-4 sm:p-6 md:p-8">
-  <!-- Cabeçalho -->
   <div class="mb-5 sm:mb-6">
     <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
       <a
@@ -42,9 +41,7 @@
       (ngSubmit)="onSubmit()"
       class="grid min-w-0 gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_300px]"
     >
-
       <div class="min-w-0 space-y-4 sm:space-y-5">
-
         <section class="glass min-w-0 rounded-2xl p-4 sm:p-5">
           <div class="mb-4 flex items-start gap-3">
             <div
@@ -161,9 +158,7 @@
                 <div
                   class="w-21.5 shrink-0 border-l border-white/8 pl-2 text-right sm:w-33 sm:pl-3"
                 >
-                  <p
-                    class="hidden max-w-32 truncate text-xs font-medium text-white/70 sm:block"
-                  >
+                  <p class="hidden max-w-32 truncate text-xs font-medium text-white/70 sm:block">
                     {{ g.championship.name }}
                   </p>
 
@@ -326,9 +321,16 @@
                 <button
                   type="button"
                   (click)="appendSnippet(snippet)"
-                  class="min-h-9 shrink-0 cursor-pointer rounded-lg border border-white/10 px-2.5 py-1 text-xs text-white/50 transition hover:border-white/20 hover:text-white/80"
+                  [disabled]="!canAppendSnippet(snippet)"
+                  [attr.title]="
+                    hasSnippet(snippet)
+                      ? 'Este tópico já está no relato.'
+                      : 'Adicionar tópico ao relato.'
+                  "
+                  class="min-h-9 shrink-0 cursor-pointer rounded-lg border border-white/10 px-2.5 py-1 text-xs text-white/50 transition enabled:hover:border-white/20 enabled:hover:text-white/80 disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  + {{ snippet.replace(': ', '') }}
+                  {{ hasSnippet(snippet) ? '✓' : '+' }}
+                  {{ snippet.replace(': ', '') }}
                 </button>
               }
             </div>
