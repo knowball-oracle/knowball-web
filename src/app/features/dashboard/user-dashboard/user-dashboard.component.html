@@ -1,0 +1,177 @@
+<div class="mx-auto w-full max-w-5xl space-y-6 px-4 pb-10 pt-20 sm:px-6 md:px-8 md:pt-8">
+  <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-[11px] font-semibold tracking-[0.18em] text-white/40">
+        {{ greeting() }}
+      </p>
+
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+        Olá, {{ firstName() }}
+      </h1>
+
+      <p class="mt-2 text-sm leading-6 text-white/55">
+        Registre um relato e acompanhe suas denúncias em um só lugar.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="refresh()"
+      [disabled]="refreshing()"
+      class="min-h-11 self-start rounded-xl border border-white/15 bg-white/5 px-4 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-wait disabled:opacity-50"
+    >
+      {{ refreshing() ? 'Atualizando...' : 'Atualizar' }}
+    </button>
+  </header>
+
+  <section class="rounded-3xl border border-emerald-400/15 bg-[#111111] p-6 sm:p-8">
+    <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-300">
+      Uma base mais transparente
+    </p>
+
+    <h2 class="mt-3 max-w-2xl text-xl font-bold tracking-tight text-white sm:text-2xl">
+      Seu relato ajuda a dar visibilidade ao que acontece em campo.
+    </h2>
+
+    <p class="mt-3 max-w-2xl text-sm leading-7 text-white/55">
+      Descreva os fatos observados e acompanhe o andamento pelo protocolo. O registro de uma
+      denúncia não representa comprovação de irregularidade.
+    </p>
+
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <a
+        routerLink="/reports/new"
+        class="inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-5 text-sm font-semibold text-[#0A0A0A] transition hover:bg-white/90"
+      >
+        Registrar denúncia →
+      </a>
+
+      <a
+        routerLink="/faq"
+        class="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/15 px-5 text-sm font-semibold text-white/75 transition hover:bg-white/5 hover:text-white"
+      >
+        Como funciona
+      </a>
+    </div>
+  </section>
+
+  @if (error()) {
+    <div
+      class="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-200"
+      role="alert"
+    >
+      {{ error() }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      @for (_ of [1, 2, 3, 4]; track $index) {
+        <div class="skeleton h-24 rounded-2xl"></div>
+      }
+    </div>
+
+    <div class="skeleton h-64 rounded-2xl"></div>
+  } @else if (lastUpdated()) {
+    <section aria-label="Resumo das suas denúncias">
+      <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <h2 class="text-sm font-semibold text-white/85">Suas denúncias</h2>
+
+        <p class="text-[11px] text-white/40" aria-live="polite">
+          Última consulta:
+          {{ lastUpdated() | date: 'dd/MM/yyyy HH:mm:ss' }}
+        </p>
+      </div>
+
+      <dl class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        @for (item of summary(); track item.key) {
+          <div class="rounded-2xl border border-white/10 bg-[#111111] p-5">
+            <dt class="text-xs text-white/50">
+              {{ item.label }}
+            </dt>
+
+            <dd class="mt-3 text-3xl font-bold tabular-nums" [ngClass]="item.accent">
+              {{ item.count }}
+            </dd>
+          </div>
+        }
+      </dl>
+    </section>
+
+    <section class="overflow-hidden rounded-2xl border border-white/10 bg-[#111111]">
+      <header
+        class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 p-5"
+      >
+        <h2 class="text-sm font-semibold text-white">Registros recentes</h2>
+
+        <a
+          routerLink="/reports"
+          class="text-xs font-semibold text-emerald-300 transition hover:text-emerald-200"
+        >
+          Ver todas →
+        </a>
+      </header>
+
+      <div class="divide-y divide-white/5">
+        @for (report of recentReports(); track report.id) {
+          <a
+            [routerLink]="['/reports', report.id]"
+            class="flex flex-col gap-3 p-5 transition hover:bg-white/5 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <div class="min-w-0">
+              <p class="break-all font-mono text-sm font-semibold text-white/85">
+                {{ report.protocol }}
+              </p>
+
+              <p class="mt-1 text-xs text-white/45">
+                Registrada em
+                {{ report.date | date: 'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+
+            <span
+              class="self-start rounded-full border px-3 py-1 text-[11px] font-semibold sm:shrink-0"
+              [ngClass]="statusClass(report.status)"
+            >
+              {{ statusLabel(report.status) }}
+            </span>
+          </a>
+        } @empty {
+          <div class="px-5 py-10 text-center">
+            <h3 class="text-sm font-semibold text-white/85">Você ainda não registrou denúncias.</h3>
+
+            <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-white/45">
+              Quando houver um relato para registrar, utilize o botão “Registrar denúncia”. Seus
+              protocolos aparecerão aqui.
+            </p>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <section class="rounded-2xl border border-white/10 bg-[#111111] p-5">
+    <h2 class="text-sm font-semibold text-white/85">Entenda o acompanhamento</h2>
+
+    <div class="mt-4 grid gap-4 sm:grid-cols-3">
+      <div>
+        <h3 class="text-xs font-semibold text-blue-300">Nova</h3>
+        <p class="mt-1 text-xs leading-6 text-white/50">
+          Seu relato foi registrado e aguarda análise.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold text-amber-300">Em análise</h3>
+        <p class="mt-1 text-xs leading-6 text-white/50">O registro está na etapa de avaliação.</p>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-semibold text-emerald-300">Resolvida</h3>
+        <p class="mt-1 text-xs leading-6 text-white/50">
+          A análise foi concluída. Consulte os detalhes disponíveis.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,10 +1,17 @@
 import { Routes } from '@angular/router';
+
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
 import { UserOnlyGuard } from './core/guards/user-only.guard';
 
+import { adminDashboardMatch, userDashboardMatch } from './core/guards/dashboard-match.guards';
+
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full',
+  },
 
   {
     path: 'auth',
@@ -29,7 +36,11 @@ export const routes: Routes = [
             (c) => c.AuthCallbackComponent,
           ),
       },
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full',
+      },
     ],
   },
 
@@ -39,9 +50,19 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        title: 'Dashboard',
+        title: 'Dashboard administrativo',
+        canMatch: [adminDashboardMatch],
         loadComponent: () =>
           import('./features/dashboard/dashboard.component').then((c) => c.DashboardComponent),
+      },
+      {
+        path: 'dashboard',
+        title: 'Meu dashboard',
+        canMatch: [userDashboardMatch],
+        loadComponent: () =>
+          import('./features/dashboard/user-dashboard/user-dashboard.component').then(
+            (c) => c.UserDashboardComponent,
+          ),
       },
 
       {
@@ -58,20 +79,20 @@ export const routes: Routes = [
           {
             path: 'new',
             title: 'Novo campeonato',
+            canActivate: [AdminGuard],
             loadComponent: () =>
               import('./features/championship/championship-form/championship-form.component').then(
                 (c) => c.ChampionshipFormComponent,
               ),
-            canActivate: [AdminGuard],
           },
           {
             path: ':id/edit',
             title: 'Editar campeonato',
+            canActivate: [AdminGuard],
             loadComponent: () =>
               import('./features/championship/championship-form/championship-form.component').then(
                 (c) => c.ChampionshipFormComponent,
               ),
-            canActivate: [AdminGuard],
           },
         ],
       },
@@ -90,11 +111,11 @@ export const routes: Routes = [
           {
             path: 'new',
             title: 'Nova partida',
+            canActivate: [AdminGuard],
             loadComponent: () =>
               import('./features/game/game-form/game-form.component').then(
                 (c) => c.GameFormComponent,
               ),
-            canActivate: [AdminGuard],
           },
           {
             path: ':id',
@@ -107,11 +128,11 @@ export const routes: Routes = [
           {
             path: ':id/edit',
             title: 'Editar partida',
+            canActivate: [AdminGuard],
             loadComponent: () =>
               import('./features/game/game-form/game-form.component').then(
                 (c) => c.GameFormComponent,
               ),
-            canActivate: [AdminGuard],
           },
         ],
       },
@@ -130,20 +151,20 @@ export const routes: Routes = [
           {
             path: 'new',
             title: 'Novo árbitro',
+            canActivate: [AdminGuard],
             loadComponent: () =>
               import('./features/referee/referee-form/referee-form.component').then(
                 (c) => c.RefereeFormComponent,
               ),
-            canActivate: [AdminGuard],
           },
           {
             path: ':id/edit',
             title: 'Editar árbitro',
+            canActivate: [AdminGuard],
             loadComponent: () =>
               import('./features/referee/referee-form/referee-form.component').then(
                 (c) => c.RefereeFormComponent,
               ),
-            canActivate: [AdminGuard],
           },
         ],
       },
@@ -162,20 +183,20 @@ export const routes: Routes = [
           {
             path: 'new',
             title: 'Novo time',
+            canActivate: [AdminGuard],
             loadComponent: () =>
               import('./features/team/team-form/team-form.component').then(
                 (c) => c.TeamFormComponent,
               ),
-            canActivate: [AdminGuard],
           },
           {
             path: ':id/edit',
             title: 'Editar time',
+            canActivate: [AdminGuard],
             loadComponent: () =>
               import('./features/team/team-form/team-form.component').then(
                 (c) => c.TeamFormComponent,
               ),
-            canActivate: [AdminGuard],
           },
         ],
       },
@@ -194,11 +215,11 @@ export const routes: Routes = [
           {
             path: 'new',
             title: 'Nova denúncia',
+            canActivate: [UserOnlyGuard],
             loadComponent: () =>
               import('./features/report/report-form/report-form.component').then(
                 (c) => c.ReportFormComponent,
               ),
-            canActivate: [UserOnlyGuard],
           },
           {
             path: ':id',
@@ -252,7 +273,7 @@ export const routes: Routes = [
       {
         path: 'faq',
         title: 'FAQ',
-        loadComponent: () => import('./features/faq/faq.component').then((m) => m.FaqComponent),
+        loadComponent: () => import('./features/faq/faq.component').then((c) => c.FaqComponent),
       },
       {
         path: 'profile',
@@ -265,5 +286,8 @@ export const routes: Routes = [
     ],
   },
 
-  { path: '**', redirectTo: 'dashboard' },
+  {
+    path: '**',
+    redirectTo: 'dashboard',
+  },
 ];
