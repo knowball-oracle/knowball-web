@@ -44,9 +44,10 @@ import {
 
 import {
   ArrowRight,
+  BarChart3,
   Calendar,
   FileWarning,
-  MapPin,
+  PieChart,
   ShieldCheck,
   Swords,
   Trophy,
@@ -80,6 +81,7 @@ interface StatCard {
   count: number;
   path: string;
   icon: LucideIconData;
+  accent: 'amber' | 'emerald' | 'blue' | 'purple';
 }
 
 interface StatusItem {
@@ -145,6 +147,12 @@ export class DashboardComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly refreshRequests = new Subject<void>();
 
+  private readonly reportMonthFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+  });
+
   readonly isBrowser = isPlatformBrowser(this.platformId);
   readonly user = this.auth.user;
 
@@ -153,13 +161,13 @@ export class DashboardComponent {
   readonly error = signal('');
   readonly lastUpdated = signal<Date | null>(null);
   readonly months = signal(6);
-
   readonly data = signal<DashboardData | null>(null);
 
   readonly ArrowRightIcon = ArrowRight;
   readonly CalendarIcon = Calendar;
-  readonly MapPinIcon = MapPin;
   readonly ReportIcon = FileWarning;
+  readonly PieChartIcon = PieChart;
+  readonly BarChartIcon = BarChart3;
 
   readonly firstName = computed(() => {
     const name = this.user()?.name?.trim();
@@ -201,24 +209,28 @@ export class DashboardComponent {
         count: snapshot.championships.length,
         path: '/championships',
         icon: Trophy,
+        accent: 'amber',
       },
       {
         label: 'Partidas',
         count: snapshot.games.length,
         path: '/games',
         icon: Swords,
+        accent: 'emerald',
       },
       {
         label: 'Árbitros ativos',
         count: snapshot.referees.filter((item) => item.status === 'ACTIVE').length,
         path: '/referees',
         icon: ShieldCheck,
+        accent: 'blue',
       },
       {
         label: 'Times',
         count: snapshot.teams.length,
         path: '/teams',
         icon: Users2,
+        accent: 'purple',
       },
     ];
   });
@@ -249,17 +261,9 @@ export class DashboardComponent {
 
   readonly statusColors = computed(() => this.statusItems().map((item) => item.color));
 
-  private readonly reportMonthFormatter = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Sao_Paulo',
-    year: 'numeric',
-    month: '2-digit',
-  });
-
   readonly monthlyPoints = computed<MonthlyPoint[]>(() => {
     const reference = this.lastUpdated() ?? new Date();
-    const currentKey = this.monthKey(reference);
-    const [year, month] = currentKey.split('-').map(Number);
-
+    const [year, month] = this.monthKey(reference).split('-').map(Number);
     const counts = new Map<string, number>();
 
     for (const report of this.data()?.reports ?? []) {
@@ -319,6 +323,7 @@ export class DashboardComponent {
 
     for (const game of this.data()?.games ?? []) {
       const championship = game.championship;
+
       const key =
         championship?.id != null
           ? String(championship.id)
@@ -371,7 +376,7 @@ export class DashboardComponent {
       counts.set(key, (counts.get(key) ?? 0) + 1);
     }
 
-    const points = CATEGORY_CONFIG.map((item) => ({
+    const points: CategoryPoint[] = CATEGORY_CONFIG.map((item) => ({
       ...item,
       count: counts.get(item.key) ?? 0,
     }));
@@ -427,21 +432,45 @@ export class DashboardComponent {
     padding: { left: 8, right: 12 },
   };
 
-  readonly axisDataLabels: ApexDataLabels = { enabled: false };
+  readonly axisDataLabels: ApexDataLabels = {
+    enabled: false,
+  };
 
   readonly donutDataLabels: ApexDataLabels = {
-    enabled: true,
-    formatter: (value: number) => `${value.toFixed(1).replace('.', ',')}%`,
-    style: {
-      fontSize: '12px',
-      colors: ['#111111'],
-    },
-    dropShadow: { enabled: false },
+    enabled: false,
   };
 
   readonly donutOptions: ApexPlotOptions = {
     pie: {
-      donut: { size: '72%' },
+      expandOnClick: false,
+      donut: {
+        size: '74%',
+        labels: {
+          show: true,
+          name: {
+            show: true,
+            color: '#A3A3A3',
+            fontSize: '12px',
+            offsetY: 20,
+          },
+          value: {
+            show: true,
+            color: '#F5F5F5',
+            fontSize: '30px',
+            fontWeight: 700,
+            offsetY: -12,
+            formatter: (value: string) => Number(value).toLocaleString('pt-BR'),
+          },
+          total: {
+            show: true,
+            showAlways: true,
+            label: 'Denúncias',
+            color: '#A3A3A3',
+            fontSize: '12px',
+            formatter: () => this.totalReports().toLocaleString('pt-BR'),
+          },
+        },
+      },
     },
   };
 
@@ -516,11 +545,17 @@ export class DashboardComponent {
     },
   };
 
-  readonly blueColors = ['#60A5FA'];
+  readonly amberColors = ['#FBBF24'];
   readonly greenColors = ['#34D399'];
-  readonly purpleColors = ['#A78BFA'];
+  readonly purpleColors = ['#C084FC'];
 
-  readonly donutChart = this.chartConfig('donut', 270);
+  readonly donutChart: ApexChart = {
+    ...this.chartConfig('donut', 250),
+    width: '100%',
+    redrawOnParentResize: true,
+    redrawOnWindowResize: true,
+  };
+
   readonly monthlyChart = this.chartConfig('area', 290);
   readonly rankingChart = this.chartConfig('bar', 320);
   readonly categoryChart = this.chartConfig('bar', 290);
@@ -558,6 +593,20 @@ export class DashboardComponent {
         this.loading.set(false);
         this.refreshing.set(false);
       });
+  }
+
+  greeting(): string {
+    const hour = new Date().getHours();
+
+    if (hour < 12) {
+      return 'Bom dia';
+    }
+
+    if (hour < 18) {
+      return 'Boa tarde';
+    }
+
+    return 'Boa noite';
   }
 
   refresh(): void {
@@ -630,6 +679,7 @@ export class DashboardComponent {
     return {
       type,
       height,
+      width: '100%',
       background: 'transparent',
       foreColor: '#A3A3A3',
       fontFamily: 'Sora, sans-serif',
@@ -637,6 +687,8 @@ export class DashboardComponent {
       animations: { enabled: false },
       zoom: { enabled: false },
       parentHeightOffset: 0,
+      redrawOnParentResize: true,
+      redrawOnWindowResize: true,
     };
   }
 }
