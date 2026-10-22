@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
+
 import { Component, computed, inject } from '@angular/core';
+
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+
 import {
   ChartNoAxesCombined,
   CircleHelp,
@@ -12,6 +15,7 @@ import {
   FileWarning,
   LayoutDashboard,
   LogOut,
+  Mail,
   Menu,
   ShieldCheck,
   Swords,
@@ -20,6 +24,7 @@ import {
   Users2,
   X,
 } from '../../../shared/icons/icons';
+
 import { AuthService } from '../../../core/services/auth.service';
 
 interface NavLink {
@@ -27,6 +32,7 @@ interface NavLink {
   label: string;
   icon: LucideIconData;
   adminOnly?: boolean;
+  userOnly?: boolean;
 }
 
 @Component({
@@ -49,14 +55,47 @@ export class NavbarComponent {
   readonly LogOutIcon = LogOut;
 
   readonly links: NavLink[] = [
-    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/championships', label: 'Campeonatos', icon: Trophy },
-    { path: '/games', label: 'Partidas', icon: Swords },
-    { path: '/referees', label: 'Árbitros', icon: ShieldCheck },
-    { path: '/teams', label: 'Times', icon: Users2 },
-    { path: '/reports', label: 'Denúncias', icon: FileWarning },
-    { path: '/faq', label: 'FAQ', icon: CircleHelp },
-
+    {
+      path: '/dashboard',
+      label: 'Dashboard',
+      icon: LayoutDashboard,
+    },
+    {
+      path: '/championships',
+      label: 'Campeonatos',
+      icon: Trophy,
+    },
+    {
+      path: '/games',
+      label: 'Partidas',
+      icon: Swords,
+    },
+    {
+      path: '/referees',
+      label: 'Árbitros',
+      icon: ShieldCheck,
+    },
+    {
+      path: '/teams',
+      label: 'Times',
+      icon: Users2,
+    },
+    {
+      path: '/reports',
+      label: 'Denúncias',
+      icon: FileWarning,
+    },
+    {
+      path: '/contato',
+      label: 'Contato',
+      icon: Mail,
+      userOnly: true,
+    },
+    {
+      path: '/faq',
+      label: 'FAQ',
+      icon: CircleHelp,
+    },
     {
       path: '/oracle-apex',
       label: 'Oracle APEX',
@@ -74,7 +113,17 @@ export class NavbarComponent {
   readonly visibleLinks = computed(() => {
     const isAdmin = this.auth.isAdmin();
 
-    return this.links.filter((link) => !link.adminOnly || isAdmin);
+    return this.links.filter((link) => {
+      if (link.adminOnly) {
+        return isAdmin;
+      }
+
+      if (link.userOnly) {
+        return !isAdmin;
+      }
+
+      return true;
+    });
   });
 
   logout(): void {
