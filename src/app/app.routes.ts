@@ -66,6 +66,14 @@ export const routes: Routes = [
       },
 
       {
+        path: 'contato',
+        title: 'Contato',
+        canActivate: [UserOnlyGuard],
+        loadComponent: () =>
+          import('./features/contact/contact.component').then((c) => c.ContactComponent),
+      },
+
+      {
         path: 'championships',
         children: [
           {
@@ -270,11 +278,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/oracle-apex/oracle-apex.component').then((c) => c.OracleApexComponent),
       },
+
       {
         path: 'faq',
         title: 'FAQ',
         loadComponent: () => import('./features/faq/faq.component').then((c) => c.FaqComponent),
       },
+
       {
         path: 'profile',
         title: 'Meu perfil',

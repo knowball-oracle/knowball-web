@@ -3,7 +3,7 @@ import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserOnlyGuard implements CanActivate {
   private auth = inject(AuthService);

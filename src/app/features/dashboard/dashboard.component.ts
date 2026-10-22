@@ -60,8 +60,6 @@ import {
   type LucideIconData,
 } from '../../shared/icons/icons';
 
-import { ContactSectionComponent } from '../../shared/components/contact-section/contact-section.component';
-
 import { AuthService } from '../../core/services/auth.service';
 
 import { Championship } from '../../models/championship.model';
@@ -157,7 +155,7 @@ const CATEGORY_CONFIG = [
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule, ChartComponent, ContactSectionComponent],
+  imports: [CommonModule, RouterLink, LucideAngularModule, ChartComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,0 +1,251 @@
+<div class="mx-auto w-full max-w-xl px-4 pb-10 pt-20 sm:px-6 md:pt-8">
+  <header class="mb-6 text-center">
+    <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-300/80">
+      Fale com o Knowball
+    </p>
+
+    <h1 class="mt-2 text-2xl font-bold tracking-tight text-white sm:text-3xl">Estamos por perto</h1>
+
+    <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-white/55">
+      Acompanhe novidades e entre em contato com a equipe para dúvidas, sugestões ou propostas de
+      colaboração.
+    </p>
+  </header>
+
+  <!-- Post estilo Instagram -->
+  <article
+    class="overflow-hidden rounded-3xl border border-white/10 bg-[#111111] shadow-[0_24px_80px_-40px_rgba(0,0,0,0.9)]"
+    aria-label="Post de contato do Knowball"
+  >
+    <!-- Cabeçalho do post -->
+    <div class="flex items-center gap-3 p-4">
+      <span
+        class="relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-rose-500 via-red-500 to-amber-400 p-0.5"
+      >
+        <span
+          class="flex h-full w-full items-center justify-center rounded-full bg-[#111111] text-sm font-bold text-white"
+        >
+          KB
+        </span>
+      </span>
+
+      <div class="min-w-0">
+        <p class="truncate text-sm font-semibold text-white">Knowball</p>
+
+        <p class="truncate text-xs text-white/45">{{ instagramHandle }} · {{ postDate }}</p>
+      </div>
+
+      <span
+        class="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50"
+        aria-hidden="true"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        >
+          <circle cx="12" cy="12" r="1" />
+          <circle cx="19" cy="12" r="1" />
+          <circle cx="5" cy="12" r="1" />
+        </svg>
+      </span>
+    </div>
+
+    <!-- Área visual do post -->
+    <div
+      class="relative isolate overflow-hidden border-y border-white/10 bg-linear-to-br from-[#1A1A1A] via-[#141414] to-[#0E0E0E] px-6 py-12 text-center"
+    >
+      <div
+        class="pointer-events-none absolute -left-16 -top-20 h-56 w-56 rounded-full bg-rose-500/20 blur-3xl"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="pointer-events-none absolute -bottom-24 -right-16 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl"
+        aria-hidden="true"
+      ></div>
+
+      <div class="relative">
+        <span
+          class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-rose-400/20 bg-rose-400/10 text-rose-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+          </svg>
+        </span>
+
+        <h2 class="mt-5 text-xl font-bold tracking-tight text-white sm:text-2xl">
+          Juntos por um futebol de base mais transparente
+        </h2>
+
+        <p class="mx-auto mt-3 max-w-sm text-sm leading-6 text-white/55">
+          Siga o Knowball no Instagram e acompanhe as próximas atualizações da plataforma.
+        </p>
+
+        <a
+          [href]="instagramUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-rose-500 to-red-500 px-6 text-sm font-bold text-white shadow-lg shadow-rose-500/20 transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-300"
+        >
+          Seguir {{ instagramHandle }}
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M7 17 17 7M7 7h10v10" />
+          </svg>
+
+          <span class="sr-only">, abre em uma nova aba</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Ações do post -->
+    <div class="flex items-center gap-4 px-4 pt-4 text-white/60">
+      <span
+        class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l8.8 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8Z"
+          />
+        </svg>
+      </span>
+
+      <span
+        class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.6 9.6 0 0 1-2.8-.4L3 21l1.5-5.2A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"
+          />
+        </svg>
+      </span>
+
+      <span
+        class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M22 2 11 13M22 2l-7 20-4-9-9-4Z" />
+        </svg>
+      </span>
+
+      <span class="ml-auto text-xs text-white/35"> Contato oficial </span>
+    </div>
+
+    <!-- Legenda e e-mail -->
+    <div class="space-y-5 p-4 sm:p-5">
+      <div>
+        <p class="text-sm leading-6 text-white/75">
+          <span class="font-semibold text-white">Knowball</span>
+          Dúvidas, sugestões e parcerias podem ser enviadas para
+          <a
+            [href]="contactEmailUrl"
+            class="break-all font-medium text-rose-300 underline-offset-4 transition hover:text-rose-200 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-300"
+          >
+            {{ contactEmail }} </a
+          >.
+        </p>
+
+        <p class="mt-2 text-xs leading-6 text-white/45">
+          Para registrar e acompanhar denúncias, utilize a área “Denúncias” da plataforma.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/3 p-4">
+        <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/40">
+          E-mail oficial
+        </p>
+
+        <a
+          [href]="contactEmailUrl"
+          class="mt-2 block break-all text-sm font-semibold text-white transition hover:text-rose-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-300"
+        >
+          {{ contactEmail }}
+        </a>
+
+        <a
+          [href]="contactEmailUrl"
+          class="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 text-sm font-semibold text-white transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-300"
+        >
+          Escrever um e-mail
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <div class="mt-6 flex justify-center">
+    <a
+      routerLink="/dashboard"
+      class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/15 px-5 text-sm font-semibold text-white/70 transition hover:bg-white/5 hover:text-white"
+    >
+      Voltar ao dashboard
+    </a>
+  </div>
+</div>
