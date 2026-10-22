@@ -1,4 +1,5 @@
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { ContactSectionComponent } from '../../../shared/components/contact-section/contact-section.component';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -40,7 +41,7 @@ type LoadResult = { ok: true; reports: Report[] } | { ok: false };
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ContactSectionComponent],
   templateUrl: './user-dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
