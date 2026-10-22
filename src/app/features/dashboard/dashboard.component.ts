@@ -1,4 +1,5 @@
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,9 +9,12 @@ import {
   inject,
   signal,
 } from '@angular/core';
+
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+
 import { LucideAngularModule } from 'lucide-angular';
+
 import {
   ChartComponent,
   type ApexAxisChartSeries,
@@ -27,6 +31,7 @@ import {
   type ApexXAxis,
   type ApexYAxis,
 } from 'ng-apexcharts';
+
 import {
   Subject,
   catchError,
@@ -55,7 +60,10 @@ import {
   type LucideIconData,
 } from '../../shared/icons/icons';
 
+import { ContactSectionComponent } from '../../shared/components/contact-section/contact-section.component';
+
 import { AuthService } from '../../core/services/auth.service';
+
 import { Championship } from '../../models/championship.model';
 import { Game } from '../../models/game.model';
 import { Referee } from '../../models/referee.model';
@@ -63,9 +71,13 @@ import { Report } from '../../models/report.model';
 import { Team } from '../../models/team.model';
 
 import { ChampionshipService } from '../championship/services/championship.service';
+
 import { GameService } from '../game/services/game.service';
+
 import { RefereeService } from '../referee/services/referee.service';
+
 import { TeamService } from '../team/services/team.service';
+
 import { ReportService } from '../report/services/report.service';
 
 interface DashboardData {
@@ -113,10 +125,26 @@ interface CategoryPoint {
 type SnapshotResult = { ok: true; data: DashboardData } | { ok: false };
 
 const STATUS_CONFIG = [
-  { key: 'NEW', label: 'Novas', color: '#60A5FA' },
-  { key: 'UNDER_REVIEW', label: 'Em análise', color: '#FBBF24' },
-  { key: 'RESOLVED', label: 'Resolvidas', color: '#34D399' },
-  { key: 'OTHER', label: 'Outros', color: '#A3A3A3' },
+  {
+    key: 'NEW',
+    label: 'Novas',
+    color: '#60A5FA',
+  },
+  {
+    key: 'UNDER_REVIEW',
+    label: 'Em análise',
+    color: '#FBBF24',
+  },
+  {
+    key: 'RESOLVED',
+    label: 'Resolvidas',
+    color: '#34D399',
+  },
+  {
+    key: 'OTHER',
+    label: 'Outros',
+    color: '#A3A3A3',
+  },
 ];
 
 const CATEGORY_CONFIG = [
@@ -129,13 +157,14 @@ const CATEGORY_CONFIG = [
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideAngularModule, ChartComponent],
+  imports: [CommonModule, RouterLink, LucideAngularModule, ChartComponent, ContactSectionComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent {
   private readonly auth = inject(AuthService);
+
   private readonly championshipSvc = inject(ChampionshipService);
   private readonly gameSvc = inject(GameService);
   private readonly refereeSvc = inject(RefereeService);
@@ -145,6 +174,7 @@ export class DashboardComponent {
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformId = inject(PLATFORM_ID);
+
   private readonly refreshRequests = new Subject<void>();
 
   private readonly reportMonthFormatter = new Intl.DateTimeFormat('en-US', {
@@ -159,6 +189,7 @@ export class DashboardComponent {
   readonly loading = signal(true);
   readonly refreshing = signal(false);
   readonly error = signal('');
+
   readonly lastUpdated = signal<Date | null>(null);
   readonly months = signal(6);
   readonly data = signal<DashboardData | null>(null);
@@ -171,6 +202,7 @@ export class DashboardComponent {
 
   readonly firstName = computed(() => {
     const name = this.user()?.name?.trim();
+
     return name ? name.split(/\s+/)[0] : 'Usuário';
   });
 
@@ -238,6 +270,7 @@ export class DashboardComponent {
   readonly statusItems = computed<StatusItem[]>(() => {
     const reports = this.data()?.reports ?? [];
     const total = reports.length;
+
     const knownStatuses = ['NEW', 'UNDER_REVIEW', 'RESOLVED'];
 
     return STATUS_CONFIG.map((item) => {
@@ -263,7 +296,9 @@ export class DashboardComponent {
 
   readonly monthlyPoints = computed<MonthlyPoint[]>(() => {
     const reference = this.lastUpdated() ?? new Date();
+
     const [year, month] = this.monthKey(reference).split('-').map(Number);
+
     const counts = new Map<string, number>();
 
     for (const report of this.data()?.reports ?? []) {
@@ -274,6 +309,7 @@ export class DashboardComponent {
       }
 
       const key = this.monthKey(date);
+
       counts.set(key, (counts.get(key) ?? 0) + 1);
     }
 
@@ -310,12 +346,21 @@ export class DashboardComponent {
   readonly monthlyXAxis = computed<ApexXAxis>(() => ({
     categories: this.monthlyPoints().map((point) => point.label),
     labels: {
-      style: { colors: '#A3A3A3', fontSize: '11px' },
+      style: {
+        colors: '#A3A3A3',
+        fontSize: '11px',
+      },
       rotate: -35,
     },
-    axisBorder: { show: false },
-    axisTicks: { show: false },
-    tooltip: { enabled: false },
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+    tooltip: {
+      enabled: false,
+    },
   }));
 
   readonly championshipRanking = computed<RankingPoint[]>(() => {
@@ -340,7 +385,11 @@ export class DashboardComponent {
       if (current) {
         current.count++;
       } else {
-        groups.set(key, { key, label, count: 1 });
+        groups.set(key, {
+          key,
+          label,
+          count: 1,
+        });
       }
     }
 
@@ -359,11 +408,17 @@ export class DashboardComponent {
   readonly championshipXAxis = computed<ApexXAxis>(() => ({
     categories: this.championshipRanking().map((item) => item.label),
     labels: {
-      style: { colors: '#A3A3A3' },
+      style: {
+        colors: '#A3A3A3',
+      },
       formatter: (value: string) => this.integerLabel(Number(value)),
     },
-    axisBorder: { show: false },
-    axisTicks: { show: false },
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
   }));
 
   readonly categoryPoints = computed<CategoryPoint[]>(() => {
@@ -371,6 +426,7 @@ export class DashboardComponent {
 
     for (const report of this.data()?.reports ?? []) {
       const category = String(report.game?.championship?.category ?? '');
+
       const key = counts.has(category) ? category : 'OTHER';
 
       counts.set(key, (counts.get(key) ?? 0) + 1);
@@ -401,9 +457,17 @@ export class DashboardComponent {
 
   readonly categoryXAxis = computed<ApexXAxis>(() => ({
     categories: this.categoryPoints().map((item) => item.label),
-    labels: { style: { colors: '#A3A3A3' } },
-    axisBorder: { show: false },
-    axisTicks: { show: false },
+    labels: {
+      style: {
+        colors: '#A3A3A3',
+      },
+    },
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
   }));
 
   readonly recentGames = computed(() =>
@@ -423,13 +487,21 @@ export class DashboardComponent {
       .slice(0, 5),
   );
 
-  readonly theme: ApexTheme = { mode: 'dark' };
-  readonly legend: ApexLegend = { show: false };
+  readonly theme: ApexTheme = {
+    mode: 'dark',
+  };
+
+  readonly legend: ApexLegend = {
+    show: false,
+  };
 
   readonly grid: ApexGrid = {
     borderColor: 'rgba(255,255,255,0.08)',
     strokeDashArray: 4,
-    padding: { left: 8, right: 12 },
+    padding: {
+      left: 8,
+      right: 12,
+    },
   };
 
   readonly axisDataLabels: ApexDataLabels = {
@@ -512,7 +584,9 @@ export class DashboardComponent {
     min: 0,
     decimalsInFloat: 0,
     labels: {
-      style: { colors: '#A3A3A3' },
+      style: {
+        colors: '#A3A3A3',
+      },
       formatter: (value: number) => this.integerLabel(value),
     },
   };
@@ -520,14 +594,20 @@ export class DashboardComponent {
   readonly rankingYAxis: ApexYAxis = {
     labels: {
       maxWidth: 190,
-      style: { colors: '#D4D4D4', fontSize: '11px' },
+      style: {
+        colors: '#D4D4D4',
+        fontSize: '11px',
+      },
     },
   };
 
   readonly axisTooltip: ApexTooltip = {
     theme: 'dark',
     y: {
-      formatter: (value: number) => value.toLocaleString('pt-BR', { maximumFractionDigits: 0 }),
+      formatter: (value: number) =>
+        value.toLocaleString('pt-BR', {
+          maximumFractionDigits: 0,
+        }),
     },
   };
 
@@ -536,6 +616,7 @@ export class DashboardComponent {
     y: {
       formatter: (value: number) => {
         const total = this.totalReports();
+
         const percentage = total > 0 ? (value / total) * 100 : 0;
 
         return `${value} denúncia(s) · ${percentage.toLocaleString('pt-BR', {
@@ -654,8 +735,17 @@ export class DashboardComponent {
       });
     }).pipe(
       timeout(60_000),
-      map((data): SnapshotResult => ({ ok: true, data })),
-      catchError(() => of<SnapshotResult>({ ok: false })),
+      map(
+        (data): SnapshotResult => ({
+          ok: true,
+          data,
+        }),
+      ),
+      catchError(() =>
+        of<SnapshotResult>({
+          ok: false,
+        }),
+      ),
     );
   }
 
@@ -665,7 +755,9 @@ export class DashboardComponent {
 
   private monthKey(date: Date): string {
     const parts = this.reportMonthFormatter.formatToParts(date);
+
     const year = parts.find((part) => part.type === 'year')?.value;
+
     const month = parts.find((part) => part.type === 'month')?.value;
 
     return `${year}-${month}`;
@@ -683,9 +775,15 @@ export class DashboardComponent {
       background: 'transparent',
       foreColor: '#A3A3A3',
       fontFamily: 'Sora, sans-serif',
-      toolbar: { show: false },
-      animations: { enabled: false },
-      zoom: { enabled: false },
+      toolbar: {
+        show: false,
+      },
+      animations: {
+        enabled: false,
+      },
+      zoom: {
+        enabled: false,
+      },
       parentHeightOffset: 0,
       redrawOnParentResize: true,
       redrawOnWindowResize: true,
