@@ -14,6 +14,7 @@ interface FaqItem {
   standalone: true,
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './faq.component.html',
+  styleUrl: './faq.component.css',
 })
 export class FaqComponent {
   readonly PlusIcon = Plus;
