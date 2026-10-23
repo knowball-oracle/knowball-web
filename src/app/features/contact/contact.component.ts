@@ -20,6 +20,4 @@ export class ContactComponent {
 
   readonly contactEmailUrl =
     'mailto:systemknowball@gmail.com?subject=' + encodeURIComponent('Contato pelo site Knowball');
-
-  readonly postDate = 'Hoje';
 }
