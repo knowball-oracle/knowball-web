@@ -86,15 +86,15 @@ export class NavbarComponent {
       icon: FileWarning,
     },
     {
+      path: '/faq',
+      label: 'FAQ',
+      icon: CircleHelp,
+    },
+    {
       path: '/contato',
       label: 'Contato',
       icon: Mail,
       userOnly: true,
-    },
-    {
-      path: '/faq',
-      label: 'FAQ',
-      icon: CircleHelp,
     },
     {
       path: '/oracle-apex',
